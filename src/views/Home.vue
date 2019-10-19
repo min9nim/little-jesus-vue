@@ -47,17 +47,21 @@ export default createComponent({
   },
 })
 </script>
-<style scoped lang="stylus">
-.home
-  margin 0 10px
-  padding 5px
-  text-align left 
-  .form
-    border 1px solid #eee
-    .item
-      font-size 18px
-      margin 3px 0
-      display flex
-      .control
-        margin-left 10px
+<style scoped>
+.home {
+  margin: 0 10px;
+  padding: 5px;
+  text-align: left;
+}
+.home .form {
+  border: 1px solid #eee;
+}
+.home .form .item {
+  font-size: 18px;
+  margin: 3px 0;
+  display: flex;
+}
+.home .form .item .control {
+  margin-left: 10px;
+}
 </style>
