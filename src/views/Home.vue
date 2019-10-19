@@ -1,6 +1,6 @@
 <template lang="pug">
 div
-  div(v-for="(student, index) in state.students" :key="index")
+  .form(v-for="(student, index) in state.students" :key="index")
     | 이름: {{ student.name }}
     div
       | 출석여부
@@ -45,6 +45,7 @@ export default createComponent({
   },
 })
 </script>
-<style scoped>
-
+<style scoped lang="stylus">
+.form
+  border 1px solid #eee
 </style>
