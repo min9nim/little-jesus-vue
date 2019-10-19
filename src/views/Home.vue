@@ -2,7 +2,11 @@
 .home
   .form(v-for="(student, index) in state.students" :key="index")
     h1 {{ student.name }}
-    .item 출석여부
+    .item
+      .label 출석여부
+      .control
+        el-radio(lable="1") 출석
+        el-radio(lable="2") 결석
     .item 말씀묵상
     .item 말씀암송
     .item 전도
@@ -47,4 +51,7 @@ export default createComponent({
     .item
       font-size 18px
       margin 3px 0
+      display flex
+      .control
+        margin-left 10px
 </style>
