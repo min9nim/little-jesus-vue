@@ -1,27 +1,19 @@
-<template>
-  <div>
-    <div v-for="(student, index) in state.students" :key="index">
-      이름: {{ student.name }}
-      <div>
-        출석여부
-      </div>
-      <div>
-        출석여부
-      </div>
-      <div>
-        말씀묵상
-      </div>
-      <div>
-        말씀암송
-      </div>
-      <div>
-        전도
-      </div>
-      <div>
-        기타
-      </div>
-    </div>
-  </div>
+<template lang="pug">
+div
+  div(v-for="(student, index) in state.students" :key="index")
+    | 이름: {{ student.name }}
+    div
+      | 출석여부
+    div
+      | 출석여부
+    div
+      | 말씀묵상
+    div
+      | 말씀암송
+    div
+      | 전도
+    div
+      | 기타
 </template>
 
 <script>
