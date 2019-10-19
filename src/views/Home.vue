@@ -5,8 +5,13 @@
     .item
       .label 출석여부
       .control
-        el-radio(lable="1") 출석
-        el-radio(lable="2") 결석
+        el-radio(lable="1") O
+        el-radio(lable="2") X
+    .item
+      .label 심방여부
+      .control
+        el-radio(lable="1") O
+        el-radio(lable="2") X    
     .item 말씀묵상
     .item 말씀암송
     .item 전도
@@ -45,6 +50,7 @@ export default createComponent({
 <style scoped lang="stylus">
 .home
   margin 0 10px
+  padding 5px
   text-align left 
   .form
     border 1px solid #eee
