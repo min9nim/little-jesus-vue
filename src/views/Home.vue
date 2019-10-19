@@ -1,19 +1,12 @@
 <template lang="pug">
-div
+.home
   .form(v-for="(student, index) in state.students" :key="index")
-    | 이름: {{ student.name }}
-    div
-      | 출석여부
-    div
-      | 출석여부
-    div
-      | 말씀묵상
-    div
-      | 말씀암송
-    div
-      | 전도
-    div
-      | 기타
+    h1 {{ student.name }}
+    .item 출석여부
+    .item 말씀묵상
+    .item 말씀암송
+    .item 전도
+    .item 기타
 </template>
 
 <script>
@@ -46,6 +39,12 @@ export default createComponent({
 })
 </script>
 <style scoped lang="stylus">
-.form
-  border 1px solid #eee
+.home
+  margin 0 10px
+  text-align left 
+  .form
+    border 1px solid #eee
+    .item
+      font-size 18px
+      margin 3px 0
 </style>
