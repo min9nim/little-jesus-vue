@@ -48,9 +48,10 @@
 
 <script>
 import { createComponent, reactive, onMounted } from "@vue/composition-api";
-import gql from "graphql-tag";
-import { req } from "@/utils";
+// import gql from "graphql-tag";
+// import { req } from "@/utils";
 import { mergeRight } from "ramda";
+import {students} from '@/assets/data'
 
 export default createComponent({
   setup() {
@@ -59,15 +60,15 @@ export default createComponent({
     });
 
     onMounted(async () => {
-      const result = await req(gql`
-        {
-          students {
-            name
-          }
-        }
-      `);
+      // const result = await req(gql`
+      //   {
+      //     students {
+      //       name
+      //     }
+      //   }
+      // `);
       // console.log(result)
-      state.students = result.students.map(
+      state.students = students.map(
         mergeRight({
           attendance: false,
           visitcall: false,
