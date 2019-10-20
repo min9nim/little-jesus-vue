@@ -12,7 +12,7 @@
       .control
         el-radio(v-model="student.visitcall" :label="true") O
         el-radio(v-model="student.visitcall" :label="false") X    
-    .item
+    .item.meditation
       .label 말씀묵상
       .control
         el-radio(v-model="student.meditation" :label="0") 0
@@ -28,7 +28,7 @@
       .control
         el-radio(v-model="student.recitation" :label="true") O
         el-radio(v-model="student.recitation" :label="false") X    
-    .item
+    .item.invitation
       .label 전도
       .control
         el-radio(v-model="student.invitation" :label="0") 0
@@ -47,16 +47,16 @@
 </template>
 
 <script>
-import {createComponent, reactive, onMounted} from '@vue/composition-api'
-import gql from 'graphql-tag'
-import {req} from '@/utils'
-import {mergeRight} from 'ramda'
+import { createComponent, reactive, onMounted } from "@vue/composition-api";
+import gql from "graphql-tag";
+import { req } from "@/utils";
+import { mergeRight } from "ramda";
 
 export default createComponent({
   setup() {
     const state = reactive({
-      students: [],
-    })
+      students: []
+    });
 
     onMounted(async () => {
       const result = await req(gql`
@@ -65,16 +65,24 @@ export default createComponent({
             name
           }
         }
-      `)
+      `);
       // console.log(result)
-      state.students = result.students.map(mergeRight({attendance: false, visitcall: false}))
-    })
+      state.students = result.students.map(
+        mergeRight({
+          attendance: false,
+          visitcall: false,
+          meditation: 0,
+          invitation: 0,
+          recitation: false
+        })
+      );
+    });
 
     return {
-      state,
-    }
-  },
-})
+      state
+    };
+  }
+});
 </script>
 <style scoped>
 .home {
@@ -87,7 +95,7 @@ export default createComponent({
   border: 1px solid #eee;
   padding: 10px;
 }
-.home .form h1{
+.home .form h1 {
   margin-top: 0;
 }
 .home .form .item {
@@ -95,6 +103,12 @@ export default createComponent({
   margin: 3px 0;
   display: flex;
   margin: 10px 0;
+}
+.home .form .item.meditation .el-radio {
+  margin: 10px 20px 10px 0;
+}
+.home .form .item.invitation .el-radio {
+  margin: 10px 20px 10px 0;
 }
 .home .form .item .label {
   margin-right: 20px;
