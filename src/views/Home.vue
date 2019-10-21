@@ -38,20 +38,24 @@
         el-radio(v-model="student.invitation" :label="4") 4
         el-radio(v-model="student.invitation" :label="5") 5    
     .item
-      .label 기타
+      .label 기타사항
       .control
-        el-input(v-model="student.etc" type="textarea" :autosize="{ minRows: 2, maxRows: 6}")
-
+        el-input(
+          v-model="student.etc"
+          type="textarea"
+          :autosize="{ minRows: 2, maxRows: 6}"
+          placeholder="특이사항 입력"
+        )
   .btn
     el-button 저장
 </template>
 
 <script>
-import { createComponent, reactive, onMounted } from "@vue/composition-api";
-// import gql from "graphql-tag";
-// import { req } from "@/utils";
+import { createComponent, reactive, onBeforeMount } from "@vue/composition-api";
+import gql from "graphql-tag";
+import { req } from "@/utils";
 import { mergeRight } from "ramda";
-import {students} from '@/assets/data'
+// import {students} from '@/assets/data'
 
 export default createComponent({
   setup() {
@@ -59,16 +63,15 @@ export default createComponent({
       students: []
     });
 
-    onMounted(async () => {
-      // const result = await req(gql`
-      //   {
-      //     students {
-      //       name
-      //     }
-      //   }
-      // `);
-      // console.log(result)
-      state.students = students.map(
+    onBeforeMount(async () => {
+      const result = await req(gql`
+        {
+          res: students {
+            name
+          }
+        }
+      `);
+      state.students = result.res.map(
         mergeRight({
           attendance: false,
           visitcall: false,
@@ -115,6 +118,8 @@ export default createComponent({
   margin-right: 20px;
   width: 70px;
   text-align: right;
+  display: flex;
+  align-items: center;  
 }
 .home .form .item .control {
   margin-left: 10px;
@@ -122,5 +127,10 @@ export default createComponent({
 }
 .home .btn {
   margin-top: 10px;
+}
+</style>
+<style>
+.home .form .item .el-radio__label{
+  font-size: 18px;
 }
 </style>
