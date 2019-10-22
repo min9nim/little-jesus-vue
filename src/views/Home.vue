@@ -1,5 +1,16 @@
 <template lang="pug">
 .home(v-loading='state.loading')
+  el-select(
+    v-model="state.teacherId"
+    placeholder="선생님 선택"
+    @change="handleTeacherChange"
+  )
+    el-option(
+      v-for="item in state.teachers"
+      :key="item._id"
+      :label="item.name"
+      :value="item._id"
+    )
   .form(v-for="(student, index) in state.students" :key="index")
     h1 {{ student.name }}
     .item
@@ -54,38 +65,55 @@
 import { createComponent, reactive, onBeforeMount } from "@vue/composition-api";
 import gql from "graphql-tag";
 import { req } from "@/utils";
-import { mergeRight } from "ramda";
+import { mergeRight, propEq } from "ramda";
 // import {students} from '@/assets/data'
 
 export default createComponent({
   setup() {
     const state = reactive({
+      teachers: [],
+      teacherId: "",
       students: [],
       loading: true
     });
 
+    function handleTeacherChange(teacherId){
+      console.count(teacherId)
+      state.teacherId = teacherId
+      const teacher = state.teachers.find(propEq("_id", state.teacherId));
+      if (teacher) {
+        state.students = teacher.students.map(
+          mergeRight({
+            attendance: false,
+            visitcall: false,
+            meditation: 0,
+            invitation: 0,
+            recitation: false
+          })
+        );
+      }      
+    }
+
     onBeforeMount(async () => {
       const result = await req(gql`
         {
-          res: students {
+          res: teachers {
+            _id
             name
+            students {
+              _id
+              name
+            }
           }
         }
       `);
-      state.students = result.res.map(
-        mergeRight({
-          attendance: false,
-          visitcall: false,
-          meditation: 0,
-          invitation: 0,
-          recitation: false
-        })
-      );
-      state.loading = false
+      state.teachers = result.res;
+      state.loading = false;
     });
 
     return {
-      state
+      state,
+      handleTeacherChange,
     };
   }
 });
@@ -121,7 +149,7 @@ export default createComponent({
   width: 70px;
   text-align: right;
   display: flex;
-  align-items: center;  
+  align-items: center;
 }
 .home .form .item .control {
   margin-left: 10px;
@@ -132,7 +160,7 @@ export default createComponent({
 }
 </style>
 <style>
-.home .form .item .el-radio__label{
+.home .form .item .el-radio__label {
   font-size: 18px;
 }
 </style>
