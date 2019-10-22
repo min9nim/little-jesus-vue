@@ -1,5 +1,5 @@
 <template lang="pug">
-.home
+.home(v-loading='state.loading')
   .form(v-for="(student, index) in state.students" :key="index")
     h1 {{ student.name }}
     .item
@@ -60,7 +60,8 @@ import { mergeRight } from "ramda";
 export default createComponent({
   setup() {
     const state = reactive({
-      students: []
+      students: [],
+      loading: true
     });
 
     onBeforeMount(async () => {
@@ -80,6 +81,7 @@ export default createComponent({
           recitation: false
         })
       );
+      state.loading = false
     });
 
     return {
