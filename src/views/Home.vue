@@ -1,15 +1,21 @@
 <template lang="pug">
 .home(v-loading='state.loading')
-  el-select(
-    v-model="state.teacherId"
-    placeholder="선생님 선택"
-    @change="handleTeacherChange"
-  )
-    el-option(
-      v-for="item in state.teachers"
-      :key="item._id"
-      :label="item.name"
-      :value="item._id"
+  .options
+    el-select.teacher(
+      v-model="state.teacherId"
+      placeholder="선생님 선택"
+      @change="handleTeacherChange"
+    )
+      el-option(
+        v-for="item in state.teachers"
+        :key="item._id"
+        :label="item.name"
+        :value="item._id"
+      )
+    el-date-picker.date(
+      v-model="state.date"
+      type="date"
+      placeholder="날짜 선택"
     )
   .form(v-for="(student, index) in state.students" :key="index")
     h1 {{ student.name }}
@@ -74,6 +80,7 @@ export default createComponent({
       teachers: [],
       teacherId: "",
       students: [],
+      date: '',
       loading: true
     });
 
@@ -123,6 +130,13 @@ export default createComponent({
   margin: 0 10px;
   padding: 5px;
   text-align: left;
+}
+.home .options .teacher {
+  width: 150px;
+}
+.home .options .date {
+  margin-left: 5px;
+  width: 150px;
 }
 .home .form {
   margin: 5px 0;
