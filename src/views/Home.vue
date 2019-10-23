@@ -72,14 +72,14 @@ import { createComponent, onBeforeMount } from "@vue/composition-api";
 import gql from "graphql-tag";
 import { req } from "@/utils";
 import { mergeRight, propEq } from "ramda";
-import {useState} from './home.fn'
+import { useState } from "./home.fn";
 
 export default createComponent({
   setup() {
-    const state = useState()
-    function handleTeacherChange(teacherId){
-      console.count(teacherId)
-      state.teacherId = teacherId
+    const state = useState();
+    function handleTeacherChange(teacherId) {
+      console.count(teacherId);
+      state.teacherId = teacherId;
       const teacher = state.teachers.find(propEq("_id", state.teacherId));
       if (teacher) {
         state.students = teacher.students.map(
@@ -91,7 +91,7 @@ export default createComponent({
             recitation: false
           })
         );
-      }      
+      }
     }
 
     onBeforeMount(async () => {
@@ -113,7 +113,7 @@ export default createComponent({
 
     return {
       state,
-      handleTeacherChange,
+      handleTeacherChange
     };
   }
 });

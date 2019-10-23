@@ -3,16 +3,16 @@
   h1 {{state.name}}
 </template>
 <script lang="ts">
-import {createComponent, reactive} from '@vue/composition-api'
+import { createComponent, reactive } from "@vue/composition-api";
 
 export default createComponent({
-  setup(){
+  setup() {
     const state = reactive({
-      name: 'blabla',
-    })
+      name: "blabla"
+    });
     return {
       state
-    }
+    };
   }
-})
+});
 </script>
