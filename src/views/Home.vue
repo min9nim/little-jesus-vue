@@ -19,51 +19,7 @@
       @change="handleDateChange"
     )
   .form(v-for="(student, index) in state.students" :key="index")
-    h1 {{ student.name }}
-    .item
-      .label 출석여부
-      .control
-        el-radio(v-model="student.attendance" :label="true") O
-        el-radio(v-model="student.attendance" :label="false") X
-    .item
-      .label 심방여부
-      .control
-        el-radio(v-model="student.visitcall" :label="true") O
-        el-radio(v-model="student.visitcall" :label="false") X    
-    .item.meditation
-      .label 말씀묵상
-      .control
-        el-radio(v-model="student.meditation" :label="0") 0
-        el-radio(v-model="student.meditation" :label="1") 1
-        el-radio(v-model="student.meditation" :label="2") 2
-        el-radio(v-model="student.meditation" :label="3") 3
-        el-radio(v-model="student.meditation" :label="4") 4
-        el-radio(v-model="student.meditation" :label="5") 5
-        el-radio(v-model="student.meditation" :label="6") 6
-        el-radio(v-model="student.meditation" :label="7") 7
-    .item
-      .label 말씀암송
-      .control
-        el-radio(v-model="student.recitation" :label="true") O
-        el-radio(v-model="student.recitation" :label="false") X    
-    .item.invitation
-      .label 전도
-      .control
-        el-radio(v-model="student.invitation" :label="0") 0
-        el-radio(v-model="student.invitation" :label="1") 1
-        el-radio(v-model="student.invitation" :label="2") 2
-        el-radio(v-model="student.invitation" :label="3") 3
-        el-radio(v-model="student.invitation" :label="4") 4
-        el-radio(v-model="student.invitation" :label="5") 5    
-    .item
-      .label 기타사항
-      .control
-        el-input(
-          v-model="student.etc"
-          type="textarea"
-          :autosize="{ minRows: 2, maxRows: 6}"
-          placeholder="특이사항 입력"
-        )
+    input-form(:studentId="student._id")
   .btn
     el-button 저장
 </template>
@@ -71,17 +27,22 @@
 <script lang="ts">
 import {createComponent, onBeforeMount} from '@vue/composition-api'
 import {useState, useBeforeMount} from './home.fn'
+import InputForm from '../components/InputForm.vue'
 
 interface Teacher {
   _id: string
   name: string
   students: [string]
 }
-export default createComponent({
+export default {
+  name: 'v-home',
+  components: {InputForm},
   setup() {
     const state = useState()
-    const handleTeacherChange = (teacherId: string) => {localStorage.setItem('teacherId', teacherId)}
-    const handleDateChange = (date: any) => {
+    const handleTeacherChange = (teacherId: string) => {
+      localStorage.setItem('teacherId', teacherId)
+    }
+    const handleDateChange = (date: Date) => {
       console.log({date})
     }
 
@@ -93,7 +54,7 @@ export default createComponent({
       handleDateChange,
     }
   },
-})
+}
 </script>
 <style scoped lang="stylus">
 .home {
