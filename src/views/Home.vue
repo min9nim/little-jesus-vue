@@ -68,58 +68,26 @@
 </template>
 
 <script lang="ts">
-import { createComponent, onBeforeMount } from "@vue/composition-api"
-import gql from "graphql-tag"
-import { req } from "@/utils"
-import { mergeRight, propEq } from "ramda"
-import { useState } from "./home.fn"
+import {createComponent, onBeforeMount} from '@vue/composition-api'
+import {useState, useBeforeMount, useHandleTeacherChange} from './home.fn'
+
 interface Teacher {
-  _id: string;
-  name: string;
-  students: [string];
+  _id: string
+  name: string
+  students: [string]
 }
 export default createComponent({
   setup() {
     const state = useState()
-    function handleTeacherChange(teacherId: string) {
-      // console.count(teacherId);
-      state.teacherId = teacherId
-      const teacher: any = state.teachers.find(propEq("_id", state.teacherId))
-      if (teacher) {
-        state.students = teacher.students.map(
-          mergeRight<any>({
-            attendance: false,
-            visitcall: false,
-            meditation: 0,
-            invitation: 0,
-            recitation: false
-          })
-        )
-      }
-    }
+    const handleTeacherChange = useHandleTeacherChange({state})
 
-    onBeforeMount(async () => {
-      const result = await req(gql`
-        {
-          res: teachers {
-            _id
-            name
-            students {
-              _id
-              name
-            }
-          }
-        }
-      `)
-      state.teachers = result.res
-      state.loading = false
-    });
+    onBeforeMount(useBeforeMount({state}))
 
     return {
       state,
-      handleTeacherChange
+      handleTeacherChange,
     }
-  }
+  },
 })
 </script>
 <style scoped lang="stylus">
