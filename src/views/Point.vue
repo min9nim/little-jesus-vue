@@ -1,5 +1,18 @@
-<template>
-  <div class="point">
-    <h1>준비 중</h1>
-  </div>
+<template lang="pug">
+.point
+  h1 {{state.name}}
 </template>
+<script lang="ts">
+import {createComponent, reactive} from '@vue/composition-api'
+
+export default createComponent({
+  setup(){
+    const state = reactive({
+      name: 'blabla',
+    })
+    return {
+      state
+    }
+  }
+})
+</script>
