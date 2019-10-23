@@ -1,11 +1,11 @@
-import { reactive } from "@vue/composition-api";
+import {reactive} from '@vue/composition-api'
 
 export function useState() {
   return reactive({
     teachers: [],
-    teacherId: "",
+    teacherId: '',
     students: [],
-    date: "",
-    loading: true
-  });
+    date: '',
+    loading: true,
+  })
 }

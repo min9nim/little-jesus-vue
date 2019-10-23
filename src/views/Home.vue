@@ -67,30 +67,34 @@
     el-button 저장
 </template>
 
-<script>
-import { createComponent, onBeforeMount } from "@vue/composition-api";
-import gql from "graphql-tag";
-import { req } from "@/utils";
-import { mergeRight, propEq } from "ramda";
-import { useState } from "./home.fn";
-
+<script lang="ts">
+import { createComponent, onBeforeMount } from "@vue/composition-api"
+import gql from "graphql-tag"
+import { req } from "@/utils"
+import { mergeRight, propEq } from "ramda"
+import { useState } from "./home.fn"
+interface Teacher {
+  _id: string;
+  name: string;
+  students: [string];
+}
 export default createComponent({
   setup() {
-    const state = useState();
-    function handleTeacherChange(teacherId) {
-      console.count(teacherId);
-      state.teacherId = teacherId;
-      const teacher = state.teachers.find(propEq("_id", state.teacherId));
+    const state = useState()
+    function handleTeacherChange(teacherId: string) {
+      // console.count(teacherId);
+      state.teacherId = teacherId
+      const teacher: any = state.teachers.find(propEq("_id", state.teacherId))
       if (teacher) {
         state.students = teacher.students.map(
-          mergeRight({
+          mergeRight<any>({
             attendance: false,
             visitcall: false,
             meditation: 0,
             invitation: 0,
             recitation: false
           })
-        );
+        )
       }
     }
 
@@ -106,68 +110,90 @@ export default createComponent({
             }
           }
         }
-      `);
-      state.teachers = result.res;
-      state.loading = false;
+      `)
+      state.teachers = result.res
+      state.loading = false
     });
 
     return {
       state,
       handleTeacherChange
-    };
+    }
   }
-});
+})
 </script>
-<style scoped>
+<style scoped lang="stylus">
 .home {
   margin: 0 10px;
   padding: 5px;
   text-align: left;
-}
-.home .options .teacher {
-  width: 150px;
-}
-.home .options .date {
-  margin-left: 5px;
-  width: 150px;
-}
-.home .form {
-  margin: 5px 0;
-  border: 1px solid #eee;
-  padding: 10px;
-}
-.home .form h1 {
-  margin-top: 0;
-}
-.home .form .item {
-  font-size: 18px;
-  margin: 3px 0;
-  display: flex;
-  margin: 10px 0;
-}
-.home .form .item.meditation .el-radio {
-  margin: 10px 20px 10px 0;
-}
-.home .form .item.invitation .el-radio {
-  margin: 10px 20px 10px 0;
-}
-.home .form .item .label {
-  margin-right: 20px;
-  width: 70px;
-  text-align: right;
-  display: flex;
-  align-items: center;
-}
-.home .form .item .control {
-  margin-left: 10px;
-  flex: 1;
-}
-.home .btn {
-  margin-top: 10px;
+
+  .options {
+    .teacher {
+      width: 150px;
+    }
+
+    .date {
+      margin-left: 5px;
+      width: 150px;
+    }
+  }
+
+  .form {
+    margin: 5px 0;
+    border: 1px solid #eee;
+    padding: 10px;
+
+    h1 {
+      margin-top: 0;
+    }
+
+    .item {
+      font-size: 18px;
+      margin: 3px 0;
+      display: flex;
+      margin: 10px 0;
+
+      &.meditation {
+        .el-radio {
+          margin: 10px 20px 10px 0;
+        }
+      }
+
+      &.invitation {
+        .el-radio {
+          margin: 10px 20px 10px 0;
+        }
+      }
+
+      .label {
+        margin-right: 20px;
+        width: 70px;
+        text-align: right;
+        display: flex;
+        align-items: center;
+      }
+
+      .control {
+        margin-left: 10px;
+        flex: 1;
+      }
+    }
+  }
+
+  .btn {
+    margin-top: 10px;
+  }
 }
 </style>
-<style>
-.home .form .item .el-radio__label {
-  font-size: 18px;
+<style lang="stylus">
+.home {
+  .form {
+    .item {
+      .el-radio__label {
+        font-size: 18px;
+      }
+    }
+  }
 }
 </style>
