@@ -58,7 +58,7 @@ export default {
 </script>
 <style scoped lang="stylus">
 .home {
-  margin: 0 10px;
+  // margin: 0 10px;
   padding: 5px;
   text-align: left;
 
