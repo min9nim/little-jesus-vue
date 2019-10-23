@@ -16,6 +16,7 @@
       v-model="state.date"
       type="date"
       placeholder="날짜 선택"
+      @change="handleDateChange"
     )
   .form(v-for="(student, index) in state.students" :key="index")
     h1 {{ student.name }}
@@ -80,12 +81,16 @@ export default createComponent({
   setup() {
     const state = useState()
     const handleTeacherChange = useHandleTeacherChange({state})
+    const handleDateChange = (date) => {
+      console.log({date})
+    }
 
     onBeforeMount(useBeforeMount({state}))
 
     return {
       state,
       handleTeacherChange,
+      handleDateChange,
     }
   },
 })

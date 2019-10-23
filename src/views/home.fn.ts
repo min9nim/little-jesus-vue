@@ -2,6 +2,7 @@ import {reactive} from '@vue/composition-api'
 import {req} from '@/utils'
 import gql from 'graphql-tag'
 import {mergeRight, propEq} from 'ramda'
+import moment from 'moment'
 
 let state: any
 
@@ -13,7 +14,7 @@ export function useState() {
     teachers: [],
     teacherId: '',
     students: [],
-    date: '',
+    date: moment().startOf('week'),
     loading: true,
   })
   return state
