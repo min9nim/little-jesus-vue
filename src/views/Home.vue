@@ -68,22 +68,15 @@
 </template>
 
 <script>
-import { createComponent, reactive, onBeforeMount } from "@vue/composition-api";
+import { createComponent, onBeforeMount } from "@vue/composition-api";
 import gql from "graphql-tag";
 import { req } from "@/utils";
 import { mergeRight, propEq } from "ramda";
-// import {students} from '@/assets/data'
+import {useState} from './home.fn'
 
 export default createComponent({
   setup() {
-    const state = reactive({
-      teachers: [],
-      teacherId: "",
-      students: [],
-      date: '',
-      loading: true
-    });
-
+    const state = useState()
     function handleTeacherChange(teacherId){
       console.count(teacherId)
       state.teacherId = teacherId
