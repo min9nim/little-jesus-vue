@@ -75,13 +75,18 @@ export default createComponent({
 .input-form {
   h1 {
     margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #f9f9f9;
   }
 
   .item {
     font-size: 18px;
-    margin: 3px 0;
     display: flex;
-    margin: 10px 0;
+    padding: 10px 0;
+
+    & + .item {
+      border-top: 1px solid #f9f9f9;
+    }
 
     &.meditation {
       .el-radio {

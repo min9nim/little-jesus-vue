@@ -75,7 +75,7 @@ export default {
 
   .form {
     margin: 5px 0;
-    border: 1px solid #eee;
+    border: 1px solid #ddd;
     padding: 10px;
   }
 
