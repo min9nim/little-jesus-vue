@@ -70,7 +70,7 @@
 
 <script lang="ts">
 import {createComponent, onBeforeMount} from '@vue/composition-api'
-import {useState, useBeforeMount, useHandleTeacherChange} from './home.fn'
+import {useState, useBeforeMount} from './home.fn'
 
 interface Teacher {
   _id: string
@@ -80,7 +80,7 @@ interface Teacher {
 export default createComponent({
   setup() {
     const state = useState()
-    const handleTeacherChange = useHandleTeacherChange({state})
+    const handleTeacherChange = (teacherId: string) => {localStorage.setItem('teacherId', teacherId)}
     const handleDateChange = (date: any) => {
       console.log({date})
     }
