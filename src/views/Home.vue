@@ -81,7 +81,7 @@ export default createComponent({
   setup() {
     const state = useState()
     const handleTeacherChange = useHandleTeacherChange({state})
-    const handleDateChange = (date) => {
+    const handleDateChange = (date: any) => {
       console.log({date})
     }
 

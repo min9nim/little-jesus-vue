@@ -22,6 +22,12 @@ export function useState() {
 
 export function useBeforeMount({state}: any) {
   return async () => {
+    const teachers = window.localStorage.getItem('teachers')
+    if(teachers){
+      state.teachers = JSON.parse(teachers)
+      state.loading = false
+      return
+    }
     const result = await req(gql`
       {
         res: teachers {
@@ -36,6 +42,7 @@ export function useBeforeMount({state}: any) {
     `)
     state.teachers = result.res
     state.loading = false
+    window.localStorage.setItem('teachers', JSON.stringify(state.teachers))
   }
 }
 
