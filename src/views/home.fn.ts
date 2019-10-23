@@ -3,17 +3,23 @@ import {req} from '@/utils'
 import gql from 'graphql-tag'
 import {mergeRight, propEq} from 'ramda'
 
+let state: any
+
 export function useState() {
-  return reactive({
+  if (state) {
+    return state
+  }
+  state = reactive({
     teachers: [],
     teacherId: '',
     students: [],
     date: '',
     loading: true,
   })
+  return state
 }
 
-export function useBeforeMount({state}: any){
+export function useBeforeMount({state}: any) {
   return async () => {
     const result = await req(gql`
       {
@@ -32,7 +38,7 @@ export function useBeforeMount({state}: any){
   }
 }
 
-export function useHandleTeacherChange({state}: any){
+export function useHandleTeacherChange({state}: any) {
   return (teacherId: string) => {
     // console.count(teacherId);
     state.teacherId = teacherId
