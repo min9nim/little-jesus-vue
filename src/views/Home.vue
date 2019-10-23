@@ -20,7 +20,7 @@
     )
   .form(v-for="(student, index) in state.students" :key="index")
     input-form(:studentId="student._id")
-  .btn
+  .btn(v-show="state.students.length > 0")
     el-button 저장
 </template>
 
@@ -77,57 +77,10 @@ export default {
     margin: 5px 0;
     border: 1px solid #eee;
     padding: 10px;
-
-    h1 {
-      margin-top: 0;
-    }
-
-    .item {
-      font-size: 18px;
-      margin: 3px 0;
-      display: flex;
-      margin: 10px 0;
-
-      &.meditation {
-        .el-radio {
-          margin: 10px 20px 10px 0;
-        }
-      }
-
-      &.invitation {
-        .el-radio {
-          margin: 10px 20px 10px 0;
-        }
-      }
-
-      .label {
-        margin-right: 20px;
-        width: 70px;
-        text-align: right;
-        display: flex;
-        align-items: center;
-      }
-
-      .control {
-        margin-left: 10px;
-        flex: 1;
-      }
-    }
   }
 
   .btn {
     margin-top: 10px;
-  }
-}
-</style>
-<style lang="stylus">
-.home {
-  .form {
-    .item {
-      .el-radio__label {
-        font-size: 18px;
-      }
-    }
   }
 }
 </style>
