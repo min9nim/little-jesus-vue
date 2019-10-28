@@ -22,10 +22,13 @@
     )
   template(v-if="!state.loading")
     .form(v-for="(point, index) in globalState.points" :key="index")
-      read-point(v-if="state.pointInit" :studentId="point.owner._id")
+      read-point(v-if="!state.editable" :studentId="point.owner._id")
       edit-point(v-else :studentId="point.owner._id")
     .btn(v-show="globalState.points.length > 0")
-      el-button(@click="handleSave") 저장
+      template(v-if="state.editable")
+        el-button(@click="handleSave") 저장
+        el-button(@click="handleCancel") 취소
+      el-button(v-else @click="handleEdit") 수정
 </template>
 
 <script lang="ts">
@@ -41,6 +44,7 @@ import {
   useHandleDateChange,
   IGlobalState,
   useHandleTeacherChange,
+  useHandleEdit,
 } from './home.fn'
 import EditPoint from '../components/EditPoint.vue'
 import ReadPoint from '../components/ReadPoint.vue'
@@ -54,15 +58,16 @@ export default {
     const handleTeacherChange = useHandleTeacherChange({state, globalState})
     const handleDateChange = useHandleDateChange({state, globalState})
     const handleSave = useHandleSave({state, globalState})
-
+    const handleEdit = useHandleEdit({state, globalState})
     onBeforeMount(useBeforeMount({state, globalState}))
-
     return {
       state,
       globalState,
       handleTeacherChange,
       handleDateChange,
       handleSave,
+      handleEdit,
+      handleCancel: () => {state.editable = false}
     }
   },
 }

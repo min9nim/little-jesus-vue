@@ -37,6 +37,7 @@ export interface IState {
   date: string
   loading: boolean
   pointInit: boolean
+  editable: boolean
 }
 
 export interface IGlobalState {
@@ -53,6 +54,7 @@ export function useState(): IState {
       .format('YYYYMMDD'),
     loading: false,
     pointInit: false,
+    editable: false,
   })
 }
 
@@ -87,6 +89,7 @@ export async function initPoints({state, globalState}: IAllState) {
   if (points.length > 0) {
     globalState.points = points
     state.pointInit = true
+    state.editable = false
     return
   }
   const teacher: ITeacher | undefined = globalState.teachers.find(
@@ -110,6 +113,7 @@ export async function initPoints({state, globalState}: IAllState) {
     }
   })
   state.pointInit = false
+  state.editable = true
 }
 
 export async function initTeachers({state, globalState}: IAllState) {
@@ -143,6 +147,7 @@ export function useHandleSave({state, globalState}: IAllState) {
     await Promise.all(results)
     state.loading = false
     state.pointInit = true
+    state.editable = false
     await MessageBox.alert('저장 완료', {type: 'success'})
   }
 }
@@ -157,5 +162,11 @@ export function useHandleTeacherChange({state, globalState}: IAllState) {
   return async (teacherId: string) => {
     localStorage.setItem('teacherId', teacherId)
     await initPoints({state, globalState})
+  }
+}
+
+export function useHandleEdit({state, globalState}: IAllState) {
+  return () => {
+    state.editable = true
   }
 }
