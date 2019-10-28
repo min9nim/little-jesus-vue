@@ -12,7 +12,7 @@ export const qCreatePoint = gql`
     $invitation: Int
     $etc: String
   ) {
-    createPoint(
+    res: createPoint(
       owner: $owner
       date: $date
       attendance: $attendance
@@ -53,7 +53,7 @@ export const qTeachers = gql`
 
 export const qPoints = gql`
   query points($date: String, $teacherId: ObjectId) {
-    points(date: $date, teacherId: $teacherId) {
+    res: points(date: $date, teacherId: $teacherId) {
       _id
       owner {
         _id

@@ -51,7 +51,7 @@ export function useState(): IState {
     date: moment()
       .startOf('week')
       .format('YYYYMMDD'),
-    loading: true,
+    loading: false,
     pointInit: false,
   })
 }
@@ -64,59 +64,65 @@ export function useGlobalState(): IGlobalState {
   globalState = reactive({
     teacherId: localStorage.getItem('teacherId') || '',
     teachers: [] as ITeacher[],
-    points: computed(() => {
-      const teacher: ITeacher | undefined = globalState.teachers.find(
-        propEq('_id', globalState.teacherId),
-      )
-      if (!teacher) {
-        return []
-      }
-      return teacher.students.map(student => {
-        return {
-          owner: {
-            _id: student._id,
-            name: student.name,
-          },
-          attendance: false,
-          visitcall: false,
-          meditation: 0,
-          invitation: 0,
-          recitation: false,
-          etc: '',
-        }
-      })
-    }),
+    points: [],
   })
   return globalState
 }
 
 export function useBeforeMount({state}: any) {
   return async () => {
+    state.loading = true
     await initTeachers(state)
     await initPoints(state)
+    state.loading = false
   }
 }
-async function initPoints(state: IState) {
-  const points: IPoint[] = await req(qPoints, {
+export async function initPoints(state: IState) {
+  const result: any = await req(qPoints, {
     date: state.date,
     teacherId: globalState.teacherId,
   })
-  globalState.points = points
-  state.pointInit = true
+  const points: IPoint[] = result.res
+
+  if (points.length > 0) {
+    globalState.points = points
+    state.pointInit = true
+    return
+  }
+  const teacher: ITeacher | undefined = globalState.teachers.find(
+    propEq('_id', globalState.teacherId),
+  )
+  if (!teacher) {
+    throw Error('Teacher not found')
+  }
+  globalState.points = teacher.students.map(student => {
+    return {
+      owner: {
+        _id: student._id,
+        name: student.name,
+      },
+      attendance: false,
+      visitcall: false,
+      meditation: 0,
+      invitation: 0,
+      recitation: false,
+      etc: '',
+    }
+  })
+  state.pointInit = false
 }
-async function initTeachers(state: IState) {
+
+export async function initTeachers(state: IState) {
   const teachers = window.localStorage.getItem('teachers')
   if (teachers) {
     globalState.teachers = JSON.parse(teachers)
-    state.loading = false
-    return
   } else {
     const result = await req(qTeachers)
     globalState.teachers = result.res
-    state.loading = false
     localStorage.setItem('teachers', JSON.stringify(globalState.teachers))
   }
 }
+
 export function useHandleSave({state, globalState}: IUseHandleSave) {
   return async () => {
     state.loading = true
