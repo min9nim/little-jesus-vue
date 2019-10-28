@@ -62,6 +62,7 @@ export const qPoints = gql`
       date
       attendance
       meditation
+      invitation
       visitcall
       recitation
       etc

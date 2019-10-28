@@ -22,7 +22,8 @@
     )
   template(v-if="!state.loading")
     .form(v-for="(point, index) in globalState.points" :key="index")
-      input-form(:studentId="point.owner._id")
+      read-point(v-if="state.pointInit" :studentId="point.owner._id")
+      edit-point(v-else :studentId="point.owner._id")
     .btn(v-show="globalState.points.length > 0")
       el-button(@click="handleSave") 저장
 </template>
@@ -37,25 +38,24 @@ import {
   IPoint,
   IState,
   useGlobalState,
+  useHandleDateChange,
   IGlobalState,
+  useHandleTeacherChange,
 } from './home.fn'
-import InputForm from '../components/InputForm.vue'
+import EditPoint from '../components/EditPoint.vue'
+import ReadPoint from '../components/ReadPoint.vue'
 
 export default {
   name: 'v-home',
-  components: {InputForm},
+  components: {EditPoint, ReadPoint},
   setup() {
     const globalState: IGlobalState = useGlobalState()
     const state: IState = useState()
-    const handleTeacherChange = (teacherId: string) => {
-      localStorage.setItem('teacherId', teacherId)
-    }
-    const handleDateChange = (date: Date) => {
-      console.log({date})
-    }
+    const handleTeacherChange = useHandleTeacherChange({state, globalState})
+    const handleDateChange = useHandleDateChange({state, globalState})
     const handleSave = useHandleSave({state, globalState})
 
-    onBeforeMount(useBeforeMount({state}))
+    onBeforeMount(useBeforeMount({state, globalState}))
 
     return {
       state,

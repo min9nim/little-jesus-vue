@@ -1,4 +1,4 @@
-import {reactive, computed} from '@vue/composition-api'
+import {reactive} from '@vue/composition-api'
 import {req} from '@/utils'
 import {propEq} from 'ramda'
 import moment from 'moment'
@@ -28,7 +28,7 @@ export interface IPoint {
   etc: string
 }
 
-export interface IUseHandleSave {
+export interface IAllState {
   state: IState
   globalState: IGlobalState
 }
@@ -69,19 +69,19 @@ export function useGlobalState(): IGlobalState {
   return globalState
 }
 
-export function useBeforeMount({state}: any) {
+export function useBeforeMount({state, globalState}: IAllState) {
   return async () => {
-    state.loading = true
-    await initTeachers(state)
-    await initPoints(state)
-    state.loading = false
+    await initTeachers({state, globalState})
+    await initPoints({state, globalState})
   }
 }
-export async function initPoints(state: IState) {
+export async function initPoints({state, globalState}: IAllState) {
+  state.loading = true
   const result: any = await req(qPoints, {
     date: state.date,
     teacherId: globalState.teacherId,
   })
+  state.loading = false
   const points: IPoint[] = result.res
 
   if (points.length > 0) {
@@ -112,18 +112,20 @@ export async function initPoints(state: IState) {
   state.pointInit = false
 }
 
-export async function initTeachers(state: IState) {
+export async function initTeachers({state, globalState}: IAllState) {
   const teachers = window.localStorage.getItem('teachers')
   if (teachers) {
     globalState.teachers = JSON.parse(teachers)
   } else {
+    state.loading = true
     const result = await req(qTeachers)
+    state.loading = false
     globalState.teachers = result.res
     localStorage.setItem('teachers', JSON.stringify(globalState.teachers))
   }
 }
 
-export function useHandleSave({state, globalState}: IUseHandleSave) {
+export function useHandleSave({state, globalState}: IAllState) {
   return async () => {
     state.loading = true
     const results = globalState.points.map(point => {
@@ -139,8 +141,21 @@ export function useHandleSave({state, globalState}: IUseHandleSave) {
       })
     })
     await Promise.all(results)
-    await MessageBox.alert('저장 완료', {type: 'success'})
     state.loading = false
     state.pointInit = true
+    await MessageBox.alert('저장 완료', {type: 'success'})
+  }
+}
+
+export function useHandleDateChange({state, globalState}: IAllState) {
+  return async () => {
+    await initPoints({state, globalState})
+  }
+}
+
+export function useHandleTeacherChange({state, globalState}: IAllState) {
+  return async (teacherId: string) => {
+    localStorage.setItem('teacherId', teacherId)
+    await initPoints({state, globalState})
   }
 }
