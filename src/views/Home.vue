@@ -58,7 +58,7 @@ export default {
     const handleTeacherChange = useHandleTeacherChange({state, globalState})
     const handleDateChange = useHandleDateChange({state, globalState})
     const handleSave = useHandleSave({state, globalState})
-    const handleEdit = useHandleEdit({state, globalState})
+    const handleEdit = useHandleEdit({state})
     onBeforeMount(useBeforeMount({state, globalState}))
     return {
       state,

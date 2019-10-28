@@ -2,7 +2,7 @@ import {reactive} from '@vue/composition-api'
 import {req} from '@/utils'
 import {propEq} from 'ramda'
 import moment from 'moment'
-import {qCreatePoint, qTeachers, qPoints} from '@/biz/query'
+import {qCreatePoint, qTeachers, qPoints, qUpdatePoint} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 
 export interface IStudent {
@@ -15,6 +15,7 @@ export interface ITeacher {
   students: IStudent[]
 }
 export interface IPoint {
+  _id?: string
   owner: {
     _id: string
     name: string
@@ -131,25 +132,55 @@ export async function initTeachers({state, globalState}: IAllState) {
 
 export function useHandleSave({state, globalState}: IAllState) {
   return async () => {
-    state.loading = true
-    const results = globalState.points.map(point => {
-      return req(qCreatePoint, {
-        owner: point.owner._id,
-        date: state.date,
-        attendance: point.attendance,
-        visitcall: point.visitcall,
-        meditation: point.meditation,
-        recitation: point.recitation,
-        invitation: point.invitation,
-        etc: point.etc,
-      })
-    })
-    await Promise.all(results)
-    state.loading = false
-    state.pointInit = true
-    state.editable = false
-    await MessageBox.alert('저장 완료', {type: 'success'})
+    if (state.pointInit) {
+      await updatePoint({state, globalState})
+    } else {
+      await createPoint({state, globalState})
+    }
   }
+}
+
+export async function updatePoint({state, globalState}: IAllState) {
+  state.loading = true
+  const results = globalState.points.map(point => {
+    return req(qUpdatePoint, {
+      _id: point._id,
+      owner: point.owner._id,
+      date: state.date,
+      attendance: point.attendance,
+      visitcall: point.visitcall,
+      meditation: point.meditation,
+      recitation: point.recitation,
+      invitation: point.invitation,
+      etc: point.etc,
+    })
+  })
+  await Promise.all(results)
+  state.loading = false
+  state.pointInit = true
+  state.editable = false
+  await MessageBox('저장 완료', '', 'success')
+}
+
+export async function createPoint({state, globalState}: IAllState) {
+  state.loading = true
+  const results = globalState.points.map(point => {
+    return req(qCreatePoint, {
+      owner: point.owner._id,
+      date: state.date,
+      attendance: point.attendance,
+      visitcall: point.visitcall,
+      meditation: point.meditation,
+      recitation: point.recitation,
+      invitation: point.invitation,
+      etc: point.etc,
+    })
+  })
+  await Promise.all(results)
+  state.loading = false
+  state.pointInit = true
+  state.editable = false
+  await MessageBox('저장 완료', '', 'success')
 }
 
 export function useHandleDateChange({state, globalState}: IAllState) {
@@ -165,7 +196,7 @@ export function useHandleTeacherChange({state, globalState}: IAllState) {
   }
 }
 
-export function useHandleEdit({state, globalState}: IAllState) {
+export function useHandleEdit({state}: {state: IState}) {
   return () => {
     state.editable = true
   }
