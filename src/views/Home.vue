@@ -15,36 +15,34 @@
     el-date-picker.date(
       v-model="state.date"
       type="date"
+      format="yyyy-MM-dd"
+      value-format="yyyyMMdd"
       placeholder="날짜 선택"
       @change="handleDateChange"
     )
   .form(v-for="(student, index) in state.students" :key="index")
     input-form(:studentId="student._id")
   .btn(v-show="state.students.length > 0")
-    el-button 저장
+    el-button(@click="handleSave") 저장
 </template>
 
 <script lang="ts">
 import {createComponent, onBeforeMount} from '@vue/composition-api'
-import {useState, useBeforeMount} from './home.fn'
+import {useState, useBeforeMount, useHandleSave, ITeacher, IPoint, IState} from './home.fn'
 import InputForm from '../components/InputForm.vue'
 
-interface Teacher {
-  _id: string
-  name: string
-  students: [string]
-}
 export default {
   name: 'v-home',
   components: {InputForm},
-  setup() {
-    const state = useState()
+  setup(props: any, {root}: any) {
+    const state: IState = useState()
     const handleTeacherChange = (teacherId: string) => {
       localStorage.setItem('teacherId', teacherId)
     }
     const handleDateChange = (date: Date) => {
       console.log({date})
     }
+    const handleSave = useHandleSave({root, state})
 
     onBeforeMount(useBeforeMount({state}))
 
@@ -52,6 +50,7 @@ export default {
       state,
       handleTeacherChange,
       handleDateChange,
+      handleSave,
     }
   },
 }
