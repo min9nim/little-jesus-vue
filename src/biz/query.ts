@@ -37,3 +37,34 @@ export const qCreatePoint = gql`
     }
   }
 `
+
+export const qTeachers = gql`
+  query teachers {
+    res: teachers {
+      _id
+      name
+      students {
+        _id
+        name
+      }
+    }
+  }
+`
+
+export const qPoints = gql`
+  query points($date: String, $teacherId: ObjectId) {
+    points(date: $date, teacherId: $teacherId) {
+      _id
+      owner {
+        _id
+        name
+      }
+      date
+      attendance
+      meditation
+      visitcall
+      recitation
+      etc
+    }
+  }
+`

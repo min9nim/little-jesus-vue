@@ -1,113 +1,140 @@
 import {reactive, computed} from '@vue/composition-api'
 import {req} from '@/utils'
-import gql from 'graphql-tag'
-import {mergeRight, propEq} from 'ramda'
+import {propEq} from 'ramda'
 import moment from 'moment'
-import {qCreatePoint} from '@/biz/query'
+import {qCreatePoint, qTeachers, qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 
+export interface IStudent {
+  _id: string
+  name: string
+}
 export interface ITeacher {
   _id: string
   name: string
-  students: [string]
+  students: IStudent[]
 }
 export interface IPoint {
-  _id: string
-  date: string
-  attendance: false
-  visitcall: false
-  meditation: 0
-  invitation: 0
-  recitation: false
+  owner: {
+    _id: string
+    name: string
+  }
+  date?: string
+  attendance: boolean
+  visitcall: boolean
+  meditation: number
+  invitation: number
+  recitation: boolean
   etc: string
 }
 
-export interface IState {
-  teachers: ITeacher[]
-  teacherId?: string
-  students: IPoint[]
-  date: string
-  loading: boolean
+export interface IUseHandleSave {
+  state: IState
+  globalState: IGlobalState
 }
 
-let state: IState
+export interface IState {
+  date: string
+  loading: boolean
+  pointInit: boolean
+}
 
-export function useState() {
-  if (state) {
-    return state
-  }
-  state = reactive({
+export interface IGlobalState {
+  teacherId?: string
+  teachers: ITeacher[]
+  points: IPoint[]
+}
+
+export function useState(): IState {
+  return reactive({
     teachers: [] as ITeacher[],
+    date: moment()
+      .startOf('week')
+      .format('YYYYMMDD'),
+    loading: true,
+    pointInit: false,
+  })
+}
+
+let globalState: IGlobalState
+export function useGlobalState(): IGlobalState {
+  if (globalState) {
+    return globalState
+  }
+  globalState = reactive({
     teacherId: localStorage.getItem('teacherId') || '',
-    students: computed(() => {
-      const teacher: any = state.teachers.find(propEq('_id', state.teacherId))
+    teachers: [] as ITeacher[],
+    points: computed(() => {
+      const teacher: ITeacher | undefined = globalState.teachers.find(
+        propEq('_id', globalState.teacherId),
+      )
       if (!teacher) {
         return []
       }
-      return teacher.students.map(
-        mergeRight<any>({
+      return teacher.students.map(student => {
+        return {
+          owner: {
+            _id: student._id,
+            name: student.name,
+          },
           attendance: false,
           visitcall: false,
           meditation: 0,
           invitation: 0,
           recitation: false,
-        }),
-      )
+          etc: '',
+        }
+      })
     }),
-    date: moment()
-      .startOf('week')
-      .format('YYYYMMDD'),
-    loading: true,
   })
-  return state
+  return globalState
 }
 
 export function useBeforeMount({state}: any) {
   return async () => {
-    const teachers = window.localStorage.getItem('teachers')
-    if (teachers) {
-      state.teachers = JSON.parse(teachers)
-      state.loading = false
-      return
-    }
-    const result = await req(gql`
-      {
-        res: teachers {
-          _id
-          name
-          students {
-            _id
-            name
-          }
-        }
-      }
-    `)
-    state.teachers = result.res
-    state.loading = false
-    localStorage.setItem('teachers', JSON.stringify(state.teachers))
+    await initTeachers(state)
+    await initPoints(state)
   }
 }
-interface IUseHandleSave {
-  state: IState
+async function initPoints(state: IState) {
+  const points: IPoint[] = await req(qPoints, {
+    date: state.date,
+    teacherId: globalState.teacherId,
+  })
+  globalState.points = points
+  state.pointInit = true
 }
-
-export function useHandleSave({state}: IUseHandleSave) {
+async function initTeachers(state: IState) {
+  const teachers = window.localStorage.getItem('teachers')
+  if (teachers) {
+    globalState.teachers = JSON.parse(teachers)
+    state.loading = false
+    return
+  } else {
+    const result = await req(qTeachers)
+    globalState.teachers = result.res
+    state.loading = false
+    localStorage.setItem('teachers', JSON.stringify(globalState.teachers))
+  }
+}
+export function useHandleSave({state, globalState}: IUseHandleSave) {
   return async () => {
     state.loading = true
-    const results = state.students.map(student => {
+    const results = globalState.points.map(point => {
       return req(qCreatePoint, {
-        owner: student._id,
+        owner: point.owner._id,
         date: state.date,
-        attendance: student.attendance,
-        visitcall: student.visitcall,
-        meditation: student.meditation,
-        recitation: student.recitation,
-        invitation: student.invitation,
-        etc: student.etc,
+        attendance: point.attendance,
+        visitcall: point.visitcall,
+        meditation: point.meditation,
+        recitation: point.recitation,
+        invitation: point.invitation,
+        etc: point.etc,
       })
     })
     await Promise.all(results)
-    state.loading = false
     await MessageBox.alert('저장 완료', {type: 'success'})
+    state.loading = false
+    state.pointInit = true
   }
 }

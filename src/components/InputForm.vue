@@ -1,46 +1,46 @@
 <template lang="pug">
 .input-form
-  h1 {{ state.student.name }}
+  h1 {{ state.point.owner.name }}
   .item
     .label 출석여부
     .control
-      el-radio(v-model="state.student.attendance" :label="true") O
-      el-radio(v-model="state.student.attendance" :label="false") X
+      el-radio(v-model="state.point.attendance" :label="true") O
+      el-radio(v-model="state.point.attendance" :label="false") X
   .item
     .label 심방여부
     .control
-      el-radio(v-model="state.student.visitcall" :label="true") O
-      el-radio(v-model="state.student.visitcall" :label="false") X    
+      el-radio(v-model="state.point.visitcall" :label="true") O
+      el-radio(v-model="state.point.visitcall" :label="false") X    
   .item.meditation
     .label 말씀묵상
     .control
-      el-radio(v-model="state.student.meditation" :label="0") 0
-      el-radio(v-model="state.student.meditation" :label="1") 1
-      el-radio(v-model="state.student.meditation" :label="2") 2
-      el-radio(v-model="state.student.meditation" :label="3") 3
-      el-radio(v-model="state.student.meditation" :label="4") 4
-      el-radio(v-model="state.student.meditation" :label="5") 5
-      el-radio(v-model="state.student.meditation" :label="6") 6
-      el-radio(v-model="state.student.meditation" :label="7") 7
+      el-radio(v-model="state.point.meditation" :label="0") 0
+      el-radio(v-model="state.point.meditation" :label="1") 1
+      el-radio(v-model="state.point.meditation" :label="2") 2
+      el-radio(v-model="state.point.meditation" :label="3") 3
+      el-radio(v-model="state.point.meditation" :label="4") 4
+      el-radio(v-model="state.point.meditation" :label="5") 5
+      el-radio(v-model="state.point.meditation" :label="6") 6
+      el-radio(v-model="state.point.meditation" :label="7") 7
   .item
     .label 말씀암송
     .control
-      el-radio(v-model="state.student.recitation" :label="true") O
-      el-radio(v-model="state.student.recitation" :label="false") X    
+      el-radio(v-model="state.point.recitation" :label="true") O
+      el-radio(v-model="state.point.recitation" :label="false") X    
   .item.invitation
     .label 전도
     .control
-      el-radio(v-model="state.student.invitation" :label="0") 0
-      el-radio(v-model="state.student.invitation" :label="1") 1
-      el-radio(v-model="state.student.invitation" :label="2") 2
-      el-radio(v-model="state.student.invitation" :label="3") 3
-      el-radio(v-model="state.student.invitation" :label="4") 4
-      el-radio(v-model="state.student.invitation" :label="5") 5    
+      el-radio(v-model="state.point.invitation" :label="0") 0
+      el-radio(v-model="state.point.invitation" :label="1") 1
+      el-radio(v-model="state.point.invitation" :label="2") 2
+      el-radio(v-model="state.point.invitation" :label="3") 3
+      el-radio(v-model="state.point.invitation" :label="4") 4
+      el-radio(v-model="state.point.invitation" :label="5") 5    
   .item
     .label 기타사항
     .control
       el-input(
-        v-model="state.student.etc"
+        v-model="state.point.etc"
         type="textarea"
         :autosize="{ minRows: 2, maxRows: 6}"
         placeholder="특이사항 입력"
@@ -48,21 +48,21 @@
 </template>
 <script lang="ts">
 import {createComponent, reactive, computed, watch} from '@vue/composition-api'
-import {useState} from '../views/home.fn'
-import {propEq} from 'ramda'
+import {useState, useGlobalState} from '../views/home.fn'
+import {propEq, pathEq} from 'ramda'
 import Vue from 'vue'
 
 export default createComponent({
   props: {studentId: String},
   setup(props, {root}) {
-    const globalState = useState()
+    const globalState = useGlobalState()
     let state = reactive({
-      student: globalState.students.find(propEq('_id', props.studentId)),
+      point: globalState.points.find(pathEq(['owner', '_id'], props.studentId)),
     })
     watch(
       () => props.studentId,
       () => {
-        state.student = globalState.students.find(propEq('_id', props.studentId))
+        state.point = globalState.points.find(pathEq(['owner', '_id'], props.studentId))
       },
     )
     return {
