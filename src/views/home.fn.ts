@@ -4,6 +4,7 @@ import gql from 'graphql-tag'
 import {mergeRight, propEq} from 'ramda'
 import moment from 'moment'
 import {qCreatePoint} from '@/biz/query'
+import {MessageBox} from 'element-ui'
 
 export interface ITeacher {
   _id: string
@@ -87,12 +88,12 @@ export function useBeforeMount({state}: any) {
   }
 }
 interface IUseHandleSave {
-  root: any
   state: IState
 }
 
-export function useHandleSave({root, state}: IUseHandleSave) {
+export function useHandleSave({state}: IUseHandleSave) {
   return async () => {
+    state.loading = true
     const results = state.students.map(student => {
       return req(qCreatePoint, {
         owner: student._id,
@@ -106,6 +107,7 @@ export function useHandleSave({root, state}: IUseHandleSave) {
       })
     })
     await Promise.all(results)
-    root.$alert('저장 완료')
+    state.loading = false
+    await MessageBox.alert('저장 완료', {type: 'success'})
   }
 }
