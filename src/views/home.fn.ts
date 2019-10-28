@@ -1,6 +1,6 @@
 import {reactive} from '@vue/composition-api'
 import {req} from '@/utils'
-import {propEq} from 'ramda'
+import {propEq, prop} from 'ramda'
 import moment from 'moment'
 import {qCreatePoint, qTeachers, qPoints, qUpdatePoint} from '@/biz/query'
 import {Message} from 'element-ui'
@@ -176,7 +176,8 @@ export async function createPoint({state, globalState}: IAllState) {
       etc: point.etc,
     })
   })
-  await Promise.all(results)
+  const resolvedList: any = await Promise.all(results)
+  globalState.points = resolvedList.map(prop('res')) // 생성된 _id 세팅
   state.loading = false
   state.pointInit = true
   state.editable = false
