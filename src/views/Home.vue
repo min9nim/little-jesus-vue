@@ -20,10 +20,11 @@
       placeholder="날짜 선택"
       @change="handleDateChange"
     )
-  .form(v-for="(student, index) in state.students" :key="index")
-    input-form(:studentId="student._id")
-  .btn(v-show="state.students.length > 0")
-    el-button(@click="handleSave") 저장
+  template(v-if="!state.loading")
+    .form(v-for="(student, index) in state.students" :key="index")
+      input-form(:studentId="student._id")
+    .btn(v-show="state.students.length > 0")
+      el-button(@click="handleSave") 저장
 </template>
 
 <script lang="ts">
@@ -34,7 +35,7 @@ import InputForm from '../components/InputForm.vue'
 export default {
   name: 'v-home',
   components: {InputForm},
-  setup(props: any, {root}: any) {
+  setup() {
     const state: IState = useState()
     const handleTeacherChange = (teacherId: string) => {
       localStorage.setItem('teacherId', teacherId)
@@ -42,7 +43,7 @@ export default {
     const handleDateChange = (date: Date) => {
       console.log({date})
     }
-    const handleSave = useHandleSave({root, state})
+    const handleSave = useHandleSave({state})
 
     onBeforeMount(useBeforeMount({state}))
 
