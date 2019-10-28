@@ -3,7 +3,7 @@ import {req} from '@/utils'
 import {propEq} from 'ramda'
 import moment from 'moment'
 import {qCreatePoint, qTeachers, qPoints, qUpdatePoint} from '@/biz/query'
-import {MessageBox} from 'element-ui'
+import {Message} from 'element-ui'
 
 export interface IStudent {
   _id: string
@@ -159,7 +159,7 @@ export async function updatePoint({state, globalState}: IAllState) {
   state.loading = false
   state.pointInit = true
   state.editable = false
-  await MessageBox('저장 완료', '', 'success')
+  await Message({message: '저장 완료', type: 'success'})
 }
 
 export async function createPoint({state, globalState}: IAllState) {
@@ -180,7 +180,7 @@ export async function createPoint({state, globalState}: IAllState) {
   state.loading = false
   state.pointInit = true
   state.editable = false
-  await MessageBox('저장 완료', '', 'success')
+  await Message({message: '저장 완료', type: 'success'})
 }
 
 export function useHandleDateChange({state, globalState}: IAllState) {
