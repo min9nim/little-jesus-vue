@@ -1,4 +1,4 @@
-import {reactive} from '@vue/composition-api'
+import {reactive, computed} from '@vue/composition-api'
 import moment from 'moment'
 import {req} from '@/utils'
 import {propEq, prop} from 'ramda'
@@ -10,6 +10,14 @@ export interface IState {
   date: string
   loading: boolean
   points: IPoint[]
+}
+
+export interface IComputed {
+  attendanceSum: number
+  visitcallSum: number
+  meditationSum: number
+  recitationSum: number
+  invitationSum: number
 }
 
 export interface IAllState {
@@ -66,5 +74,20 @@ export function useState(): IState {
       .format('YYYYMMDD'),
     loading: false,
     points: [],
+  })
+}
+
+export function useComputed(state: IState) {
+  const attendanceReducer = (acc: number, point: IPoint) => acc + (point.attendance ? 1 : 0)
+  const visitcallReducer = (acc: number, point: IPoint) => acc + (point.visitcall ? 1 : 0)
+  const recitationReducer = (acc: number, point: IPoint) => acc + (point.recitation ? 1 : 0)
+  const meditationReducer = (acc: number, point: IPoint) => acc + point.meditation
+  const invitationReducer = (acc: number, point: IPoint) => acc + point.invitation
+  return reactive({
+    attendanceSum: computed(() => state.points.reduce(attendanceReducer, 0)),
+    visitcallSum: computed(() => state.points.reduce(visitcallReducer, 0)),
+    meditationSum: computed(() => state.points.reduce(meditationReducer, 0)),
+    recitationSum: computed(() => state.points.reduce(recitationReducer, 0)),
+    invitationSum: computed(() => state.points.reduce(invitationReducer, 0)),
   })
 }
