@@ -9,7 +9,7 @@ table.items
       td.recitation 암송
       td.invitation 전도
       td.invitation 기타
-  tbody
+  tbody(v-if="!tableBodyHidden")
     tr.row(v-for="(point, index) in points" :key="index")
       td.name {{point.owner.name}}
       td.attendance {{point.attendance ? 1 : 0}}
@@ -41,6 +41,7 @@ export default {
   name: 'table-point',
   props: {
     points: Array,
+    tableBodyHidden: Boolean,
   },
   setup(props: any) {
     const computed: IComputed = useComputed(props)

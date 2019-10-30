@@ -7,7 +7,7 @@ import {Message} from 'element-ui'
 import {IGlobalState, IPoint, ITeacher} from '@/biz/type'
 
 export interface IState {
-  date: string
+  date?: string
   loading: boolean
   pointInit?: boolean
   editable?: boolean

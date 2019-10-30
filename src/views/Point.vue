@@ -9,14 +9,26 @@
       placeholder="날짜 선택"
       @change="handleDateChange"
     )
-  table-point(v-if="!state.loading" :points="state.points")
+  .result(v-for="(points, teacherName) in state.pointsByTeacher")  
+    h3.teacher {{teacherName}}
+    table-point(:points="points")
+  .sum
+    h2 전체합계
+    table-point(:points="state.points" :table-body-hidden="true")
 </template>
 
 <script lang="ts">
 import {createComponent, onBeforeMount} from '@vue/composition-api'
 import {useGlobalState} from './home.fn'
 import TablePoint from '../components/TablePoint.vue'
-import {useState, IState, IComputed, useHandleDateChange, useBeforeMount, useComputed} from './point.fn'
+import {
+  useState,
+  IState,
+  IComputed,
+  useHandleDateChange,
+  useBeforeMount,
+  useComputed,
+} from './point.fn'
 import {IGlobalState, IPoint, ITeacher} from '../biz/type'
 
 export default {
@@ -54,31 +66,10 @@ export default {
     }
   }
 
-  .items {
-    margin-top: 10px;
-    width: 100%;
-    border-collapse: collapse;
-
-    .row {
-      margin: 5px;
-      border: 1px solid #ddd;
-      padding: 10px;
-    }
-    thead{
-      background-color: #f9f9f9;
-    }    
-    tfoot {
-      background-color: #f9f9f9;
+  .result {
+    .teacher {
+      margin-bottom: 0px;
     }
   }
 }
-
-table, th, td {
-  border: 1px solid #eee;
-}
-td{
-  padding: 3px;
-  text-align: center;
-}
-
 </style>

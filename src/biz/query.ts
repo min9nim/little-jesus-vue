@@ -97,6 +97,9 @@ export const qPoints = gql`
       owner {
         _id
         name
+        teacher {
+          name
+        }
       }
       date
       attendance

@@ -1,15 +1,17 @@
 import {reactive, computed} from '@vue/composition-api'
 import moment from 'moment'
 import {req} from '@/utils'
-import {propEq, prop} from 'ramda'
+import {propEq, prop, groupBy, path, difference, differenceWith} from 'ramda'
 import {qCreatePoint, qTeachers, qPoints, qUpdatePoint} from '@/biz/query'
 import {Message} from 'element-ui'
 import {IGlobalState, IPoint, ITeacher} from '@/biz/type'
+import {initTeachers} from './home.fn'
 
 export interface IState {
   date?: string
-  loading?: boolean
+  loading: boolean
   points: IPoint[]
+  pointsByTeacher?: any
 }
 
 export interface IComputed {
@@ -33,6 +35,9 @@ export function useHandleDateChange({state, globalState}: IAllState) {
 
 export function useBeforeMount({state, globalState}: IAllState) {
   return async () => {
+    if (globalState.teachers.length === 0) {
+      await initTeachers({state, globalState})
+    }
     await initPoints({state, globalState})
   }
 }
@@ -44,27 +49,31 @@ export async function initPoints({state, globalState}: IAllState) {
   state.loading = false
   const points: IPoint[] = result.res
   state.points = points
+  // @ts-ignore
+  state.pointsByTeacher = groupBy(path(['owner', 'teacher', 'name']))(points)
+  const teachers = globalState.teachers.map(prop('name'))
 
-  // const teacher: ITeacher | undefined = globalState.teachers.find(
-  //   propEq('_id', globalState.teacherId),
-  // )
-  // if (!teacher) {
-  //   throw Error('Teacher not found')
-  // }
-  // globalState.points = teacher.students.map(student => {
-  //   return {
-  //     owner: {
-  //       _id: student._id,
-  //       name: student.name,
-  //     },
-  //     attendance: false,
-  //     visitcall: false,
-  //     meditation: 0,
-  //     invitation: 0,
-  //     recitation: false,
-  //     etc: '',
-  //   }
-  // })
+  const diffTeachers: ITeacher[] = differenceWith(
+    (t1, t2) => t1.name === t2,
+    globalState.teachers,
+    Object.keys(state.pointsByTeacher),
+  )
+  diffTeachers.forEach(teacher => {
+    state.pointsByTeacher[teacher.name] = []
+    const points = teacher.students.map(student => ({
+      owner: {
+        _id: student._id,
+        name: student.name,
+      },
+      attendance: false,
+      visitcall: false,
+      meditation: 0,
+      invitation: 0,
+      recitation: false,
+      etc: '',
+    }))
+    state.points.push(...points)
+  })
 }
 
 export function useState(): IState {
