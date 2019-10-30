@@ -1,6 +1,6 @@
 <template lang="pug">
 .home(v-loading='state.loading')
-  .options 날짜:
+  .options
     el-date-picker.date(
       v-model="state.date"
       type="date"

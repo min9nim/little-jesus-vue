@@ -27,7 +27,7 @@
     .btn(v-show="globalState.points.length > 0")
       template(v-if="state.editable")
         el-button(@click="handleSave") 저장
-        el-button(@click="handleCancel") 취소
+        el-button(v-if="state.pointInit" @click="handleCancel") 취소
       template(v-else)
         el-button(@click="handleEdit") 수정
         el-button(@click="handleRemove") 삭제
@@ -70,7 +70,9 @@ export default {
       handleSave,
       handleEdit,
       handleRemove,
-      handleCancel: () => {state.editable = false}
+      handleCancel: () => {
+        state.editable = false
+      },
     }
   },
 }
@@ -83,7 +85,7 @@ export default {
 
   .options {
     .teacher {
-      width: 150px;
+      width: 100px;
     }
 
     .date {

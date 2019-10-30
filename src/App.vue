@@ -16,7 +16,7 @@
 }
 
 #nav {
-  padding: 10px;
+  text-align: center;
 }
 
 #nav a {
