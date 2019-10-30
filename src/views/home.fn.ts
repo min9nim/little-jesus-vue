@@ -3,7 +3,7 @@ import {req} from '@/utils'
 import {propEq, prop} from 'ramda'
 import moment from 'moment'
 import {qCreatePoint, qTeachers, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
-import {Message, MessageBox} from 'element-ui'
+import {Message, MessageBox, Notification} from 'element-ui'
 import {IGlobalState, IPoint, ITeacher} from '@/biz/type'
 
 export interface IState {
@@ -130,7 +130,9 @@ export async function updatePoint({state, globalState}: IAllState) {
   state.loading = false
   state.pointInit = true
   state.editable = false
-  await Message({message: '저장 완료', type: 'success'})
+  // @ts-ignore
+  Notification.success({message: '저장 완료', position: 'bottom-right'})
+  // await Message({message: '저장 완료', type: 'success'})
 }
 
 export async function createPoint({state, globalState}: IAllState) {
@@ -152,7 +154,9 @@ export async function createPoint({state, globalState}: IAllState) {
   state.loading = false
   state.pointInit = true
   state.editable = false
-  await Message({message: '저장 완료', type: 'success'})
+  // await Message({message: '저장 완료', type: 'success'})
+  // @ts-ignore
+  Notification.success({message: '저장 완료', position: 'bottom-right'})
 }
 
 export function useHandleDateChange({state, globalState}: IAllState) {
@@ -184,7 +188,10 @@ export function useHandleRemove({state}: {state: IState}) {
       )
       await Promise.all(results)
       state.loading = false
-      await Message({message: '삭제 완료', type: 'success'})
+      // await Message({message: '삭제 완료', type: 'success'})
+      // @ts-ignore
+      Notification.success({message: '삭제 완료', position: 'bottom-right'})
+
       await initPoints({state, globalState})
     } catch (e) {
       if (e !== 'cancel') {
