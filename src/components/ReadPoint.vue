@@ -1,26 +1,26 @@
 <template lang="pug">
 .input-form
-  h1 {{ state.point.owner.name }}
+  h1 {{ point.owner.name }}
   .item
     .label 출석여부
-    .control {{state.point.attendance ? 'O' : 'X'}}
+    .control {{point.attendance ? 'O' : 'X'}}
   .item
     .label 심방여부
-    .control {{state.point.visitcall ? 'O' : 'X'}}
+    .control {{point.visitcall ? 'O' : 'X'}}
   .item.meditation
     .label 말씀묵상
-    .control {{state.point.meditation}}
+    .control {{point.meditation}}
   .item
     .label 말씀암송
-    .control {{state.point.recitation ? 'O' : 'X'}}
+    .control {{point.recitation ? 'O' : 'X'}}
   .item.invitation
     .label 전도
-    .control {{state.point.invitation}}
+    .control {{point.invitation}}
   .item
     .label 기타사항
     .control
       el-input(
-        v-model="state.point.etc"
+        v-model="point.etc"
         type="textarea"
         readonly
         :autosize="{ minRows: 2, maxRows: 6}"
@@ -33,20 +33,20 @@ import {propEq, pathEq} from 'ramda'
 import Vue from 'vue'
 
 export default createComponent({
-  props: {studentId: String},
+  props: {point: Object},
   setup(props, {root}) {
     const globalState = useGlobalState()
-    let state = reactive({
-      point: globalState.points.find(pathEq(['owner', '_id'], props.studentId)),
-    })
-    watch(
-      () => props.studentId,
-      () => {
-        state.point = globalState.points.find(pathEq(['owner', '_id'], props.studentId))
-      },
-    )
+    // let state = reactive({
+    //   point: globalState.points.find(pathEq(['owner', '_id'], props.studentId)),
+    // })
+    // watch(
+    //   () => props.point,
+    //   () => {
+    //     state.point = globalState.points.find(pathEq(['owner', '_id'], props.studentId))
+    //   },
+    // )
     return {
-      state,
+      // state,
     }
   },
 })

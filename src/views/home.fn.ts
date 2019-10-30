@@ -4,47 +4,18 @@ import {propEq, prop} from 'ramda'
 import moment from 'moment'
 import {qCreatePoint, qTeachers, qPoints, qUpdatePoint} from '@/biz/query'
 import {Message} from 'element-ui'
+import {IGlobalState, IPoint, ITeacher} from '@/biz/type'
 
-export interface IStudent {
-  _id: string
-  name: string
-}
-export interface ITeacher {
-  _id: string
-  name: string
-  students: IStudent[]
-}
-export interface IPoint {
-  _id?: string
-  owner: {
-    _id: string
-    name: string
-  }
-  date?: string
-  attendance: boolean
-  visitcall: boolean
-  meditation: number
-  invitation: number
-  recitation: boolean
-  etc: string
+export interface IState {
+  date: string
+  loading: boolean
+  pointInit?: boolean
+  editable?: boolean
 }
 
 export interface IAllState {
   state: IState
   globalState: IGlobalState
-}
-
-export interface IState {
-  date: string
-  loading: boolean
-  pointInit: boolean
-  editable: boolean
-}
-
-export interface IGlobalState {
-  teacherId?: string
-  teachers: ITeacher[]
-  points: IPoint[]
 }
 
 export function useState(): IState {
