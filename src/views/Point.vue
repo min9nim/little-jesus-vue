@@ -1,6 +1,6 @@
 <template lang="pug">
 .home(v-loading='state.loading')
-  .options
+  .options 날짜:
     el-date-picker.date(
       v-model="state.date"
       type="date"
@@ -12,6 +12,7 @@
   .result(v-for="(points, teacherName) in state.pointsByTeacher")  
     h3.teacher {{teacherName}}
     table-point(:points="points")
+  hr
   .sum
     h2 전체합계
     table-point(:points="state.points" :table-body-hidden="true")
@@ -64,6 +65,9 @@ export default {
       margin-left: 5px;
       width: 150px;
     }
+  }
+  hr{
+    margin-top: 30px;
   }
 
   .result {
