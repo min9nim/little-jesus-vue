@@ -28,7 +28,9 @@
       template(v-if="state.editable")
         el-button(@click="handleSave") 저장
         el-button(@click="handleCancel") 취소
-      el-button(v-else @click="handleEdit") 수정
+      template(v-else)
+        el-button(@click="handleEdit") 수정
+        el-button(@click="handleRemove") 삭제
 </template>
 
 <script lang="ts">
@@ -42,6 +44,7 @@ import {
   useHandleDateChange,
   useHandleTeacherChange,
   useHandleEdit,
+  useHandleRemove,
 } from './home.fn'
 import EditPoint from '../components/EditPoint.vue'
 import ReadPoint from '../components/ReadPoint.vue'
@@ -57,6 +60,7 @@ export default {
     const handleDateChange = useHandleDateChange({state, globalState})
     const handleSave = useHandleSave({state, globalState})
     const handleEdit = useHandleEdit({state})
+    const handleRemove = useHandleRemove({state})
     onBeforeMount(useBeforeMount({state, globalState}))
     return {
       state,
@@ -65,6 +69,7 @@ export default {
       handleDateChange,
       handleSave,
       handleEdit,
+      handleRemove,
       handleCancel: () => {state.editable = false}
     }
   },

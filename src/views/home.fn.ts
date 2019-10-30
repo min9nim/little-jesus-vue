@@ -2,8 +2,8 @@ import {reactive} from '@vue/composition-api'
 import {req} from '@/utils'
 import {propEq, prop} from 'ramda'
 import moment from 'moment'
-import {qCreatePoint, qTeachers, qPoints, qUpdatePoint} from '@/biz/query'
-import {Message} from 'element-ui'
+import {qCreatePoint, qTeachers, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
+import {Message, MessageBox} from 'element-ui'
 import {IGlobalState, IPoint, ITeacher} from '@/biz/type'
 
 export interface IState {
@@ -171,5 +171,25 @@ export function useHandleTeacherChange({state, globalState}: IAllState) {
 export function useHandleEdit({state}: {state: IState}) {
   return () => {
     state.editable = true
+  }
+}
+export function useHandleRemove({state}: {state: IState}) {
+  return async () => {
+    try {
+      await MessageBox.confirm('입력했던 내용을 전부 삭제합니다', {type: 'warning'})
+      const globalState = useGlobalState()
+      state.loading = true
+      const results: Array<Promise<any>> = globalState.points.map(point =>
+        req(qRemovePoint, {_id: point._id}),
+      )
+      await Promise.all(results)
+      state.loading = false
+      await Message({message: '삭제 완료', type: 'success'})
+      await initPoints({state, globalState})
+    } catch (e) {
+      if (e !== 'cancel') {
+        throw e
+      }
+    }
   }
 }

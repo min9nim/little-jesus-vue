@@ -111,3 +111,12 @@ export const qPoints = gql`
     }
   }
 `
+
+export const qRemovePoint = gql`
+  mutation removePoint($_id: ObjectId!) {
+    removePoint(_id: $_id) {
+      _id
+      date
+    }
+  }
+`
