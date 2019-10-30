@@ -9,9 +9,26 @@
       placeholder="날짜 선택"
       @change="handleDateChange"
     )
-  .items(v-if="!state.loading")
-    .form(v-for="(point, index) in state.points" :key="index")
-      view-point(:point="point")
+  .section 출석현황
+    table.items(v-if="!state.loading")
+      thead
+        tr.row
+          td.name 이름
+          td.attendance 출석
+          td.visitcall 심방
+          td.meditation 묵상
+          td.recitation 암송
+          td.invitation 전도
+          td.invitation 기타
+      tbody
+        tr.row(v-for="(point, index) in state.points" :key="index")
+          td.name {{point.owner.name}}
+          td.attendance {{point.attendance ? 1 : 0}}
+          td.visitcall {{point.visitcall ? 1 : 0}}
+          td.meditation {{point.meditation}}
+          td.recitation {{point.recitation ? 1 : 0}}
+          td.invitation {{point.invitation}}
+          td.invitation {{point.etc}}
 </template>
 
 <script lang="ts">
@@ -53,16 +70,23 @@ export default {
       width: 150px;
     }
   }
+
   .items {
-    display: flex;
-    flex-wrap: wrap;
-    .form {
-      flex: 1;
+    width: 100%;
+    border-collapse: collapse;
+
+    .row {
       margin: 5px;
       border: 1px solid #ddd;
       padding: 10px;
-      min-width: 150px;
-    }    
+    }
   }
+}
+
+table, th, td {
+  border: 1px solid #eee;
+}
+td{
+  padding: 3px;
 }
 </style>
