@@ -8,7 +8,8 @@ table.items
       td.meditation 묵상
       td.recitation 암송
       td.invitation 전도
-      td.invitation 기타
+      td.etc 기타
+      td.point 점수
   tbody(v-if="!tableBodyHidden")
     tr.row(v-for="(point, index) in points" :key="index")
       td.name {{point.owner.name}}
@@ -17,7 +18,8 @@ table.items
       td.meditation {{point.meditation}}
       td.recitation {{point.recitation ? 1 : 0}}
       td.invitation {{point.invitation}}
-      td.invitation {{point.etc}}
+      td.etc {{point.etc}}
+      td.point {{(point.attendance ? 1 : 0) + (point.visitcall ? 1 : 0) + point.meditation + (point.recitation ? 1 : 0) + point.invitation}}
   tfoot
     tr.row
       td.name 합계
@@ -26,12 +28,20 @@ table.items
       td.meditation {{computed.meditationSum}}
       td.recitation {{computed.recitationSum}} / {{points.length}}
       td.invitation {{computed.invitationSum}}
-      td.invitation N/A              
+      td.etc -    
+      td.point -        
 </template>
 
 <script lang="ts">
 import ViewPoint from '../components/ViewPoint.vue'
-import {useState, IState, IComputed, useHandleDateChange, useBeforeMount, useComputed} from '../views/point.fn'
+import {
+  useState,
+  IState,
+  IComputed,
+  useHandleDateChange,
+  useBeforeMount,
+  useComputed,
+} from '../views/point.fn'
 import {IGlobalState, IPoint, ITeacher} from '../biz/type'
 
 interface IProps {
@@ -52,34 +62,44 @@ export default {
 }
 </script>
 <style scoped lang="stylus">
-.home {
-  // margin: 0 10px;
+.items {
+  margin-top: 10px;
+  width: 100%;
+  font-size: 12px;
+  border-collapse: collapse;
   padding: 5px;
-  text-align: left;
 
-  .items {
-    margin-top: 10px;
-    width: 100%;
-    border-collapse: collapse;
+  .row {
+    margin: 5px;
+    border: 1px solid #ddd;
+    padding: 10px;
+  }
 
-    .row {
-      margin: 5px;
-      border: 1px solid #ddd;
-      padding: 10px;
+  thead {
+    background-color: #f9f9f9;
+  }
+
+  tbody {
+    .name {
+      min-width: 35px;
     }
-    thead{
-      background-color: #f9f9f9;
-    }    
-    tfoot {
-      background-color: #f9f9f9;
+    .etc {
+      font-size: 10px;
+      text-align: left;
+      max-width: 130px;
     }
+  }
+
+  tfoot {
+    background-color: #f9f9f9;
   }
 }
 
 table, th, td {
   border: 1px solid #eee;
 }
-td{
+
+td {
   padding: 3px;
   text-align: center;
 }
