@@ -7,8 +7,8 @@ import {Message} from 'element-ui'
 import {IGlobalState, IPoint, ITeacher} from '@/biz/type'
 
 export interface IState {
-  date: string
-  loading: boolean
+  date?: string
+  loading?: boolean
   points: IPoint[]
 }
 
