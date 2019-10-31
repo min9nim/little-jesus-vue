@@ -15,6 +15,7 @@
     el-date-picker.date(
       v-model="state.date"
       type="date"
+      :clearable="false"
       format="yyyy-MM-dd"
       value-format="yyyyMMdd"
       placeholder="날짜 선택"
@@ -89,6 +90,7 @@ export default {
     }
 
     .date {
+      cursor: pointer;
       margin-left: 5px;
       width: 150px;
     }
@@ -103,5 +105,10 @@ export default {
   .btn {
     margin-top: 10px;
   }
+}
+</style>
+<style lang="stylus">
+.el-input--prefix .el-input__inner {
+  cursor: pointer;
 }
 </style>
