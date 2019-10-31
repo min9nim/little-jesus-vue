@@ -164,7 +164,6 @@ export async function createPoint({state, globalState}: IAllState) {
 
 export function useHandleDateChange({state, globalState}: IAllState) {
   return async (value: string) => {
-    console.log(value, state.oldDate)
     if (moment(value, 'YYYYMMDD').format('dddd') !== 'Sunday') {
       await MessageBox.alert('일요일만 선택가능합니다', {type: 'warning'})
       state.date = state.oldDate

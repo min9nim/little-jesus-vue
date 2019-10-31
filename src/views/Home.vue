@@ -92,7 +92,7 @@ export default {
     .date {
       cursor: pointer;
       margin-left: 5px;
-      width: 120px;
+      width: 140px;
     }
   }
 

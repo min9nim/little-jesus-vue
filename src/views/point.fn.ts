@@ -1,14 +1,15 @@
 import {reactive, computed} from '@vue/composition-api'
 import moment from 'moment'
 import {req} from '@/utils'
-import {propEq, prop, groupBy, path, difference, differenceWith} from 'ramda'
-import {qCreatePoint, qTeachers, qPoints, qUpdatePoint} from '@/biz/query'
-import {Message} from 'element-ui'
+import {prop, groupBy, path, differenceWith} from 'ramda'
+import {qPoints} from '@/biz/query'
+import {MessageBox} from 'element-ui'
 import {IGlobalState, IPoint, ITeacher} from '@/biz/type'
 import {initTeachers} from './home.fn'
 
 export interface IState {
   date?: string
+  oldDate?: string
   loading: boolean
   points: IPoint[]
   pointsByTeacher?: any
@@ -28,7 +29,14 @@ export interface IAllState {
 }
 
 export function useHandleDateChange({state, globalState}: IAllState) {
-  return async () => {
+  return async (value: string) => {
+    if (moment(value, 'YYYYMMDD').format('dddd') !== 'Sunday') {
+      await MessageBox.alert('일요일만 선택가능합니다', {type: 'warning'})
+      state.date = state.oldDate
+      return
+    }
+    state.oldDate = state.date
+
     await initPoints({state, globalState})
   }
 }
@@ -77,13 +85,15 @@ export async function initPoints({state, globalState}: IAllState) {
 }
 
 export function useState(): IState {
-  return reactive({
+  const state: IState = reactive({
     date: moment()
       .startOf('week')
       .format('YYYYMMDD'),
     loading: false,
     points: [],
   })
+  state.oldDate = state.date
+  return state
 }
 
 export function useComputed(state: IState) {
