@@ -63,7 +63,7 @@ export default {
 
     .date {
       margin-left: 5px;
-      width: 150px;
+      width: 140px;
     }
   }
   hr{
