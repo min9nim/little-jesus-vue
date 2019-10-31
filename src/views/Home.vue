@@ -19,6 +19,7 @@
       format="yyyy-MM-dd"
       value-format="yyyyMMdd"
       placeholder="날짜 선택"
+      :disabled="state.pointInit && state.editable"
       @change="handleDateChange"
     )
   template(v-if="!state.loading")
