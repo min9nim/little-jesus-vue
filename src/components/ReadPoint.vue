@@ -27,28 +27,10 @@
       ) 
 </template>
 <script lang="ts">
-import {createComponent, reactive, computed, watch} from '@vue/composition-api'
-import {useState, useGlobalState} from '../views/home.fn'
-import {propEq, pathEq} from 'ramda'
-import Vue from 'vue'
+import {createComponent} from '@vue/composition-api'
 
 export default createComponent({
   props: {point: Object},
-  setup(props, {root}) {
-    const globalState = useGlobalState()
-    // let state = reactive({
-    //   point: globalState.points.find(pathEq(['owner', '_id'], props.studentId)),
-    // })
-    // watch(
-    //   () => props.point,
-    //   () => {
-    //     state.point = globalState.points.find(pathEq(['owner', '_id'], props.studentId))
-    //   },
-    // )
-    return {
-      // state,
-    }
-  },
 })
 </script>
 <style lang="stylus" scoped>
@@ -66,18 +48,6 @@ export default createComponent({
 
     & + .item {
       border-top: 1px solid #f9f9f9;
-    }
-
-    &.meditation {
-      .el-radio {
-        margin: 10px 20px 10px 0;
-      }
-    }
-
-    &.invitation {
-      .el-radio {
-        margin: 10px 20px 10px 0;
-      }
     }
 
     .label {
