@@ -86,13 +86,13 @@ export default {
 
   .options {
     .teacher {
-      width: 100px;
+      width: 130px;
     }
 
     .date {
       cursor: pointer;
       margin-left: 5px;
-      width: 150px;
+      width: 120px;
     }
   }
 
