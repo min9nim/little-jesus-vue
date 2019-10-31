@@ -12,7 +12,8 @@
   .result(v-for="(points, teacherName) in state.pointsByTeacher")
     .title
       h3.teacher {{teacherName}}
-      el-button.btn(size="mini") {{points.length ? '수정' : '입력'}}
+      router-link(to="/")
+        el-button.btn(size="mini" @click="handleClick(teacherName)") {{points.length ? '수정' : '입력'}}
     table-point(:points="points")
   hr
   .sum
@@ -31,6 +32,7 @@ import {
   useHandleDateChange,
   useBeforeMount,
   useComputed,
+  useHandleClick,
 } from './point.fn'
 import {IGlobalState, IPoint, ITeacher} from '../biz/type'
 
@@ -42,11 +44,13 @@ export default {
     const state: IState = useState()
     const computed: IComputed = useComputed(state)
     const handleDateChange = useHandleDateChange({state, globalState})
+    const handleClick = useHandleClick(globalState)
     onBeforeMount(useBeforeMount({state, globalState}))
     return {
       state,
       computed,
       globalState,
+      handleClick,
       handleDateChange,
     }
   },
@@ -75,16 +79,18 @@ export default {
 
   .result {
     margin-top: 40px;
+
     .title {
-      display flex
-      align-items : center;
+      display: flex;
+      align-items: center;
       justify-content: space-between;
+
       .teacher {
         margin: 0;
       }
 
       .btn {
-        height 25px
+        height: 25px;
         display: inline-block;
         margin-left: 15px;
       }

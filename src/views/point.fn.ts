@@ -1,7 +1,7 @@
 import {reactive, computed} from '@vue/composition-api'
 import moment from 'moment'
 import {req} from '@/utils'
-import {prop, groupBy, path, differenceWith} from 'ramda'
+import {prop, groupBy, path, differenceWith, propEq} from 'ramda'
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 import {IGlobalState, IPoint, ITeacher} from '@/biz/type'
@@ -109,4 +109,14 @@ export function useComputed(state: IState) {
     recitationSum: computed(() => state.points.reduce(recitationReducer, 0)),
     invitationSum: computed(() => state.points.reduce(invitationReducer, 0)),
   })
+}
+
+export function useHandleClick(globalState: IGlobalState) {
+  return (teacherName: string) => {
+    const teacher = globalState.teachers.find(propEq('name', teacherName))
+    if (!teacher) {
+      throw Error('Not found teacher')
+    }
+    globalState.teacherId = teacher._id
+  }
 }
