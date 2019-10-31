@@ -50,7 +50,8 @@ export function useBeforeMount({root, state, globalState}: any) {
   return async () => {
     await initTeachers({state, globalState})
     await initPoints({state, globalState})
-    if (root.$route.fullPath === '/point/edit') {
+    console.log(root.$route)
+    if (root.$route.fullPath === '/?edit') {
       state.editable = true
     }
   }

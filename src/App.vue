@@ -2,7 +2,7 @@
 #app
   #nav
     router-link(to="/") 출석체크
-    router-link(to="/point") 포인트현황
+    router-link(to="/points") 포인트현황
   router-view
 </template>
 

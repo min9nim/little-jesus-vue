@@ -41,7 +41,7 @@ import {
   useHandleDateChange,
   useBeforeMount,
   useComputed,
-} from '../views/point.fn'
+} from '../views/points.fn'
 import {IGlobalState, IPoint, ITeacher} from '../biz/type'
 
 interface IProps {

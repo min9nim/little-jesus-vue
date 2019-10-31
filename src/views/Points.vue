@@ -12,7 +12,7 @@
   .result(v-for="(points, teacherName) in state.pointsByTeacher")
     .title
       h3.teacher {{teacherName}}
-      router-link(to="/point/edit")
+      router-link(to="/?edit")
         el-button.btn(size="mini" @click="handleClick(teacherName)") {{points.length ? '수정' : '입력'}}
     table-point(:points="points")
   hr
@@ -33,11 +33,11 @@ import {
   useBeforeMount,
   useComputed,
   useHandleClick,
-} from './point.fn'
+} from './points.fn'
 import {IGlobalState, IPoint, ITeacher} from '../biz/type'
 
 export default {
-  name: 'v-point',
+  name: 'v-points',
   components: {TablePoint},
   setup() {
     const globalState: IGlobalState = useGlobalState()

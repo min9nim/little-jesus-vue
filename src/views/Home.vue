@@ -54,7 +54,7 @@ import {IGlobalState, IPoint, ITeacher} from '../biz/type'
 export default {
   name: 'v-home',
   components: {EditPoint, ReadPoint},
-  setup(props, {root}: any) {
+  setup(props: any, {root}: any) {
     const globalState: IGlobalState = useGlobalState()
     const state: IState = useState()
     const handleTeacherChange = useHandleTeacherChange({state, globalState})
