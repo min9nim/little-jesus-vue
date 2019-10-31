@@ -9,8 +9,10 @@
       placeholder="날짜 선택"
       @change="handleDateChange"
     )
-  .result(v-for="(points, teacherName) in state.pointsByTeacher")  
-    h3.teacher {{teacherName}}
+  .result(v-for="(points, teacherName) in state.pointsByTeacher")
+    .title
+      h3.teacher {{teacherName}}
+      el-button.btn(size="mini") {{points.length ? '수정' : '입력'}}
     table-point(:points="points")
   hr
   .sum
@@ -66,13 +68,26 @@ export default {
       width: 140px;
     }
   }
-  hr{
+
+  hr {
     margin-top: 30px;
   }
 
   .result {
-    .teacher {
-      margin-bottom: 0px;
+    margin-top: 40px;
+    .title {
+      display flex
+      align-items : center;
+      justify-content: space-between;
+      .teacher {
+        margin: 0;
+      }
+
+      .btn {
+        height 25px
+        display: inline-block;
+        margin-left: 15px;
+      }
     }
   }
 }
