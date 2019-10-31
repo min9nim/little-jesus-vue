@@ -8,6 +8,7 @@ import {IGlobalState, IPoint, ITeacher} from '@/biz/type'
 
 export interface IState {
   date?: string
+  oldDate?: string
   loading: boolean
   pointInit?: boolean
   editable?: boolean
@@ -19,7 +20,7 @@ export interface IAllState {
 }
 
 export function useState(): IState {
-  return reactive({
+  const state: IState = reactive({
     teachers: [] as ITeacher[],
     date: moment()
       .startOf('week')
@@ -28,6 +29,8 @@ export function useState(): IState {
     pointInit: false,
     editable: false,
   })
+  state.oldDate = state.date
+  return state
 }
 
 let globalState: IGlobalState
@@ -160,7 +163,14 @@ export async function createPoint({state, globalState}: IAllState) {
 }
 
 export function useHandleDateChange({state, globalState}: IAllState) {
-  return async () => {
+  return async (value: string) => {
+    console.log(value, state.oldDate)
+    if (moment(value, 'YYYYMMDD').format('dddd') !== 'Sunday') {
+      await MessageBox.alert('일요일만 선택가능합니다', {type: 'warning'})
+      state.date = state.oldDate
+      return
+    }
+    state.oldDate = state.date
     await initPoints({state, globalState})
   }
 }
