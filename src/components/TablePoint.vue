@@ -19,7 +19,7 @@ table.items
       td.recitation {{point.recitation ? 1 : 0}}
       td.invitation {{point.invitation}}
       td.etc {{point.etc}}
-      td.point {{(point.attendance ? 1 : 0) + point.meditation + (point.recitation ? 1 : 0) + point.invitation}}
+      td.point {{(point.attendance ? 1 : 0) + point.meditation + (point.recitation ? 7 : 0) + point.invitation}}
   tfoot
     tr.row
       td.name 합계
