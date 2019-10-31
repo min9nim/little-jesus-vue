@@ -3,8 +3,8 @@ import {req} from '@/utils'
 import {propEq, prop} from 'ramda'
 import moment from 'moment'
 import {qCreatePoint, qTeachers, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
-import {Message, MessageBox, Notification} from 'element-ui'
-import {IGlobalState, IPoint, ITeacher} from '@/biz/type'
+import {MessageBox, Notification} from 'element-ui'
+import {IGlobalState, ITeacher, IPoint} from '@/biz/type'
 
 export interface IState {
   date?: string
@@ -50,7 +50,7 @@ export function useBeforeMount({root, state, globalState}: any) {
   return async () => {
     await initTeachers({state, globalState})
     await initPoints({state, globalState})
-    console.log(root.$route)
+    // console.log(root.$route)
     if (root.$route.fullPath === '/?edit') {
       state.editable = true
     }
