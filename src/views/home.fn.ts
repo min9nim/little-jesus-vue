@@ -46,10 +46,13 @@ export function useGlobalState(): IGlobalState {
   return globalState
 }
 
-export function useBeforeMount({state, globalState}: IAllState) {
+export function useBeforeMount({root, state, globalState}: any) {
   return async () => {
     await initTeachers({state, globalState})
     await initPoints({state, globalState})
+    if (root.$route.fullPath === '/point/edit') {
+      state.editable = true
+    }
   }
 }
 export async function initPoints({state, globalState}: IAllState) {

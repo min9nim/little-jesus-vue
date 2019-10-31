@@ -12,7 +12,7 @@
   .result(v-for="(points, teacherName) in state.pointsByTeacher")
     .title
       h3.teacher {{teacherName}}
-      router-link(to="/")
+      router-link(to="/point/edit")
         el-button.btn(size="mini" @click="handleClick(teacherName)") {{points.length ? '수정' : '입력'}}
     table-point(:points="points")
   hr

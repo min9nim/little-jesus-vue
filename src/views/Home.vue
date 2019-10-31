@@ -35,7 +35,7 @@
 </template>
 
 <script lang="ts">
-import {createComponent, onBeforeMount} from '@vue/composition-api'
+import {createComponent, onBeforeMount, onMounted} from '@vue/composition-api'
 import {
   useState,
   useBeforeMount,
@@ -54,7 +54,7 @@ import {IGlobalState, IPoint, ITeacher} from '../biz/type'
 export default {
   name: 'v-home',
   components: {EditPoint, ReadPoint},
-  setup() {
+  setup(props, {root}: any) {
     const globalState: IGlobalState = useGlobalState()
     const state: IState = useState()
     const handleTeacherChange = useHandleTeacherChange({state, globalState})
@@ -62,7 +62,7 @@ export default {
     const handleSave = useHandleSave({state, globalState})
     const handleEdit = useHandleEdit({state})
     const handleRemove = useHandleRemove({state})
-    onBeforeMount(useBeforeMount({state, globalState}))
+    onBeforeMount(useBeforeMount({root, state, globalState}))
     return {
       state,
       globalState,
