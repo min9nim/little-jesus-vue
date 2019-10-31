@@ -97,16 +97,10 @@ export async function initPoints({state, globalState}: IAllState) {
 }
 
 export async function initTeachers({state, globalState}: IAllState) {
-  const teachers = window.localStorage.getItem('teachers')
-  if (teachers) {
-    globalState.teachers = JSON.parse(teachers)
-  } else {
-    state.loading = true
-    const result = await req(qTeachers)
-    state.loading = false
-    globalState.teachers = result.res
-    localStorage.setItem('teachers', JSON.stringify(globalState.teachers))
-  }
+  state.loading = true
+  const result = await req(qTeachers)
+  state.loading = false
+  globalState.teachers = result.res
 }
 
 export function useHandleSave({state, globalState}: IAllState) {
