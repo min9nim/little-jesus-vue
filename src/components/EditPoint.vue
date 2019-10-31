@@ -1,7 +1,7 @@
 <template lang="pug">
 .input-form
   h1 {{ state.point.owner.name }}
-  .item
+  .item.attendance
     .label 출석여부
     .control
       el-radio(v-model="state.point.attendance" :label="true") O
@@ -88,7 +88,17 @@ export default createComponent({
       border-top: 1px solid #f9f9f9;
     }
 
+    &.attendance {
+      .label {
+        font-weight: bold;
+      }
+    }
+
     &.meditation {
+      .label {
+        font-weight: bold;
+      }
+
       .el-radio {
         margin: 10px 20px 10px 0;
       }
