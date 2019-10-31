@@ -71,7 +71,8 @@ export async function initPoints({state, globalState}: IAllState) {
     propEq('_id', globalState.teacherId),
   )
   if (!teacher) {
-    throw Error('Teacher not found')
+    console.warn('Teacher is not selected yet')
+    return
   }
   globalState.points = teacher.students.map(student => {
     return {
