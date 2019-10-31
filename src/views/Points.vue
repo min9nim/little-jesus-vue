@@ -93,6 +93,8 @@ export default {
         height: 25px;
         display: inline-block;
         margin-left: 15px;
+        width: 45px;
+        padding: 7px 3px;
       }
     }
   }

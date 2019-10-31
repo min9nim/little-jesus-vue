@@ -6,9 +6,9 @@
   router-view
 </template>
 
-<style>
+<style lang="stylus" >
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
+  font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -17,15 +17,16 @@
 
 #nav {
   text-align: center;
-}
+  margin-bottom: 20px;
 
-#nav a {
-  margin: 0 5px;
-  font-weight: bold;
-  color: #2c3e50;
-}
+  a {
+    margin: 0 5px;
+    font-weight: bold;
+    color: #2c3e50;
+  }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+  a.router-link-exact-active {
+    color: #42b983;
+  }
 }
 </style>
