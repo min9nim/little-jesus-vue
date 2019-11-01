@@ -59,7 +59,7 @@ export function useBeforeMount({root, state, globalState}: any) {
   }
 }
 export async function initPoints({state, globalState}: IAllState) {
-  if(!globalState.teacherId){
+  if (!globalState.teacherId) {
     globalState.points = []
     return
   }
