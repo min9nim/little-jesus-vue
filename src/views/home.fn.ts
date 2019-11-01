@@ -59,6 +59,10 @@ export function useBeforeMount({root, state, globalState}: any) {
   }
 }
 export async function initPoints({state, globalState}: IAllState) {
+  if(!globalState.teacherId){
+    globalState.points = []
+    return
+  }
   state.loading = true
   const result: any = await req(qPoints, {
     date: state.date,
