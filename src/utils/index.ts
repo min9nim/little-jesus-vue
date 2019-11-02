@@ -1,10 +1,11 @@
 import axios from 'axios'
 import {print} from 'graphql/language/printer'
+import {pipe, complement, filter} from 'ramda'
 
 const prod_url = 'https://little-jesus-api.now.sh'
 const dev_url = 'https://little-jesus-api-git-develop.min1.now.sh'
 const BASEURL = window.location.host === 'little-jesus.now.sh' ? prod_url : dev_url
-console.log({BASEURL})
+console.info({BASEURL})
 
 export async function req(query: any, variables = {}) {
   let config = {headers: {'Content-Type': 'application/json'}}
@@ -14,3 +15,8 @@ export async function req(query: any, variables = {}) {
   }
   return result.data.data
 }
+
+export const exclude = pipe<any, any, any>(
+  complement,
+  filter,
+)

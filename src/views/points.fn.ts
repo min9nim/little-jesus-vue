@@ -1,7 +1,7 @@
 import {reactive, computed} from '@vue/composition-api'
 import moment from 'moment'
-import {req} from '@/utils'
-import {prop, groupBy, path, differenceWith, propEq} from 'ramda'
+import {req, exclude} from '@/utils'
+import {prop, groupBy, path, differenceWith, propEq, pathEq} from 'ramda'
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 import {IGlobalState, IPoint, ITeacher} from '@/biz/type'
@@ -55,7 +55,7 @@ export async function initPoints({state, globalState}: IAllState) {
     date: state.date,
   })
   state.loading = false
-  const points: IPoint[] = result.res
+  const points: IPoint[] = exclude(pathEq(['owner', 'teacher'], null))(result.res)
   state.points = points
   // @ts-ignore
   state.pointsByTeacher = groupBy(path(['owner', 'teacher', 'name']))(points)
