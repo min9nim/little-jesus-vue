@@ -19,7 +19,7 @@ table.items
       td.recitation {{point.recitation ? 1 : 0}}
       td.invitation {{point.invitation}}
       td.etc {{point.etc}}
-      td.point {{(point.attendance ? 1 : 0) + point.meditation + (point.recitation ? 7 : 0) + point.invitation}}
+      td.point {{(point.attendance ? 1 : 0) + point.meditation + (point.recitation ? 7 : 0) + point.invitation * 10}}
   tfoot
     tr.row
       td.name 합계
@@ -83,6 +83,7 @@ export default {
     .name {
       min-width: 35px;
     }
+
     .etc {
       font-size: 10px;
       text-align: left;
