@@ -1,6 +1,6 @@
 import {reactive} from '@vue/composition-api'
 import {req, go} from '@/utils'
-import {propEq, prop, find, differenceWith, isNil} from 'ramda'
+import {propEq, prop, find, differenceWith, isNil, filter, pathEq} from 'ramda'
 import moment from 'moment'
 import {
   qCreatePoint,
@@ -86,10 +86,15 @@ export async function initPoints({state, globalState}: IAllState) {
   state.loading = true
   const result: any = await req(qPoints, {
     date: state.date,
-    teacherId: globalState.teacherId,
+    teacherId: globalState.teacherId || null,
   })
   state.loading = false
-  const points: IPoint[] = result.res
+  let points: IPoint[] = result.res
+  if (globalState.teacherId === '') {
+    // 반미정을 선택한 경우에는 전체 포인트목록이 리턴되는데 이를 필터링해야 한다.
+    points = filter(pathEq(['owner', 'teacher'], null))(points)
+    console.log({points})
+  }
   let students = go(
     globalState.teachers,
     find(propEq('_id', globalState.teacherId)),
