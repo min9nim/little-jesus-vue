@@ -1,11 +1,12 @@
 import {reactive, computed} from '@vue/composition-api'
 import moment from 'moment'
-import {req, exclude} from '@/utils'
-import {prop, groupBy, path, differenceWith, propEq, pathEq} from 'ramda'
+import {req, go} from '@/utils'
+import {prop, groupBy, path, differenceWith, propEq, pathEq, find} from 'ramda'
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 import {IGlobalState, IPoint, ITeacher} from '@/biz/type'
 import {initTeachers} from './home.fn'
+import {studentToDefaultPointMap} from '@/biz'
 
 export interface IState {
   date?: string
@@ -57,10 +58,30 @@ export async function initPoints({state, globalState}: IAllState) {
   state.loading = false
   // const points: IPoint[] = exclude(pathEq(['owner', 'teacher'], null))(result.res)
   const points = result.res
+
   state.points = points
   // @ts-ignore
   state.pointsByTeacher = groupBy(path(['owner', 'teacher', 'name']))(points)
-  const teachers = globalState.teachers.map(prop('name'))
+  Object.entries(state.pointsByTeacher).forEach(([teacherName, points]: any) => {
+    let students = go(globalState.teachers, find(propEq('name', teacherName)), prop('students'))
+    // console.log(JSON.stringify(points, null, 2))
+    if (students.length !== points.length) {
+      // 포인트 입력 후 신규학생을 반에 추가 배정한 경우
+      const newStudnets = differenceWith(
+        (a: any, b: any) => {
+          if (!b.owner) {
+            console.warn('owner 없는 포인트가 있다고? differenceWith 버그인가?', b)
+            return false
+          }
+          return a._id === b.owner._id
+        },
+        students,
+        points,
+      )
+      const pointsOfNewStudents = newStudnets.map(studentToDefaultPointMap)
+      points.push(...pointsOfNewStudents)
+    }
+  })
 
   const diffTeachers: ITeacher[] = differenceWith(
     (t1, t2) => t1.name === t2,
@@ -69,18 +90,7 @@ export async function initPoints({state, globalState}: IAllState) {
   )
   diffTeachers.forEach(teacher => {
     state.pointsByTeacher[teacher.name] = []
-    const points = teacher.students.map(student => ({
-      owner: {
-        _id: student._id,
-        name: student.name,
-      },
-      attendance: false,
-      visitcall: false,
-      meditation: 0,
-      invitation: 0,
-      recitation: false,
-      etc: '',
-    }))
+    const points = teacher.students.map(studentToDefaultPointMap)
     state.points.push(...points)
   })
 }

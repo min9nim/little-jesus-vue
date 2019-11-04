@@ -82,16 +82,23 @@ export async function initPoints({state, globalState}: IAllState) {
     teacherId: globalState.teacherId,
   })
   state.loading = false
+  const points: IPoint[] = result.res
   let students = go(
     globalState.teachers,
     find(propEq('_id', globalState.teacherId)),
     prop('students'),
   )
-  const points: IPoint[] = result.res
   if (result.res.length > 0 && students.length !== result.res.length) {
     // 포인트 입력 후 신규학생을 반에 추가 배정한 경우
     const newStudnets = differenceWith(
-      (a: any, b: any) => a._id === b.owner._id,
+      (a: any, b: any) => {
+        if (!b.owner) {
+          console.warn('여기도 owner 없는 포인트가 있다고? differenceWith 버그인가?', b)
+          return false
+        }
+
+        return a._id === b.owner._id
+      },
       students,
       result.res,
     )
