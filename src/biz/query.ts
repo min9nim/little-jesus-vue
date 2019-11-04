@@ -85,6 +85,10 @@ export const qTeachers = gql`
       students {
         _id
         name
+        teacher {
+          _id
+          name
+        }
       }
     }
   }
@@ -98,6 +102,7 @@ export const qPoints = gql`
         _id
         name
         teacher {
+          _id
           name
         }
       }

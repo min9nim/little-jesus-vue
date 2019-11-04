@@ -1,7 +1,10 @@
-
 export interface IStudent {
   _id: string
   name: string
+  teacher: {
+    _id: string
+    name: string
+  }
 }
 export interface ITeacher {
   _id: string
@@ -22,7 +25,6 @@ export interface IPoint {
   recitation: boolean
   etc: string
 }
-
 
 export interface IGlobalState {
   teacherId?: string

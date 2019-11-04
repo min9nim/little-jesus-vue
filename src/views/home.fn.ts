@@ -1,10 +1,10 @@
 import {reactive} from '@vue/composition-api'
-import {req} from '@/utils'
-import {propEq, prop} from 'ramda'
+import {req, go} from '@/utils'
+import {propEq, prop, find, differenceWith} from 'ramda'
 import moment from 'moment'
 import {qCreatePoint, qTeachers, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
 import {MessageBox, Notification} from 'element-ui'
-import {IGlobalState, ITeacher, IPoint} from '@/biz/type'
+import {IGlobalState, ITeacher, IPoint, IStudent} from '@/biz/type'
 
 export interface IState {
   date?: string
@@ -58,6 +58,19 @@ export function useBeforeMount({root, state, globalState}: any) {
     }
   }
 }
+
+const studentToDefaultPointMap = (student: IStudent) => {
+  return {
+    owner: student,
+    attendance: false,
+    visitcall: false,
+    meditation: 0,
+    invitation: 0,
+    recitation: false,
+    etc: '',
+  }
+}
+
 export async function initPoints({state, globalState}: IAllState) {
   if (!globalState.teacherId) {
     globalState.points = []
@@ -69,7 +82,22 @@ export async function initPoints({state, globalState}: IAllState) {
     teacherId: globalState.teacherId,
   })
   state.loading = false
+  let students = go(
+    globalState.teachers,
+    find(propEq('_id', globalState.teacherId)),
+    prop('students'),
+  )
   const points: IPoint[] = result.res
+  if (result.res.length > 0 && students.length !== result.res.length) {
+    // 포인트 입력 후 신규학생을 반에 추가 배정한 경우
+    const newStudnets = differenceWith(
+      (a: any, b: any) => a._id === b.owner._id,
+      students,
+      result.res,
+    )
+    const pointsOfNewStudents = newStudnets.map(studentToDefaultPointMap)
+    points.push(...pointsOfNewStudents)
+  }
 
   if (points.length > 0) {
     globalState.points = points
@@ -84,20 +112,8 @@ export async function initPoints({state, globalState}: IAllState) {
     console.warn('Teacher is not selected yet')
     return
   }
-  globalState.points = teacher.students.map(student => {
-    return {
-      owner: {
-        _id: student._id,
-        name: student.name,
-      },
-      attendance: false,
-      visitcall: false,
-      meditation: 0,
-      invitation: 0,
-      recitation: false,
-      etc: '',
-    }
-  })
+
+  globalState.points = teacher.students.map(studentToDefaultPointMap)
   state.pointInit = false
   state.editable = true
 }
@@ -122,6 +138,19 @@ export function useHandleSave({state, globalState}: IAllState) {
 export async function updatePoint({state, globalState}: IAllState) {
   state.loading = true
   const results = globalState.points.map(point => {
+    if (!point._id) {
+      // 최초 포인트입력 이후 신규로 추가된 학생이 있는 경우
+      return req(qCreatePoint, {
+        owner: point.owner._id,
+        date: state.date,
+        attendance: point.attendance,
+        visitcall: point.visitcall,
+        meditation: point.meditation,
+        recitation: point.recitation,
+        invitation: point.invitation,
+        etc: point.etc,
+      })
+    }
     return req(qUpdatePoint, {
       _id: point._id,
       owner: point.owner._id,

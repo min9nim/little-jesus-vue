@@ -55,7 +55,8 @@ export async function initPoints({state, globalState}: IAllState) {
     date: state.date,
   })
   state.loading = false
-  const points: IPoint[] = exclude(pathEq(['owner', 'teacher'], null))(result.res)
+  // const points: IPoint[] = exclude(pathEq(['owner', 'teacher'], null))(result.res)
+  const points = result.res
   state.points = points
   // @ts-ignore
   state.pointsByTeacher = groupBy(path(['owner', 'teacher', 'name']))(points)
