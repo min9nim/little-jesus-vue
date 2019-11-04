@@ -1,6 +1,6 @@
 import {reactive} from '@vue/composition-api'
 import {req, go} from '@/utils'
-import {propEq, prop, find, differenceWith} from 'ramda'
+import {propEq, prop, find, differenceWith, isNil} from 'ramda'
 import moment from 'moment'
 import {
   qCreatePoint,
@@ -79,7 +79,7 @@ const studentToDefaultPointMap = (student: IStudent) => {
 }
 
 export async function initPoints({state, globalState}: IAllState) {
-  if (!globalState.teacherId) {
+  if (isNil(globalState.teacherId)) {
     globalState.points = []
     return
   }
@@ -137,6 +137,11 @@ export async function initTeachers({state, globalState}: IAllState) {
   const result = await req(qTeachersAndStudents)
   state.loading = false
   globalState.teachers = result.teachers
+  globalState.teachers.push({
+    _id: '',
+    name: '반미정',
+    students: result.students.filter(propEq('teacher', null)),
+  })
 }
 
 export function useHandleSave({state, globalState}: IAllState) {

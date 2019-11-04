@@ -16,6 +16,10 @@ export interface IPoint {
   owner: {
     _id: string
     name: string
+    teacher: {
+      _id?: string
+      name: string
+    }
   }
   date?: string
   attendance: boolean

@@ -1,7 +1,7 @@
 import {reactive, computed} from '@vue/composition-api'
 import moment from 'moment'
-import {req, go} from '@/utils'
-import {prop, groupBy, path, differenceWith, propEq, pathEq, find} from 'ramda'
+import {req, go, exclude} from '@/utils'
+import {prop, groupBy, path, differenceWith, propEq, pathEq, find, filter} from 'ramda'
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 import {IGlobalState, IPoint, ITeacher} from '@/biz/type'
@@ -56,10 +56,11 @@ export async function initPoints({state, globalState}: IAllState) {
     date: state.date,
   })
   state.loading = false
-  // const points: IPoint[] = exclude(pathEq(['owner', 'teacher'], null))(result.res)
-  const points = result.res
 
+  // 반미정 친구들 제외
+  const points: IPoint[] = exclude(pathEq(['owner', 'teacher'], null))(result.res)
   state.points = points
+
   // @ts-ignore
   state.pointsByTeacher = groupBy(path(['owner', 'teacher', 'name']))(points)
   Object.entries(state.pointsByTeacher).forEach(([teacherName, points]: any) => {
@@ -83,6 +84,7 @@ export async function initPoints({state, globalState}: IAllState) {
     }
   })
 
+  // 아직 포인트입력 안한 선생님들 목록에 추가
   const diffTeachers: ITeacher[] = differenceWith(
     (t1, t2) => t1.name === t2,
     globalState.teachers,
@@ -93,6 +95,11 @@ export async function initPoints({state, globalState}: IAllState) {
     const points = teacher.students.map(studentToDefaultPointMap)
     state.points.push(...points)
   })
+
+  // 반미정인 친구들 목록에 추가
+  const etcStudentPoints: any = filter<IPoint>(pathEq(['owner', 'teacher'], null))(result.res)
+  state.pointsByTeacher['반미정'] = etcStudentPoints
+  state.points.push(...etcStudentPoints)
 }
 
 export function useState(): IState {
