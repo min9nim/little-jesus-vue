@@ -2,7 +2,14 @@ import {reactive} from '@vue/composition-api'
 import {req, go} from '@/utils'
 import {propEq, prop, find, differenceWith} from 'ramda'
 import moment from 'moment'
-import {qCreatePoint, qTeachers, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
+import {
+  qCreatePoint,
+  qTeachers,
+  qTeachersAndStudents,
+  qPoints,
+  qUpdatePoint,
+  qRemovePoint,
+} from '@/biz/query'
 import {MessageBox, Notification} from 'element-ui'
 import {IGlobalState, ITeacher, IPoint, IStudent} from '@/biz/type'
 
@@ -127,9 +134,9 @@ export async function initPoints({state, globalState}: IAllState) {
 
 export async function initTeachers({state, globalState}: IAllState) {
   state.loading = true
-  const result = await req(qTeachers)
+  const result = await req(qTeachersAndStudents)
   state.loading = false
-  globalState.teachers = result.res
+  globalState.teachers = result.teachers
 }
 
 export function useHandleSave({state, globalState}: IAllState) {
