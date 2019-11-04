@@ -20,3 +20,8 @@ export const exclude = pipe<any, any, any>(
   complement,
   filter,
 )
+
+export function go(...args: any[]) {
+  // @ts-ignore
+  return pipe(...args.slice(1))(args[0])
+}
