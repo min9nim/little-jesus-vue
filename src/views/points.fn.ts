@@ -71,7 +71,7 @@ export async function initPoints({state, globalState}: IAllState) {
       const newStudnets = differenceWith(
         (a: any, b: any) => {
           if (!b.owner) {
-            console.warn('owner 없는 포인트가 있다고? differenceWith 버그인가?', b)
+            // console.warn('owner 없는 포인트가 있다고? differenceWith 버그인가?', b)
             return false
           }
           return a._id === b.owner._id
