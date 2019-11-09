@@ -10,11 +10,12 @@
       @change="handleDateChange"
     )
   .result(v-for="(points, teacherName) in state.pointsByTeacher")
-    .title
-      h3.teacher {{teacherName || '반미정'}}
-      router-link(to="/?edit")
-        el-button.btn(size="mini" @click="handleClick(teacherName)") {{points.length ? '수정' : '입력'}}
-    table-point(:points="points")
+    el-card
+      .title(slot="header")
+        h3.teacher {{teacherName || '반미정'}}
+        router-link(to="/?edit")
+          el-button.btn(size="mini" @click="handleClick(teacherName)") {{points.length ? '수정' : '입력'}}
+      table-point(:points="points")
   hr
   .sum
     h2 전체합계
@@ -78,7 +79,7 @@ export default {
   }
 
   .result {
-    margin-top: 40px;
+    margin-top: 10px;
 
     .title {
       display: flex;
