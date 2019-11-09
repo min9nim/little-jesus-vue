@@ -63,7 +63,6 @@ export default {
 </script>
 <style scoped lang="stylus">
 .items {
-  margin-top: 10px;
   width: 100%;
   font-size: 12px;
   border-collapse: collapse;
