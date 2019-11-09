@@ -98,9 +98,7 @@ export default {
   }
 
   .form {
-    margin: 5px 0;
-    border: 1px solid #ddd;
-    padding: 10px;
+    padding: 5px 0;
   }
 
   .btn {

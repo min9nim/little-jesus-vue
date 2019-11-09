@@ -1,30 +1,32 @@
 <template lang="pug">
 .input-form
-  h1 {{ point.owner.name }}
-  .item
-    .label 출석여부
-    .control {{point.attendance ? 'O' : 'X'}}
-  .item
-    .label 심방여부
-    .control {{point.visitcall ? 'O' : 'X'}}
-  .item.meditation
-    .label 말씀묵상
-    .control {{point.meditation}}
-  .item
-    .label 말씀암송
-    .control {{point.recitation ? 'O' : 'X'}}
-  .item.invitation
-    .label 전도
-    .control {{point.invitation}}
-  .item
-    .label 기타사항
-    .control
-      el-input(
-        v-model="point.etc"
-        type="textarea"
-        readonly
-        :autosize="{ minRows: 2, maxRows: 6}"
-      ) 
+  el-card
+    div(slot="header")
+      h3 {{ point.owner.name }}
+    .item
+      .label 출석여부
+      .control {{point.attendance ? 'O' : 'X'}}
+    .item
+      .label 심방여부
+      .control {{point.visitcall ? 'O' : 'X'}}
+    .item.meditation
+      .label 말씀묵상
+      .control {{point.meditation}}
+    .item
+      .label 말씀암송
+      .control {{point.recitation ? 'O' : 'X'}}
+    .item.invitation
+      .label 전도
+      .control {{point.invitation}}
+    .item
+      .label 기타사항
+      .control
+        el-input(
+          v-model="point.etc"
+          type="textarea"
+          readonly
+          :autosize="{ minRows: 2, maxRows: 6}"
+        ) 
 </template>
 <script lang="ts">
 import {createComponent} from '@vue/composition-api'
@@ -35,16 +37,14 @@ export default createComponent({
 </script>
 <style lang="stylus" scoped>
 .input-form {
-  h1 {
-    margin-top: 0;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #f9f9f9;
+  h3 {
+    margin: 0;
   }
 
   .item {
-    font-size: 18px;
+    font-size: 16px;
     display: flex;
-    padding: 10px 0;
+    padding: 5px 0;
 
     & + .item {
       border-top: 1px solid #f9f9f9;
@@ -61,17 +61,6 @@ export default createComponent({
     .control {
       margin-left: 10px;
       flex: 1;
-    }
-  }
-}
-</style>
-<style lang="stylus">
-.home {
-  .form {
-    .item {
-      .el-radio__label {
-        font-size: 18px;
-      }
     }
   }
 }
