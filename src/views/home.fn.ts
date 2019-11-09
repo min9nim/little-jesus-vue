@@ -93,7 +93,7 @@ export async function initPoints({state, globalState}: IAllState) {
   if (globalState.teacherId === '') {
     // 반미정을 선택한 경우에는 전체 포인트목록이 리턴되는데 이를 필터링해야 한다.
     points = filter(pathEq(['owner', 'teacher'], null))(points)
-    console.log({points})
+    // console.log({points})
   }
   let students = go(
     globalState.teachers,
