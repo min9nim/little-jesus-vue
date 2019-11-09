@@ -10,7 +10,7 @@
       @change="handleDateChange"
     )
   .result(v-for="(points, teacherName) in state.pointsByTeacher")
-    el-card
+    el-card(shadow="hover")
       .title(slot="header")
         h3.teacher {{teacherName || '반미정'}}
         router-link(to="/?edit")

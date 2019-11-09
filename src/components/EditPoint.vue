@@ -1,6 +1,6 @@
 <template lang="pug">
 .input-form
-  el-card
+  el-card(shadow="hover")
     div(slot="header")
       h3 {{ state.point.owner.name }}
     .item.attendance
