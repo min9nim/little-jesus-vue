@@ -69,7 +69,7 @@ export default {
     }
 
     .date {
-      margin-left: 5px;
+      margin-left: 0;
       width: 140px;
     }
   }
