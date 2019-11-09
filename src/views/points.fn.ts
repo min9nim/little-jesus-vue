@@ -1,6 +1,6 @@
 import {reactive, computed} from '@vue/composition-api'
 import moment from 'moment'
-import {req, go, exclude} from '@/utils'
+import {req, go, exclude, nameAscending} from '@/utils'
 import {prop, groupBy, path, differenceWith, propEq, pathEq, find, filter} from 'ramda'
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
@@ -82,6 +82,7 @@ export async function initPoints({state, globalState}: IAllState) {
       const pointsOfNewStudents = newStudnets.map(studentToDefaultPointMap)
       points.push(...pointsOfNewStudents)
     }
+    points.sort(nameAscending(path(['owner', 'name'])))
   })
 
   // 아직 포인트입력 안한 선생님들 목록에 추가
@@ -98,6 +99,13 @@ export async function initPoints({state, globalState}: IAllState) {
 
   // 반미정인 친구들 목록에 추가
   const etcStudentPoints: any = filter<IPoint>(pathEq(['owner', 'teacher'], null))(result.res)
+  // const names = Object.keys(state.pointsByTeacher)
+  // const tmp: any = {}
+  // names.sort().forEach(name => {
+  //   tmp[name] = state.pointsByTeacher[name]
+  // })
+  // tmp['반미정'] = etcStudentPoints
+  // state.pointsByTeacher = tmp
   state.pointsByTeacher['반미정'] = etcStudentPoints
   state.points.push(...etcStudentPoints)
 }

@@ -25,3 +25,11 @@ export function go(...args: any[]) {
   // @ts-ignore
   return pipe(...args.slice(1))(args[0])
 }
+
+export function nameAscending(path: any) {
+  return (a: any, b: any) => {
+    if (path(a) > path(b)) return 1
+    if (path(b) > path(a)) return -1
+    return 0
+  }
+}

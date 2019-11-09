@@ -1,6 +1,6 @@
 import {reactive} from '@vue/composition-api'
-import {req, go} from '@/utils'
-import {propEq, prop, find, differenceWith, isNil, filter, pathEq} from 'ramda'
+import {req, go, nameAscending} from '@/utils'
+import {propEq, prop, find, differenceWith, isNil, filter, pathEq, path} from 'ramda'
 import moment from 'moment'
 import {
   qCreatePoint,
@@ -116,6 +116,7 @@ export async function initPoints({state, globalState}: IAllState) {
     )
     const pointsOfNewStudents = newStudnets.map(studentToDefaultPointMap)
     points.push(...pointsOfNewStudents)
+    points.sort(nameAscending(path(['owner', 'name'])))
   }
 
   if (points.length > 0) {
@@ -142,10 +143,14 @@ export async function initTeachers({state, globalState}: IAllState) {
   const result = await req(qTeachersAndStudents)
   state.loading = false
   globalState.teachers = result.teachers
+  globalState.teachers.forEach(teacher => {
+    teacher.students.sort(nameAscending(path(['name'])))
+  })
+  globalState.teachers.sort(nameAscending(path(['name'])))
   globalState.teachers.push({
     _id: '',
     name: '반미정',
-    students: result.students.filter(propEq('teacher', null)),
+    students: result.students.filter(propEq('teacher', null)).sort(nameAscending(path(['name']))),
   })
 }
 
