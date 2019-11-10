@@ -100,14 +100,17 @@ export async function initPoints({state, globalState}: IAllState) {
     etcStudentPoints.push(...pointsOfNewStudents)
   }
   state.pointsByTeacher['반미정'] = etcStudentPoints
-  // const names = Object.keys(state.pointsByTeacher)
-  // const tmp: any = {}
-  // names.sort().forEach(name => {
-  //   tmp[name] = state.pointsByTeacher[name]
-  // })
-  // tmp['반미정'] = etcStudentPoints
-  // state.pointsByTeacher = tmp
+
+  // 전체 포인트 합계에 반미정학생들도 추가
   state.points.push(...etcStudentPoints)
+
+  // 선생님 목록 가나다 정렬
+  const names = Object.keys(state.pointsByTeacher)
+  const tmp: any = {}
+  names.sort().forEach(name => {
+    tmp[name] = state.pointsByTeacher[name]
+  })
+  state.pointsByTeacher = tmp
 }
 
 export function isEqualStudent(a: IStudent, b: IPoint) {
