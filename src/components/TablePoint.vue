@@ -33,7 +33,6 @@ table.items
 </template>
 
 <script lang="ts">
-import ViewPoint from '../components/ViewPoint.vue'
 import {IComputed, useComputed} from '../components/table-point.fn'
 import {IGlobalState, IPoint, ITeacher} from '../biz/type'
 import {useGlobalState} from '../views/home.fn'
