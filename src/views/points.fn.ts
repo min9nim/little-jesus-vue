@@ -4,9 +4,10 @@ import {req, go, exclude, nameAscending} from '@/utils'
 import {prop, groupBy, path, differenceWith, propEq, pathEq, find, filter} from 'ramda'
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
-import {IGlobalState, IPoint, ITeacher} from '@/biz/type'
-import {initTeachers} from './home.fn'
+import {IGlobalState, IPoint, ITeacher, IStudent} from '@/biz/type'
+import {initTeachers, useGlobalState} from './home.fn'
 import {studentToDefaultPointMap} from '@/biz'
+import isNil from 'ramda/es/isNil'
 
 export interface IState {
   date?: string
@@ -14,6 +15,7 @@ export interface IState {
   loading: boolean
   points: IPoint[]
   pointsByTeacher?: any
+  etcStudents: IStudent[]
 }
 
 export interface IComputed {
@@ -59,6 +61,9 @@ export async function initPoints({state, globalState}: IAllState) {
 
   // 반미정 친구들 제외
   const points: IPoint[] = exclude(pathEq(['owner', 'teacher'], null))(result.res)
+  if (isNil(points)) {
+    throw Error('points is undefined or null')
+  }
   state.points = points
 
   // @ts-ignore
@@ -68,18 +73,8 @@ export async function initPoints({state, globalState}: IAllState) {
     // console.log(JSON.stringify(points, null, 2))
     if (students.length !== points.length) {
       // 포인트 입력 후 신규학생을 반에 추가 배정한 경우
-      const newStudnets = differenceWith(
-        (a: any, b: any) => {
-          if (!b.owner) {
-            // console.warn('owner 없는 포인트가 있다고? differenceWith 버그인가?', b)
-            return false
-          }
-          return a._id === b.owner._id
-        },
-        students,
-        points,
-      )
-      const pointsOfNewStudents = newStudnets.map(studentToDefaultPointMap)
+      const newStudents = differenceWith(isEqualStudent, students, points)
+      const pointsOfNewStudents = newStudents.map(studentToDefaultPointMap)
       points.push(...pointsOfNewStudents)
     }
     points.sort(nameAscending(path(['owner', 'name'])))
@@ -99,6 +94,12 @@ export async function initPoints({state, globalState}: IAllState) {
 
   // 반미정인 친구들 목록에 추가
   const etcStudentPoints: any = filter<IPoint>(pathEq(['owner', 'teacher'], null))(result.res)
+  if (etcStudentPoints.length !== state.etcStudents.length) {
+    const newStudents = differenceWith(isEqualStudent, state.etcStudents, etcStudentPoints)
+    const pointsOfNewStudents = newStudents.map(studentToDefaultPointMap)
+    etcStudentPoints.push(...pointsOfNewStudents)
+  }
+  state.pointsByTeacher['반미정'] = etcStudentPoints
   // const names = Object.keys(state.pointsByTeacher)
   // const tmp: any = {}
   // names.sort().forEach(name => {
@@ -106,17 +107,34 @@ export async function initPoints({state, globalState}: IAllState) {
   // })
   // tmp['반미정'] = etcStudentPoints
   // state.pointsByTeacher = tmp
-  state.pointsByTeacher['반미정'] = etcStudentPoints
   state.points.push(...etcStudentPoints)
 }
 
-export function useState(): IState {
+export function isEqualStudent(a: IStudent, b: IPoint) {
+  if (!b.owner) {
+    // console.warn('owner 없는 포인트가 있다고? differenceWith 버그인가?', b)
+    return false
+  }
+  return a._id === b.owner._id
+}
+
+export function useState(globalState: IGlobalState): IState {
   const state: IState = reactive({
     date: moment()
       .startOf('week')
       .format('YYYYMMDD'),
     loading: false,
     points: [],
+    etcStudents: computed(() => {
+      if (globalState.teachers.length === 0) {
+        return []
+      }
+      const nullTeacher = globalState.teachers.find(propEq('name', '반미정'))
+      if (!nullTeacher) {
+        return []
+      }
+      return nullTeacher.students
+    }),
   })
   state.oldDate = state.date
   return state

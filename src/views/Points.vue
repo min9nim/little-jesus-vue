@@ -16,7 +16,7 @@
         router-link(to="/?edit")
           el-button.btn(size="mini" @click="handleClick(teacherName)") {{points.length ? '수정' : '입력'}}
       table-point(:points="points")
-  .result(v-if="globalState.teachers.find(propEq('name', '반미정')).students.length > 0")
+  .result(v-if="state.pointsByTeacher && state.etcStudents.length > 0")
     el-card(shadow="hover")
       .title(slot="header")
         h3.teacher 반미정
@@ -51,14 +51,12 @@ export default {
   methods: {omit, propEq},
   setup() {
     const globalState: IGlobalState = useGlobalState()
-    const state: IState = useState()
-    const computed: IComputed = useComputed(state)
+    const state: IState = useState(globalState)
     const handleDateChange = useHandleDateChange({state, globalState})
     const handleClick = useHandleClick(globalState)
     onBeforeMount(useBeforeMount({state, globalState}))
     return {
       state,
-      computed,
       globalState,
       handleClick,
       handleDateChange,

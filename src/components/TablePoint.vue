@@ -43,6 +43,7 @@ import {
   useComputed,
 } from '../views/points.fn'
 import {IGlobalState, IPoint, ITeacher} from '../biz/type'
+import {useGlobalState} from '../views/home.fn'
 
 interface IProps {
   points: IPoint[]
