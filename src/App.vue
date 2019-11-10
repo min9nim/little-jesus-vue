@@ -52,5 +52,9 @@
       padding: 10px 10px;
     }
   }
+
+  .el-input--prefix .el-input__inner {
+    cursor: pointer;
+  }
 }
 </style>

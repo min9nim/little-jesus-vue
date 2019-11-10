@@ -26,6 +26,7 @@
     .form(v-for="(point, index) in globalState.points" :key="index")
       read-point(v-if="!state.editable" :point="point")
       edit-point(v-else :studentId="point.owner._id")
+    .no-result(v-show="hasNoStudent()") 반 학생이 없습니다.
     .btn(v-show="globalState.points.length > 0")
       template(v-if="state.editable")
         el-button(@click="handleSave") 저장
@@ -51,6 +52,7 @@ import {
 import EditPoint from '../components/EditPoint.vue'
 import ReadPoint from '../components/ReadPoint.vue'
 import {IGlobalState, IPoint, ITeacher} from '../biz/type'
+import {propEq} from 'ramda'
 
 export default {
   name: 'v-home',
@@ -74,6 +76,10 @@ export default {
       handleRemove,
       handleCancel: () => {
         state.editable = false
+      },
+      hasNoStudent() {
+        const teacher: any = globalState.teachers.find(propEq('_id', globalState.teacherId))
+        return teacher.students.length === 0
       },
     }
   },
@@ -106,8 +112,8 @@ export default {
   }
 }
 </style>
-<style lang="stylus">
-.el-input--prefix .el-input__inner {
-  cursor: pointer;
+<style lang="stylus" scoped>
+.no-result {
+  margin: 10px;
 }
 </style>
