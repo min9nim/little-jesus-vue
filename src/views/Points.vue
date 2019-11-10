@@ -39,7 +39,6 @@ import {
   IComputed,
   useHandleDateChange,
   useBeforeMount,
-  useComputed,
   useHandleClick,
 } from './points.fn'
 import {IGlobalState, IPoint, ITeacher} from '../biz/type'

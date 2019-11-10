@@ -34,14 +34,7 @@ table.items
 
 <script lang="ts">
 import ViewPoint from '../components/ViewPoint.vue'
-import {
-  useState,
-  IState,
-  IComputed,
-  useHandleDateChange,
-  useBeforeMount,
-  useComputed,
-} from '../views/points.fn'
+import {IComputed, useComputed} from '../views/points.fn'
 import {IGlobalState, IPoint, ITeacher} from '../biz/type'
 import {useGlobalState} from '../views/home.fn'
 
