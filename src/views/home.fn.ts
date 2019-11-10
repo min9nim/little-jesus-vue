@@ -100,6 +100,7 @@ export async function initPoints({state, globalState}: IAllState) {
     find(propEq('_id', globalState.teacherId)),
     prop('students'),
   )
+  points.sort(nameAscending(path(['owner', 'name'])))
   if (result.res.length > 0 && students.length !== result.res.length) {
     // 포인트 입력 후 신규학생을 반에 추가 배정한 경우
     const newStudnets = differenceWith(
@@ -116,7 +117,6 @@ export async function initPoints({state, globalState}: IAllState) {
     )
     const pointsOfNewStudents = newStudnets.map(studentToDefaultPointMap)
     points.push(...pointsOfNewStudents)
-    points.sort(nameAscending(path(['owner', 'name'])))
   }
 
   if (points.length > 0) {
