@@ -34,13 +34,10 @@ table.items
 
 <script lang="ts">
 import ViewPoint from '../components/ViewPoint.vue'
-import {IComputed, useComputed} from '../views/points.fn'
+import {IComputed, useComputed} from '../components/table-point.fn'
 import {IGlobalState, IPoint, ITeacher} from '../biz/type'
 import {useGlobalState} from '../views/home.fn'
 
-interface IProps {
-  points: IPoint[]
-}
 export default {
   name: 'table-point',
   props: {

@@ -18,14 +18,6 @@ export interface IState {
   etcStudents: IStudent[]
 }
 
-export interface IComputed {
-  attendanceSum: number
-  visitcallSum: number
-  meditationSum: number
-  recitationSum: number
-  invitationSum: number
-}
-
 export interface IAllState {
   state: IState
   globalState: IGlobalState
@@ -141,21 +133,6 @@ export function useState(globalState: IGlobalState): IState {
   })
   state.oldDate = state.date
   return state
-}
-
-export function useComputed(state: IState) {
-  const attendanceReducer = (acc: number, point: IPoint) => acc + (point.attendance ? 1 : 0)
-  const visitcallReducer = (acc: number, point: IPoint) => acc + (point.visitcall ? 1 : 0)
-  const recitationReducer = (acc: number, point: IPoint) => acc + (point.recitation ? 1 : 0)
-  const meditationReducer = (acc: number, point: IPoint) => acc + point.meditation
-  const invitationReducer = (acc: number, point: IPoint) => acc + point.invitation
-  return reactive({
-    attendanceSum: computed(() => state.points.reduce(attendanceReducer, 0)),
-    visitcallSum: computed(() => state.points.reduce(visitcallReducer, 0)),
-    meditationSum: computed(() => state.points.reduce(meditationReducer, 0)),
-    recitationSum: computed(() => state.points.reduce(recitationReducer, 0)),
-    invitationSum: computed(() => state.points.reduce(invitationReducer, 0)),
-  })
 }
 
 export function useHandleClick(globalState: IGlobalState) {
