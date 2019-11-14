@@ -2,14 +2,7 @@ import {reactive} from '@vue/composition-api'
 import {req, go, nameAscending} from '@/utils'
 import {propEq, prop, find, differenceWith, isNil, filter, pathEq, path} from 'ramda'
 import moment from 'moment'
-import {
-  qCreatePoint,
-  qTeachers,
-  qTeachersAndStudents,
-  qPoints,
-  qUpdatePoint,
-  qRemovePoint,
-} from '@/biz/query'
+import {qCreatePoint, qTeachersAndStudents, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
 import {MessageBox, Notification} from 'element-ui'
 import {IGlobalState, ITeacher, IPoint, IStudent} from '@/biz/type'
 
@@ -147,11 +140,14 @@ export async function initTeachers({state, globalState}: IAllState) {
     teacher.students.sort(nameAscending(path(['name'])))
   })
   globalState.teachers.sort(nameAscending(path(['name'])))
-  globalState.teachers.push({
-    _id: '',
-    name: '반미정',
-    students: result.students.filter(propEq('teacher', null)).sort(nameAscending(path(['name']))),
-  })
+  const etcStudents = result.students.filter(propEq('teacher', null))
+  if (etcStudents.length > 0) {
+    globalState.teachers.push({
+      _id: '',
+      name: '반미정',
+      students: etcStudents.sort(nameAscending(path(['name']))),
+    })
+  }
 }
 
 export function useHandleSave({state, globalState}: IAllState) {

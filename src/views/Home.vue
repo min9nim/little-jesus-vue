@@ -78,6 +78,9 @@ export default {
         state.editable = false
       },
       hasNoStudent() {
+        if (globalState.teacherId === '') {
+          return true
+        }
         const teacher: any = globalState.teachers.find(propEq('_id', globalState.teacherId))
         return teacher.students.length === 0
       },

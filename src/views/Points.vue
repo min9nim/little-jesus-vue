@@ -33,14 +33,7 @@
 import {createComponent, onBeforeMount} from '@vue/composition-api'
 import {useGlobalState} from './home.fn'
 import TablePoint from '../components/TablePoint.vue'
-import {
-  useState,
-  IState,
-  IComputed,
-  useHandleDateChange,
-  useBeforeMount,
-  useHandleClick,
-} from './points.fn'
+import {useState, IState, useHandleDateChange, useBeforeMount, useHandleClick} from './points.fn'
 import {IGlobalState, IPoint, ITeacher} from '../biz/type'
 import {propEq, omit} from 'ramda'
 
