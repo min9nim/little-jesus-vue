@@ -94,7 +94,7 @@ export async function initPoints({state, globalState}: IAllState) {
   state.pointsByTeacher['반미정'] = etcStudentPoints
 
   // 전체 포인트 합계에 반미정학생들도 추가
-  state.points.push(...etcStudentPoints)
+  // state.points.push(...etcStudentPoints)
 
   // 선생님 목록 가나다 정렬
   const names = Object.keys(state.pointsByTeacher)
