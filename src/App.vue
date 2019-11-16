@@ -1,10 +1,29 @@
 <template lang="pug">
 #app
   #nav
-    router-link(to="/") 출석체크
-    router-link(to="/points") 포인트현황
-  router-view
+    el-tabs(v-model="state.activeName" @tab-click="handleClick")
+      el-tab-pane(label="출석체크" name="/")
+      el-tab-pane(label="포인트현황" name="/points")
+  router-view  
 </template>
+<script lang="ts">
+import {reactive} from '@vue/composition-api'
+
+export default {
+  setup(props, {root}) {
+    const state = reactive({
+      activeName: '/',
+    })
+    return {
+      state,
+      handleClick(tab: any, event: any) {
+        console.log(tab, event)
+        root.$router.push(tab.name)
+      },
+    }
+  },
+}
+</script>
 <style lang="stylus" scoped>
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
@@ -17,7 +36,6 @@
 <style lang="stylus" >
 #nav {
   text-align: center;
-  margin-bottom: 20px;
 
   a {
     margin: 0 5px;
@@ -27,6 +45,11 @@
 
   a.router-link-exact-active {
     color: #42b983;
+  }
+
+  .el-tabs__item {
+    padding: 0 10px;
+    height: 35px;
   }
 }
 
