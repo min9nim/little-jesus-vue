@@ -10,7 +10,7 @@
 import {reactive} from '@vue/composition-api'
 
 export default {
-  setup(props, {root}) {
+  setup(props: any, {root}: any) {
     const state = reactive({
       activeName: '/',
     })
