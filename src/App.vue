@@ -23,7 +23,7 @@ export default {
     return {
       state,
       handleClick(tab: any, event: any) {
-        console.log(tab, event)
+        // console.log(tab, event)
         root.$router.push(tab.name)
       },
     }
