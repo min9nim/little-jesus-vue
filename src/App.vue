@@ -7,12 +7,18 @@
   router-view  
 </template>
 <script lang="ts">
-import {reactive} from '@vue/composition-api'
+import {reactive, onMounted} from '@vue/composition-api'
+import Vue from 'vue'
 
 export default {
   setup(props: any, {root}: any) {
     const state = reactive({
       activeName: '/',
+    })
+    onMounted(() => {
+      setTimeout(() => {
+        state.activeName = root.$route.path // root.$route.path 의 초기화 시점이 왜 이리 늦지..
+      }, 50)
     })
     return {
       state,
