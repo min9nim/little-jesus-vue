@@ -82,6 +82,10 @@ export default {
           return true
         }
         const teacher: any = globalState.teachers.find(propEq('_id', globalState.teacherId))
+        if (!teacher) {
+          console.log('Not found teacher', globalState.teacherId)
+          return true
+        }
         return teacher.students.length === 0
       },
     }
