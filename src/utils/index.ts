@@ -5,6 +5,7 @@ import {pipe, complement, filter} from 'ramda'
 const prod_url = 'https://little-jesus-api.now.sh'
 const dev_url = 'https://little-jesus-api-git-develop.min1.now.sh'
 const BASEURL = window.location.host === 'little-jesus.now.sh' ? prod_url : dev_url
+// const BASEURL = prod_url
 console.info({BASEURL})
 
 export async function req(query: any, variables = {}) {
