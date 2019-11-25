@@ -3,21 +3,29 @@
   el-card(shadow="hover")
     div(slot="header")
       h3 {{ point.owner.name }}
-    .item
-      .label 출석여부
-      .control {{point.attendance ? 'O' : 'X'}}
-    .item
-      .label 심방여부
-      .control {{point.visitcall ? 'O' : 'X'}}
-    .item.meditation
-      .label 말씀묵상
-      .control {{point.meditation}}
-    .item
-      .label 말씀암송
-      .control {{point.recitation ? 'O' : 'X'}}
-    .item.invitation
-      .label 전도
-      .control {{point.invitation}}
+    template(v-if="point.items")
+      .item(
+        v-for="(item, index) in $store.state.pointMenus"
+        :key="index"
+      )
+        .label {{item.label}}
+        .control xxx
+    template(v-else)
+      .item
+        .label 출석여부
+        .control {{point.attendance ? 'O' : 'X'}}
+      .item
+        .label 심방여부
+        .control {{point.visitcall ? 'O' : 'X'}}
+      .item.meditation
+        .label 말씀묵상
+        .control {{point.meditation}}
+      .item
+        .label 말씀암송
+        .control {{point.recitation ? 'O' : 'X'}}
+      .item.invitation
+        .label 전도
+        .control {{point.invitation}}
     .item
       .label 기타사항
       .control
