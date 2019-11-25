@@ -18,8 +18,18 @@ export function useComputed(props: IProps) {
   const attendanceReducer = (acc: number, point: IPoint) => acc + (point.attendance ? 1 : 0)
   const visitcallReducer = (acc: number, point: IPoint) => acc + (point.visitcall ? 1 : 0)
   const recitationReducer = (acc: number, point: IPoint) => acc + (point.recitation ? 1 : 0)
-  const meditationReducer = (acc: number, point: IPoint) => acc + point.meditation
-  const invitationReducer = (acc: number, point: IPoint) => acc + point.invitation
+  const meditationReducer = (acc: number, point: IPoint) => {
+    if (!point.meditation) {
+      return acc
+    }
+    return acc + point.meditation
+  }
+  const invitationReducer = (acc: number, point: IPoint) => {
+    if (!point.invitation) {
+      return acc
+    }
+    return acc + point.invitation
+  }
   return reactive({
     attendanceSum: computed(() => props.points.reduce(attendanceReducer, 0)),
     visitcallSum: computed(() => props.points.reduce(visitcallReducer, 0)),
