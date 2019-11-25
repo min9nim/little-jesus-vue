@@ -107,8 +107,8 @@ export const qStudents = gql`
   }
 `
 
-export const qTeachersAndStudents = gql`
-  query teachersAndStudents {
+export const qInitialize = gql`
+  query initialize {
     teachers {
       _id
       name
@@ -128,6 +128,14 @@ export const qTeachersAndStudents = gql`
         _id
         name
       }
+    }
+    pointMenus {
+      _id
+      label
+      type
+      priority
+      hidden
+      disable
     }
   }
 `

@@ -2,7 +2,7 @@ import {reactive} from '@vue/composition-api'
 import {req, go, nameAscending} from '@/utils'
 import {propEq, prop, find, differenceWith, isNil, filter, pathEq, path} from 'ramda'
 import moment from 'moment'
-import {qCreatePoint, qTeachersAndStudents, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
+import {qCreatePoint, qInitialize, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
 import {MessageBox, Notification} from 'element-ui'
 import {IPublicState, ITeacher, IPoint, IStudent} from '@/biz/type'
 
@@ -134,7 +134,7 @@ export async function initPoints({root, state, publicState}: any) {
 
 export async function initTeachers({root, state}: IAllState) {
   state.loading = true
-  const result = await req(qTeachersAndStudents)
+  const result = await req(qInitialize)
   state.loading = false
   // root.$store.state.teachers = result.teachers
 
