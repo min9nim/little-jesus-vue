@@ -11,6 +11,14 @@ export interface ITeacher {
   name: string
   students: IStudent[]
 }
+export interface IPointMenu {
+  _id: string
+  label: string
+  type: string
+  priority: number
+  hidden: boolean
+  disable: boolean
+}
 export interface IPoint {
   _id?: string
   owner: {
