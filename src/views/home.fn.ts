@@ -4,7 +4,7 @@ import {propEq, prop, find, differenceWith, isNil, filter, pathEq, path} from 'r
 import moment from 'moment'
 import {qCreatePoint, qInitialize, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
 import {MessageBox, Notification} from 'element-ui'
-import {IPublicState, ITeacher, IPoint, IStudent} from '@/biz/type'
+import {IPublicState, ITeacher, IPoint, IStudent, IPointMenu} from '@/biz/type'
 
 export interface IState {
   date?: string
@@ -60,18 +60,27 @@ export function useBeforeMount({root, state, publicState}: any) {
   }
 }
 
-const studentToDefaultPointMap = (student: IStudent) => {
+// const studentToDefaultPointMap = (student: IStudent) => {
+//   return {
+//     owner: student,
+//     attendance: false,
+//     visitcall: false,
+//     meditation: 0,
+//     invitation: 0,
+//     recitation: false,
+//     etc: '',
+//   }
+// }
+const studentToDefaultPointMap = (student: IStudent, pointMenus: IPointMenu[]) => {
   return {
     owner: student,
-    attendance: false,
-    visitcall: false,
-    meditation: 0,
-    invitation: 0,
-    recitation: false,
+    items: pointMenus.map((menu: IPointMenu) => ({
+      _id: menu._id,
+      value: '',
+    })),
     etc: '',
   }
 }
-
 export async function initPoints({root, state, publicState}: any) {
   if (isNil(publicState.teacherId)) {
     publicState.points = []
@@ -109,7 +118,9 @@ export async function initPoints({root, state, publicState}: any) {
       students,
       result.res,
     )
-    const pointsOfNewStudents = newStudnets.map(studentToDefaultPointMap)
+    const pointsOfNewStudents = newStudnets.map(student =>
+      studentToDefaultPointMap(student, root.$store.state.pointMenus),
+    )
     points.push(...pointsOfNewStudents)
   }
 
@@ -127,7 +138,9 @@ export async function initPoints({root, state, publicState}: any) {
     return
   }
 
-  publicState.points = teacher.students.map(studentToDefaultPointMap)
+  publicState.points = teacher.students.map(student =>
+    studentToDefaultPointMap(student, root.$store.state.pointMenus),
+  )
   state.pointInit = false
   state.editable = true
 }
@@ -241,10 +254,10 @@ export function useHandleDateChange({root, state, publicState}: IAllState) {
   }
 }
 
-export function useHandleTeacherChange({state, publicState}: IAllState) {
+export function useHandleTeacherChange({root, state, publicState}: IAllState) {
   return async (teacherId: string) => {
     localStorage.setItem('teacherId', teacherId)
-    await initPoints({state, publicState})
+    await initPoints({root, state, publicState})
   }
 }
 

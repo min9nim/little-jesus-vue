@@ -60,7 +60,7 @@ export default {
   setup(props: any, {root}: any) {
     const publicState: IPublicState = usePublicState()
     const state: IState = useState()
-    const handleTeacherChange = useHandleTeacherChange({state, publicState})
+    const handleTeacherChange = useHandleTeacherChange({root, state, publicState})
     const handleDateChange = useHandleDateChange({state, publicState})
     const handleSave = useHandleSave({state, publicState})
     const handleEdit = useHandleEdit({state})

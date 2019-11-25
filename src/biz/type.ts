@@ -30,11 +30,12 @@ export interface IPoint {
     }
   }
   date?: string
-  attendance: boolean
-  visitcall: boolean
-  meditation: number
-  invitation: number
-  recitation: boolean
+  attendance?: boolean
+  visitcall?: boolean
+  meditation?: number
+  invitation?: number
+  recitation?: boolean
+  items?: any[]
   etc: string
 }
 
