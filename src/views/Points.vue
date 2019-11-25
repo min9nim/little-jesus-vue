@@ -31,10 +31,10 @@
 
 <script lang="ts">
 import {createComponent, onBeforeMount} from '@vue/composition-api'
-import {useGlobalState} from './home.fn'
+import {usePublicState} from './home.fn'
 import TablePoint from '../components/TablePoint.vue'
 import {useState, IState, useHandleDateChange, useBeforeMount, useHandleClick} from './points.fn'
-import {IGlobalState, IPoint, ITeacher} from '../biz/type'
+import {IPublicState, IPoint, ITeacher} from '../biz/type'
 import {propEq, omit} from 'ramda'
 
 export default {
@@ -42,18 +42,18 @@ export default {
   components: {TablePoint},
   methods: {omit, propEq},
   setup() {
-    const globalState: IGlobalState = useGlobalState()
-    const state: IState = useState(globalState)
-    const handleDateChange = useHandleDateChange({state, globalState})
-    const handleClick = useHandleClick(globalState)
-    onBeforeMount(useBeforeMount({state, globalState}))
+    const publicState: IPublicState = usePublicState()
+    const state: IState = useState(publicState)
+    const handleDateChange = useHandleDateChange({state, publicState})
+    const handleClick = useHandleClick(publicState)
+    onBeforeMount(useBeforeMount({state, publicState}))
     return {
       state,
-      globalState,
+      publicState,
       handleClick,
       handleDateChange,
       teacherVisible(teacherName: string) {
-        const teacher: any = globalState.teachers.find(propEq('name', '반미정'))
+        const teacher: any = publicState.teachers.find(propEq('name', '반미정'))
         return teacherName !== '반미정' || teacher.students.length > 0
       },
     }

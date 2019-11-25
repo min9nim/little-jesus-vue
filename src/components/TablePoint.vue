@@ -34,8 +34,8 @@ table.items
 
 <script lang="ts">
 import {IComputed, useComputed} from '../components/table-point.fn'
-import {IGlobalState, IPoint, ITeacher} from '../biz/type'
-import {useGlobalState} from '../views/home.fn'
+import {IPublicState, IPoint, ITeacher} from '../biz/type'
+import {usePublicState} from '../views/home.fn'
 
 export default {
   name: 'table-point',

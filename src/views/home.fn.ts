@@ -4,7 +4,7 @@ import {propEq, prop, find, differenceWith, isNil, filter, pathEq, path} from 'r
 import moment from 'moment'
 import {qCreatePoint, qTeachersAndStudents, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
 import {MessageBox, Notification} from 'element-ui'
-import {IGlobalState, ITeacher, IPoint, IStudent} from '@/biz/type'
+import {IPublicState, ITeacher, IPoint, IStudent} from '@/biz/type'
 
 export interface IState {
   date?: string
@@ -16,7 +16,7 @@ export interface IState {
 
 export interface IAllState {
   state: IState
-  globalState: IGlobalState
+  publicState: IPublicState
 }
 
 export function useState(): IState {
@@ -33,25 +33,25 @@ export function useState(): IState {
   return state
 }
 
-let globalState: IGlobalState
-export function useGlobalState(): IGlobalState {
-  if (globalState) {
-    return globalState
+let publicState: IPublicState
+export function usePublicState(): IPublicState {
+  if (publicState) {
+    return publicState
   }
-  globalState = reactive({
+  publicState = reactive({
     teacherId: localStorage.getItem('teacherId') || '',
     teachers: [] as ITeacher[],
     points: [],
   })
-  return globalState
+  return publicState
 }
 
-export function useBeforeMount({root, state, globalState}: any) {
+export function useBeforeMount({root, state, publicState}: any) {
   return async () => {
-    if (globalState.teachers.length === 0) {
-      await initTeachers({state, globalState})
+    if (publicState.teachers.length === 0) {
+      await initTeachers({state, publicState})
     }
-    await initPoints({state, globalState})
+    await initPoints({state, publicState})
     // console.log(root.$route)
     if (root.$route.fullPath === '/?edit') {
       state.editable = true
@@ -71,26 +71,26 @@ const studentToDefaultPointMap = (student: IStudent) => {
   }
 }
 
-export async function initPoints({state, globalState}: IAllState) {
-  if (isNil(globalState.teacherId)) {
-    globalState.points = []
+export async function initPoints({state, publicState}: IAllState) {
+  if (isNil(publicState.teacherId)) {
+    publicState.points = []
     return
   }
   state.loading = true
   const result: any = await req(qPoints, {
     date: state.date,
-    teacherId: globalState.teacherId || null,
+    teacherId: publicState.teacherId || null,
   })
   state.loading = false
   let points: IPoint[] = result.res
-  if (globalState.teacherId === '') {
+  if (publicState.teacherId === '') {
     // 반미정을 선택한 경우에는 전체 포인트목록이 리턴되는데 이를 필터링해야 한다.
     points = filter(pathEq(['owner', 'teacher'], null))(points)
     // console.log({points})
   }
   let students = go(
-    globalState.teachers,
-    find(propEq('_id', globalState.teacherId)),
+    publicState.teachers,
+    find(propEq('_id', publicState.teacherId)),
     prop('students'),
   )
   points.sort(nameAscending(path(['owner', 'name'])))
@@ -113,36 +113,36 @@ export async function initPoints({state, globalState}: IAllState) {
   }
 
   if (points.length > 0) {
-    globalState.points = points
+    publicState.points = points
     state.pointInit = true
     state.editable = false
     return
   }
-  const teacher: ITeacher | undefined = globalState.teachers.find(
-    propEq('_id', globalState.teacherId),
+  const teacher: ITeacher | undefined = publicState.teachers.find(
+    propEq('_id', publicState.teacherId),
   )
   if (!teacher) {
     console.warn('Teacher is not selected yet')
     return
   }
 
-  globalState.points = teacher.students.map(studentToDefaultPointMap)
+  publicState.points = teacher.students.map(studentToDefaultPointMap)
   state.pointInit = false
   state.editable = true
 }
 
-export async function initTeachers({state, globalState}: IAllState) {
+export async function initTeachers({state, publicState}: IAllState) {
   state.loading = true
   const result = await req(qTeachersAndStudents)
   state.loading = false
-  globalState.teachers = result.teachers
-  globalState.teachers.forEach(teacher => {
+  publicState.teachers = result.teachers
+  publicState.teachers.forEach(teacher => {
     teacher.students.sort(nameAscending(path(['name'])))
   })
-  globalState.teachers.sort(nameAscending(path(['name'])))
+  publicState.teachers.sort(nameAscending(path(['name'])))
   const etcStudents = result.students.filter(propEq('teacher', null))
   if (etcStudents.length > 0) {
-    globalState.teachers.push({
+    publicState.teachers.push({
       _id: '',
       name: '반미정',
       students: etcStudents.sort(nameAscending(path(['name']))),
@@ -150,19 +150,19 @@ export async function initTeachers({state, globalState}: IAllState) {
   }
 }
 
-export function useHandleSave({state, globalState}: IAllState) {
+export function useHandleSave({state, publicState}: IAllState) {
   return async () => {
     if (state.pointInit) {
-      await updatePoint({state, globalState})
+      await updatePoint({state, publicState})
     } else {
-      await createPoint({state, globalState})
+      await createPoint({state, publicState})
     }
   }
 }
 
-export async function updatePoint({state, globalState}: IAllState) {
+export async function updatePoint({state, publicState}: IAllState) {
   state.loading = true
-  const results = globalState.points.map(point => {
+  const results = publicState.points.map(point => {
     if (!point._id) {
       // 최초 포인트입력 이후 신규로 추가된 학생이 있는 경우
       return req(qCreatePoint, {
@@ -197,9 +197,9 @@ export async function updatePoint({state, globalState}: IAllState) {
   // await Message({message: '저장 완료', type: 'success'})
 }
 
-export async function createPoint({state, globalState}: IAllState) {
+export async function createPoint({state, publicState}: IAllState) {
   state.loading = true
-  const results = globalState.points.map(point => {
+  const results = publicState.points.map(point => {
     return req(qCreatePoint, {
       owner: point.owner._id,
       date: state.date,
@@ -212,7 +212,7 @@ export async function createPoint({state, globalState}: IAllState) {
     })
   })
   const resolvedList: any = await Promise.all(results)
-  globalState.points = resolvedList.map(prop('res')) // 생성된 _id 세팅
+  publicState.points = resolvedList.map(prop('res')) // 생성된 _id 세팅
   state.loading = false
   state.pointInit = true
   state.editable = false
@@ -221,7 +221,7 @@ export async function createPoint({state, globalState}: IAllState) {
   Notification.success({message: '저장 완료', position: 'bottom-right'})
 }
 
-export function useHandleDateChange({state, globalState}: IAllState) {
+export function useHandleDateChange({state, publicState}: IAllState) {
   return async (value: string) => {
     if (moment(value, 'YYYYMMDD').format('dddd') !== 'Sunday') {
       await MessageBox.alert('일요일만 선택가능합니다', {type: 'warning'})
@@ -229,14 +229,14 @@ export function useHandleDateChange({state, globalState}: IAllState) {
       return
     }
     state.oldDate = state.date
-    await initPoints({state, globalState})
+    await initPoints({state, publicState})
   }
 }
 
-export function useHandleTeacherChange({state, globalState}: IAllState) {
+export function useHandleTeacherChange({state, publicState}: IAllState) {
   return async (teacherId: string) => {
     localStorage.setItem('teacherId', teacherId)
-    await initPoints({state, globalState})
+    await initPoints({state, publicState})
   }
 }
 
@@ -249,9 +249,9 @@ export function useHandleRemove({state}: {state: IState}) {
   return async () => {
     try {
       await MessageBox.confirm('입력했던 내용을 전부 삭제합니다', {type: 'warning'})
-      const globalState = useGlobalState()
+      const publicState = usePublicState()
       state.loading = true
-      const results: Array<Promise<any>> = globalState.points.map(point =>
+      const results: Array<Promise<any>> = publicState.points.map(point =>
         req(qRemovePoint, {_id: point._id}),
       )
       await Promise.all(results)
@@ -260,7 +260,7 @@ export function useHandleRemove({state}: {state: IState}) {
       // @ts-ignore
       Notification.success({message: '삭제 완료', position: 'bottom-right'})
 
-      await initPoints({state, globalState})
+      await initPoints({state, publicState})
     } catch (e) {
       if (e !== 'cancel') {
         throw e

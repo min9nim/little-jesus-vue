@@ -30,7 +30,7 @@ export interface IPoint {
   etc: string
 }
 
-export interface IGlobalState {
+export interface IPublicState {
   teacherId?: string
   teachers: ITeacher[]
   points: IPoint[]

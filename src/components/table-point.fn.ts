@@ -1,4 +1,4 @@
-import {IGlobalState, IPoint, ITeacher, IStudent} from '@/biz/type'
+import {IPublicState, IPoint, ITeacher, IStudent} from '@/biz/type'
 import {IState} from '@/views/points.fn'
 import {reactive, computed} from '@vue/composition-api'
 
