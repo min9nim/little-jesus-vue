@@ -7,7 +7,7 @@
       @change="handleTeacherChange"
     )
       el-option(
-        v-for="item in publicState.teachers"
+        v-for="item in $store.state.teachers"
         :key="item._id"
         :label="item.name"
         :value="item._id"
@@ -81,7 +81,7 @@ export default {
         if (publicState.teacherId === '') {
           return true
         }
-        const teacher: any = publicState.teachers.find(propEq('_id', publicState.teacherId))
+        const teacher: any = root.$store.state.teachers.find(propEq('_id', publicState.teacherId))
         if (!teacher) {
           console.log('Not found teacher', publicState.teacherId)
           return true

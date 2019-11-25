@@ -15,8 +15,9 @@ export interface IState {
 }
 
 export interface IAllState {
+  root?: any
   state: IState
-  publicState: IPublicState
+  publicState?: IPublicState
 }
 
 export function useState(): IState {
@@ -48,10 +49,10 @@ export function usePublicState(): IPublicState {
 
 export function useBeforeMount({root, state, publicState}: any) {
   return async () => {
-    if (publicState.teachers.length === 0) {
-      await initTeachers({state, publicState})
+    if (root.$store.state.teachers.length === 0) {
+      await initTeachers({root, state, publicState})
     }
-    await initPoints({state, publicState})
+    await initPoints({root, state, publicState})
     // console.log(root.$route)
     if (root.$route.fullPath === '/?edit') {
       state.editable = true
@@ -71,7 +72,7 @@ const studentToDefaultPointMap = (student: IStudent) => {
   }
 }
 
-export async function initPoints({state, publicState}: IAllState) {
+export async function initPoints({root, state, publicState}: any) {
   if (isNil(publicState.teacherId)) {
     publicState.points = []
     return
@@ -89,7 +90,7 @@ export async function initPoints({state, publicState}: IAllState) {
     // console.log({points})
   }
   let students = go(
-    publicState.teachers,
+    root.$store.state.teachers,
     find(propEq('_id', publicState.teacherId)),
     prop('students'),
   )
@@ -118,7 +119,7 @@ export async function initPoints({state, publicState}: IAllState) {
     state.editable = false
     return
   }
-  const teacher: ITeacher | undefined = publicState.teachers.find(
+  const teacher: ITeacher | undefined = root.$store.state.teachers.find(
     propEq('_id', publicState.teacherId),
   )
   if (!teacher) {
@@ -131,21 +132,30 @@ export async function initPoints({state, publicState}: IAllState) {
   state.editable = true
 }
 
-export async function initTeachers({state, publicState}: IAllState) {
+export async function initTeachers({root, state}: IAllState) {
   state.loading = true
   const result = await req(qTeachersAndStudents)
   state.loading = false
-  publicState.teachers = result.teachers
-  publicState.teachers.forEach(teacher => {
+  // root.$store.state.teachers = result.teachers
+
+  // api 결과를 정렬
+  result.teachers.forEach((teacher: any) => {
     teacher.students.sort(nameAscending(path(['name'])))
   })
-  publicState.teachers.sort(nameAscending(path(['name'])))
+  result.teachers.sort(nameAscending(path(['name'])))
+
+  root.$store.commit('setTeachers', result.teachers)
   const etcStudents = result.students.filter(propEq('teacher', null))
   if (etcStudents.length > 0) {
-    publicState.teachers.push({
+    // root.$store.state.teachers.push({
+    //   _id: '',
+    //   name: '반미정',
+    //   students: etcStudents.sort(nameAscending(path(['name']))),
+    // })
+    root.$store.commit('addTeacher', {
       _id: '',
       name: '반미정',
-      students: etcStudents.sort(nameAscending(path(['name']))),
+      students: etcStudents,
     })
   }
 }
@@ -160,9 +170,9 @@ export function useHandleSave({state, publicState}: IAllState) {
   }
 }
 
-export async function updatePoint({state, publicState}: IAllState) {
+export async function updatePoint({state, publicState}: any) {
   state.loading = true
-  const results = publicState.points.map(point => {
+  const results = publicState.points.map((point: IPoint) => {
     if (!point._id) {
       // 최초 포인트입력 이후 신규로 추가된 학생이 있는 경우
       return req(qCreatePoint, {
@@ -197,9 +207,9 @@ export async function updatePoint({state, publicState}: IAllState) {
   // await Message({message: '저장 완료', type: 'success'})
 }
 
-export async function createPoint({state, publicState}: IAllState) {
+export async function createPoint({state, publicState}: any) {
   state.loading = true
-  const results = publicState.points.map(point => {
+  const results = publicState.points.map((point: any) => {
     return req(qCreatePoint, {
       owner: point.owner._id,
       date: state.date,
@@ -221,7 +231,7 @@ export async function createPoint({state, publicState}: IAllState) {
   Notification.success({message: '저장 완료', position: 'bottom-right'})
 }
 
-export function useHandleDateChange({state, publicState}: IAllState) {
+export function useHandleDateChange({root, state, publicState}: IAllState) {
   return async (value: string) => {
     if (moment(value, 'YYYYMMDD').format('dddd') !== 'Sunday') {
       await MessageBox.alert('일요일만 선택가능합니다', {type: 'warning'})
@@ -229,7 +239,7 @@ export function useHandleDateChange({state, publicState}: IAllState) {
       return
     }
     state.oldDate = state.date
-    await initPoints({state, publicState})
+    await initPoints({root, state, publicState})
   }
 }
 
@@ -245,7 +255,7 @@ export function useHandleEdit({state}: {state: IState}) {
     state.editable = true
   }
 }
-export function useHandleRemove({state}: {state: IState}) {
+export function useHandleRemove({root, state}: any) {
   return async () => {
     try {
       await MessageBox.confirm('입력했던 내용을 전부 삭제합니다', {type: 'warning'})
@@ -260,7 +270,7 @@ export function useHandleRemove({state}: {state: IState}) {
       // @ts-ignore
       Notification.success({message: '삭제 완료', position: 'bottom-right'})
 
-      await initPoints({state, publicState})
+      await initPoints({root, state, publicState})
     } catch (e) {
       if (e !== 'cancel') {
         throw e

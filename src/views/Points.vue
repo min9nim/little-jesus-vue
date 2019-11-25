@@ -41,19 +41,19 @@ export default {
   name: 'v-points',
   components: {TablePoint},
   methods: {omit, propEq},
-  setup() {
+  setup(props: any, {root}: any) {
     const publicState: IPublicState = usePublicState()
-    const state: IState = useState(publicState)
+    const state: IState = useState(root)
     const handleDateChange = useHandleDateChange({state, publicState})
-    const handleClick = useHandleClick(publicState)
-    onBeforeMount(useBeforeMount({state, publicState}))
+    const handleClick = useHandleClick(root, publicState)
+    onBeforeMount(useBeforeMount({root, state}))
     return {
       state,
       publicState,
       handleClick,
       handleDateChange,
       teacherVisible(teacherName: string) {
-        const teacher: any = publicState.teachers.find(propEq('name', '반미정'))
+        const teacher: any = root.$store.state.teachers.find(propEq('name', '반미정'))
         return teacherName !== '반미정' || teacher.students.length > 0
       },
     }

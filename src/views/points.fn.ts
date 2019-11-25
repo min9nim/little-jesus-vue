@@ -5,7 +5,7 @@ import {prop, groupBy, path, differenceWith, propEq, pathEq, find, filter} from 
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 import {IPublicState, IPoint, ITeacher, IStudent} from '@/biz/type'
-import {initTeachers, usePublicState} from './home.fn'
+import {initTeachers} from './home.fn'
 import {studentToDefaultPointMap} from '@/biz'
 import isNil from 'ramda/es/isNil'
 
@@ -19,11 +19,12 @@ export interface IState {
 }
 
 export interface IAllState {
+  root?: any
   state: IState
-  publicState: IPublicState
+  publicState?: IPublicState
 }
 
-export function useHandleDateChange({state, publicState}: IAllState) {
+export function useHandleDateChange({state, root}: IAllState) {
   return async (value: string) => {
     if (moment(value, 'YYYYMMDD').format('dddd') !== 'Sunday') {
       await MessageBox.alert('일요일만 선택가능합니다', {type: 'warning'})
@@ -32,19 +33,19 @@ export function useHandleDateChange({state, publicState}: IAllState) {
     }
     state.oldDate = state.date
 
-    await initPoints({state, publicState})
+    await initPoints({root, state})
   }
 }
 
-export function useBeforeMount({state, publicState}: IAllState) {
+export function useBeforeMount({root, state}: IAllState) {
   return async () => {
-    if (publicState.teachers.length === 0) {
-      await initTeachers({state, publicState})
+    if (root.$store.state.teachers.length === 0) {
+      await initTeachers({root, state})
     }
-    await initPoints({state, publicState})
+    await initPoints({root, state})
   }
 }
-export async function initPoints({state, publicState}: IAllState) {
+export async function initPoints({root, state}: IAllState) {
   state.loading = true
   const result: any = await req(qPoints, {
     date: state.date,
@@ -61,7 +62,11 @@ export async function initPoints({state, publicState}: IAllState) {
   // @ts-ignore
   state.pointsByTeacher = groupBy(path(['owner', 'teacher', 'name']))(points)
   Object.entries(state.pointsByTeacher).forEach(([teacherName, points]: any) => {
-    let students = go(publicState.teachers, find(propEq('name', teacherName)), prop('students'))
+    let students = go(
+      root.$store.state.teachers,
+      find(propEq('name', teacherName)),
+      prop('students'),
+    )
     // console.log(JSON.stringify(points, null, 2))
     if (students.length !== points.length) {
       // 포인트 입력 후 신규학생을 반에 추가 배정한 경우
@@ -75,7 +80,7 @@ export async function initPoints({state, publicState}: IAllState) {
   // 아직 포인트입력 안한 선생님들 목록에 추가
   const diffTeachers: ITeacher[] = differenceWith(
     (t1, t2) => t1.name === t2,
-    publicState.teachers,
+    root.$store.state.teachers,
     Object.keys(state.pointsByTeacher),
   )
   diffTeachers.forEach(teacher => {
@@ -113,7 +118,7 @@ export function isEqualStudent(a: IStudent, b: IPoint) {
   return a._id === b.owner._id
 }
 
-export function useState(publicState: IPublicState): IState {
+export function useState(root: any): IState {
   const state: IState = reactive({
     date: moment()
       .startOf('week')
@@ -121,10 +126,10 @@ export function useState(publicState: IPublicState): IState {
     loading: false,
     points: [],
     etcStudents: computed(() => {
-      if (publicState.teachers.length === 0) {
+      if (root.$store.state.teachers.length === 0) {
         return []
       }
-      const nullTeacher = publicState.teachers.find(propEq('name', '반미정'))
+      const nullTeacher = root.$store.state.teachers.find(propEq('name', '반미정'))
       if (!nullTeacher) {
         return []
       }
@@ -135,9 +140,9 @@ export function useState(publicState: IPublicState): IState {
   return state
 }
 
-export function useHandleClick(publicState: IPublicState) {
+export function useHandleClick(root: any, publicState: IPublicState) {
   return (teacherName: string) => {
-    const teacher = publicState.teachers.find(propEq('name', teacherName))
+    const teacher = root.$store.state.teachers.find(propEq('name', teacherName))
     if (!teacher) {
       throw Error('Not found teacher')
     }
