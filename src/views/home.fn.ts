@@ -50,7 +50,7 @@ export function usePublicState(): IPublicState {
 export function useBeforeMount({root, state, publicState}: any) {
   return async () => {
     if (root.$store.state.teachers.length === 0) {
-      await initTeachers({root, state, publicState})
+      await initialize({root, state, publicState})
     }
     await initPoints({root, state, publicState})
     // console.log(root.$route)
@@ -132,7 +132,7 @@ export async function initPoints({root, state, publicState}: any) {
   state.editable = true
 }
 
-export async function initTeachers({root, state}: IAllState) {
+export async function initialize({root, state}: IAllState) {
   state.loading = true
   const result = await req(qInitialize)
   state.loading = false

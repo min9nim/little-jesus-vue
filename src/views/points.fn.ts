@@ -5,7 +5,7 @@ import {prop, groupBy, path, differenceWith, propEq, pathEq, find, filter} from 
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 import {IPublicState, IPoint, ITeacher, IStudent} from '@/biz/type'
-import {initTeachers} from './home.fn'
+import {initialize} from './home.fn'
 import {studentToDefaultPointMap} from '@/biz'
 import isNil from 'ramda/es/isNil'
 
@@ -40,7 +40,7 @@ export function useHandleDateChange({state, root}: IAllState) {
 export function useBeforeMount({root, state}: IAllState) {
   return async () => {
     if (root.$store.state.teachers.length === 0) {
-      await initTeachers({root, state})
+      await initialize({root, state})
     }
     await initPoints({root, state})
   }
