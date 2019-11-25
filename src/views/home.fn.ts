@@ -76,7 +76,7 @@ const studentToDefaultPointMap = (student: IStudent, pointMenus: IPointMenu[]) =
     owner: student,
     items: pointMenus.map((menu: IPointMenu) => ({
       _id: menu._id,
-      value: '',
+      value: 0,
     })),
     etc: '',
   }
