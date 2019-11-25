@@ -136,7 +136,9 @@ export async function initialize({root, state}: IAllState) {
   state.loading = true
   const result = await req(qInitialize)
   state.loading = false
-  // root.$store.state.teachers = result.teachers
+
+  // 포인트메뉴 상태 초기화
+  root.$store.commit('setPointMenus', result.pointMenus)
 
   // api 결과를 정렬
   result.teachers.forEach((teacher: any) => {
@@ -144,14 +146,10 @@ export async function initialize({root, state}: IAllState) {
   })
   result.teachers.sort(nameAscending(path(['name'])))
 
+  // 선생님목록 상태 초기화
   root.$store.commit('setTeachers', result.teachers)
   const etcStudents = result.students.filter(propEq('teacher', null))
   if (etcStudents.length > 0) {
-    // root.$store.state.teachers.push({
-    //   _id: '',
-    //   name: '반미정',
-    //   students: etcStudents.sort(nameAscending(path(['name']))),
-    // })
     root.$store.commit('addTeacher', {
       _id: '',
       name: '반미정',
