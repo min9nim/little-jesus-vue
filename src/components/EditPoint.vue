@@ -50,21 +50,21 @@
 </template>
 <script lang="ts">
 import {createComponent, reactive, computed, watch} from '@vue/composition-api'
-import {useState, usePublicState} from '../views/home.fn'
+import {useState, usePublicState as usePublicHomeState} from '../views/home.fn'
 import {propEq, pathEq} from 'ramda'
 import Vue from 'vue'
 
 export default createComponent({
   props: {studentId: String},
   setup(props, {root}) {
-    const publicState = usePublicState()
+    const homeState = usePublicHomeState()
     let state = reactive({
-      point: publicState.points.find(pathEq(['owner', '_id'], props.studentId)),
+      point: homeState.points.find(pathEq(['owner', '_id'], props.studentId)),
     })
     watch(
       () => props.studentId,
       () => {
-        state.point = publicState.points.find(pathEq(['owner', '_id'], props.studentId))
+        state.point = homeState.points.find(pathEq(['owner', '_id'], props.studentId))
       },
     )
     return {
