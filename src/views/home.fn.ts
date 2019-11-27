@@ -1,10 +1,14 @@
 import {reactive} from '@vue/composition-api'
 import {req, go, nameAscending} from '@/utils'
-import {propEq, prop, find, differenceWith, isNil, filter, pathEq, path} from 'ramda'
+import {clone, propEq, prop, find, differenceWith, isNil, filter, pathEq, path} from 'ramda'
 import moment from 'moment'
 import {qCreatePoint, qInitialize, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
 import {MessageBox, Notification} from 'element-ui'
 import {IPublicState, ITeacher, IPoint, IStudent, IPointMenu} from '@/biz/type'
+import min from '@mgsong/min-utils'
+import equals from 'ramda/es/equals'
+
+const {findById} = min as any
 
 export interface IState {
   date?: string
@@ -29,6 +33,7 @@ export function useState(): IState {
     loading: false,
     pointInit: false,
     editable: false,
+    originalPoints: [],
   })
   state.oldDate = state.date
   return state
@@ -126,6 +131,7 @@ export async function initPoints({root, state, publicState}: any) {
 
   if (points.length > 0) {
     publicState.points = points
+    state.originalPoints = clone(publicState.points)
     state.pointInit = true
     state.editable = false
     return
@@ -141,6 +147,7 @@ export async function initPoints({root, state, publicState}: any) {
   publicState.points = teacher.students.map(student =>
     studentToDefaultPointMap(student, root.$store.state.pointMenus),
   )
+  state.originalPoints = clone(publicState.points)
   state.pointInit = false
   state.editable = true
 }
@@ -193,6 +200,12 @@ export async function updatePoint({state, publicState}: any) {
           items: point.items.map((item: any) => ({value: item.value, type: item.type._id})),
           etc: point.etc,
         })
+      }
+
+      const asisPoint = findById(point._id)(state.originalPoints)
+      if (equals(point, asisPoint)) {
+        // console.log('변경사항 없어 스킵')
+        return
       }
       return req(qUpdatePoint, {
         _id: point._id,

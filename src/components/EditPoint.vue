@@ -9,6 +9,7 @@
         el-radio(
           v-for="num in Array.from(Array(Number(item.type.type)).keys())"
           v-model="item.value" :label="num"
+          :key="num"
         ) {{num}}        
     .item
       .label 기타사항
