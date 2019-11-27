@@ -46,6 +46,8 @@ export function useBeforeMount({root, state}: IAllState) {
   }
 }
 export async function initPoints({root, state}: IAllState) {
+  const {pointMenus} = root.$store.state
+  const defaultPoint = studentToDefaultPointMap(pointMenus)
   state.loading = true
   const result: any = await req(qPoints, {
     date: state.date,
@@ -71,7 +73,7 @@ export async function initPoints({root, state}: IAllState) {
     if (students.length !== points.length) {
       // 포인트 입력 후 신규학생을 반에 추가 배정한 경우
       const newStudents = differenceWith(isEqualStudent, students, points)
-      const pointsOfNewStudents = newStudents.map(studentToDefaultPointMap)
+      const pointsOfNewStudents = newStudents.map(defaultPoint)
       points.push(...pointsOfNewStudents)
     }
     points.sort(nameAscending(path(['owner', 'name'])))
@@ -85,7 +87,7 @@ export async function initPoints({root, state}: IAllState) {
   )
   diffTeachers.forEach(teacher => {
     state.pointsByTeacher[teacher.name] = []
-    const points = teacher.students.map(studentToDefaultPointMap)
+    const points = teacher.students.map(defaultPoint)
     state.points.push(...points)
   })
 
@@ -93,7 +95,7 @@ export async function initPoints({root, state}: IAllState) {
   const etcStudentPoints: any = filter<IPoint>(pathEq(['owner', 'teacher'], null))(result.res)
   if (etcStudentPoints.length !== state.etcStudents.length) {
     const newStudents = differenceWith(isEqualStudent, state.etcStudents, etcStudentPoints)
-    const pointsOfNewStudents = newStudents.map(studentToDefaultPointMap)
+    const pointsOfNewStudents = newStudents.map(defaultPoint)
     etcStudentPoints.push(...pointsOfNewStudents)
   }
   state.pointsByTeacher['반미정'] = etcStudentPoints

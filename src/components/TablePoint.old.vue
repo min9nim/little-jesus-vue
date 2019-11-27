@@ -3,19 +3,31 @@ table.items
   thead
     tr.row
       td.name 이름
-      td(v-for="item in $store.state.pointMenus") {{item.label}}
+      td.attendance 출석
+      td.visitcall 심방
+      td.meditation 묵상
+      td.recitation 암송
+      td.invitation 전도
       td.etc 기타
       td.point 점수
   tbody(v-if="!tableBodyHidden")
     tr.row(v-for="(point, index) in points" :key="index")
       td.name {{point.owner.name}}
-      td(v-for="item in point.items") {{item.value}}
+      td.attendance {{point.attendance ? 1 : 0}}
+      td.visitcall {{point.visitcall ? 1 : 0}}
+      td.meditation {{point.meditation}}
+      td.recitation {{point.recitation ? 1 : 0}}
+      td.invitation {{point.invitation}}
       td.etc {{point.etc}}
-      td.point {{itemSum(point.items)}}
+      td.point {{(point.attendance ? 1 : 0) + point.meditation + (point.recitation ? 7 : 0) + point.invitation * 10}}
   tfoot
     tr.row
       td.name 합계
-      td(v-for="(item, index) in $store.state.pointMenus") {{pointSum(index)}} / {{points.length * item.priority}}
+      td.attendance {{computed.attendanceSum}} / {{points.length}}
+      td.visitcall {{computed.visitcallSum}} / {{points.length}}
+      td.meditation {{computed.meditationSum}}
+      td.recitation {{computed.recitationSum}} / {{points.length}}
+      td.invitation {{computed.invitationSum}}
       td.etc -    
       td.point -        
 </template>
@@ -35,24 +47,6 @@ export default {
     const computed: IComputed = useComputed(props)
     return {
       computed,
-      pointSum(index: number) {
-        const reducer = (acc: number, point: any) => {
-          if (!point.items) {
-            return acc
-          }
-          const val = point.items[index].value
-          const priority = point.items[index].type.priority
-          // console.log({point, val, priority})
-          return acc + val * priority
-        }
-        return props.points.reduce(reducer, 0)
-      },
-      itemSum(items: any) {
-        if (!items) {
-          return 200
-        }
-        return items.reduce((acc, item) => acc + item.value * item.type.priority, 0)
-      },
     }
   },
 }

@@ -158,6 +158,16 @@ export const qPoints = gql`
       invitation
       visitcall
       recitation
+      items {
+        type {
+          _id
+          label
+          type
+          priority
+          disable
+        }
+        value
+      }
       etc
     }
   }
