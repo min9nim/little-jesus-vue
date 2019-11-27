@@ -3,12 +3,12 @@
   el-card(shadow="hover")
     div(slot="header")
       h3 {{ state.point.owner.name }}
-    .item(v-for="item in $store.state.pointMenus" :key="item._id")
-      .label {{item.label}}
+    .item(v-for="item in state.point.items" :key="item._id")
+      .label {{item.type.label}}
       .control
         el-radio(
-          v-for="num in Array.from(Array(Number(item.type)).keys())"
-          v-model="state.point.items[state.point.items.findIndex(propEq('_id', item._id))].value" :label="num"
+          v-for="num in Array.from(Array(Number(item.type.type)).keys())"
+          v-model="item.value" :label="num"
         ) {{num}}        
     .item
       .label 기타사항

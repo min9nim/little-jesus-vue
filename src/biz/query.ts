@@ -30,35 +30,26 @@ export const qUpdatePoint = gql`
     $_id: ObjectId!
     $owner: ObjectId
     $date: String
-    $attendance: Boolean
-    $visitcall: Boolean
-    $meditation: Int
-    $recitation: Boolean
-    $invitation: Int
+    $items: [PointItemArg!]!
     $etc: String
   ) {
-    res: updatePoint(
-      _id: $_id
-      owner: $owner
-      date: $date
-      attendance: $attendance
-      visitcall: $visitcall
-      meditation: $meditation
-      recitation: $recitation
-      invitation: $invitation
-      etc: $etc
-    ) {
+    res: updatePoint(_id: $_id, owner: $owner, date: $date, items: $items, etc: $etc) {
       _id
       owner {
         _id
         name
       }
       date
-      attendance
-      visitcall
-      meditation
-      recitation
-      invitation
+      items {
+        type {
+          _id
+          label
+          type
+          priority
+          disable
+        }
+        value
+      }
       etc
     }
   }

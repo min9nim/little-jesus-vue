@@ -35,7 +35,7 @@ export interface IPoint {
   meditation?: number
   invitation?: number
   recitation?: boolean
-  items?: any[]
+  items: any[]
   etc: string
 }
 

@@ -182,40 +182,40 @@ export function useHandleSave({state, publicState}: IAllState) {
 }
 
 export async function updatePoint({state, publicState}: any) {
-  state.loading = true
-  const results = publicState.points.map((point: IPoint) => {
-    if (!point._id) {
-      // 최초 포인트입력 이후 신규로 추가된 학생이 있는 경우
-      return req(qCreatePoint, {
+  try {
+    state.loading = true
+    const results = publicState.points.map((point: IPoint) => {
+      if (!point._id) {
+        // 최초 포인트입력 이후 신규로 추가된 학생이 있는 경우
+        return req(qCreatePoint, {
+          owner: point.owner._id,
+          date: state.date,
+          items: point.items.map((item: any) => ({value: item.value, type: item.type._id})),
+          etc: point.etc,
+        })
+      }
+      return req(qUpdatePoint, {
+        _id: point._id,
         owner: point.owner._id,
         date: state.date,
-        attendance: point.attendance,
-        visitcall: point.visitcall,
-        meditation: point.meditation,
-        recitation: point.recitation,
-        invitation: point.invitation,
+        items: point.items.map((item: any) => ({value: item.value, type: item.type._id})),
         etc: point.etc,
       })
-    }
-    return req(qUpdatePoint, {
-      _id: point._id,
-      owner: point.owner._id,
-      date: state.date,
-      attendance: point.attendance,
-      visitcall: point.visitcall,
-      meditation: point.meditation,
-      recitation: point.recitation,
-      invitation: point.invitation,
-      etc: point.etc,
     })
-  })
-  await Promise.all(results)
-  state.loading = false
-  state.pointInit = true
-  state.editable = false
-  // @ts-ignore
-  Notification.success({message: '저장 완료', position: 'bottom-right'})
-  // await Message({message: '저장 완료', type: 'success'})
+    await Promise.all(results)
+    state.loading = false
+    state.pointInit = true
+    state.editable = false
+    // @ts-ignore
+    Notification.success({message: '저장 완료', position: 'bottom-right'})
+    // await Message({message: '저장 완료', type: 'success'})
+  } catch (e) {
+    state.loading = false
+    state.pointInit = true
+    state.editable = false
+    // @ts-ignore
+    await MessageBox.alert('저장 실패', {type: 'error'})
+  }
 }
 
 export async function createPoint({state, publicState}: any) {
