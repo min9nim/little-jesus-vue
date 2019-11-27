@@ -5,10 +5,8 @@ import moment from 'moment'
 import {qCreatePoint, qInitialize, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
 import {MessageBox, Notification} from 'element-ui'
 import {IPublicState, ITeacher, IPoint, IStudent, IPointMenu} from '@/biz/type'
-import min from '@mgsong/min-utils'
+import {findById} from '@mgsong/min-utils'
 import equals from 'ramda/es/equals'
-
-const {findById} = min as any
 
 export interface IState {
   date?: string
