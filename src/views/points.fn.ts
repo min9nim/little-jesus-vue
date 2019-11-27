@@ -1,6 +1,6 @@
 import {reactive, computed} from '@vue/composition-api'
 import moment from 'moment'
-import {req, go, exclude, nameAscending} from '@/utils'
+import {req, nameAscending} from '@/utils'
 import {prop, groupBy, path, differenceWith, propEq, pathEq, find, filter} from 'ramda'
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
@@ -8,6 +8,7 @@ import {IPublicState, IPoint, ITeacher, IStudent} from '@/biz/type'
 import {initialize} from './home.fn'
 import {studentToDefaultPointMap} from '@/biz'
 import isNil from 'ramda/es/isNil'
+import {go, exclude} from '@mgsong/min-utils'
 
 export interface IState {
   date?: string

@@ -1,11 +1,11 @@
 import {reactive} from '@vue/composition-api'
-import {req, go, nameAscending} from '@/utils'
+import {req, nameAscending} from '@/utils'
 import {clone, propEq, prop, find, differenceWith, isNil, filter, pathEq, path} from 'ramda'
 import moment from 'moment'
 import {qCreatePoint, qInitialize, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
 import {MessageBox, Notification} from 'element-ui'
 import {IPublicState, ITeacher, IPoint, IStudent, IPointMenu} from '@/biz/type'
-import {findById} from '@mgsong/min-utils'
+import {findById, go} from '@mgsong/min-utils'
 import equals from 'ramda/es/equals'
 
 export interface IState {

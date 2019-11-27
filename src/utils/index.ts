@@ -1,6 +1,5 @@
 import axios from 'axios'
 import {print} from 'graphql/language/printer'
-import {pipe, complement, filter} from 'ramda'
 
 const prod_url = 'https://little-jesus-api.now.sh'
 const dev_url = 'https://little-jesus-api-git-develop.min1.now.sh'
@@ -17,15 +16,15 @@ export async function req(query: any, variables = {}) {
   return result.data.data
 }
 
-export const exclude = pipe<any, any, any>(
-  complement,
-  filter,
-)
+// export const exclude = pipe<any, any, any>(
+//   complement,
+//   filter,
+// )
 
-export function go(...args: any[]) {
-  // @ts-ignore
-  return pipe(...args.slice(1))(args[0])
-}
+// export function go(...args: any[]) {
+//   // @ts-ignore
+//   return pipe(...args.slice(1))(args[0])
+// }
 
 export function nameAscending(path: any) {
   return (a: any, b: any) => {
