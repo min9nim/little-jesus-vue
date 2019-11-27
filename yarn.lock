@@ -781,10 +781,10 @@
     request-promise "^4.1.1"
     yargs "^8.0.2"
 
-"@mgsong/min-utils@latest":
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/@mgsong/min-utils/-/min-utils-0.0.6.tgz#9fa8bfc1cca04471ba30f45bac05e9bdaf46d0e3"
-  integrity sha512-I+qhFq1m6Tw+uW2oKD4eRsj1oUgG4zEHt60E1RnA7yEc8xRFZtUf0xOkoSh4s8cT+0FW7bDeR6ShMMnN6l9HNQ==
+"@mgsong/min-utils@0.0.7":
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/@mgsong/min-utils/-/min-utils-0.0.7.tgz#8e07b1c9769601ee3b781b2a3ac30799f2990b43"
+  integrity sha512-/u5lzkgUMwoeKPHhFJsnPGZZEDlt7nEyAAoSBgo5RgGhcDJQgA8yUNsyQpH/JjIjnDLmMTuhNb5XI3dMaGpjvg==
   dependencies:
     ramda "^0.26.1"
 
