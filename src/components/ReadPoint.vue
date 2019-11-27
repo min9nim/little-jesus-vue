@@ -4,11 +4,11 @@
     div(slot="header")
       h3 {{ point.owner.name }}
     .item(
-      v-for="(item, index) in $store.state.pointMenus"
+      v-for="(item, index) in point.items"
       :key="index"
     )
-      .label {{item.label}}
-      .control xxx
+      .label {{item.type.label}}
+      .control {{item.value}}
     .item
       .label 기타사항
       .control
