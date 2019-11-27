@@ -219,27 +219,30 @@ export async function updatePoint({state, publicState}: any) {
 }
 
 export async function createPoint({state, publicState}: any) {
+  // console.log(publicState.points)
   state.loading = true
-  const results = publicState.points.map((point: any) => {
-    return req(qCreatePoint, {
-      owner: point.owner._id,
-      date: state.date,
-      attendance: point.attendance,
-      visitcall: point.visitcall,
-      meditation: point.meditation,
-      recitation: point.recitation,
-      invitation: point.invitation,
-      etc: point.etc,
+  try {
+    const results = publicState.points.map((point: any) => {
+      return req(qCreatePoint, {
+        owner: point.owner._id,
+        date: state.date,
+        items: point.items.map((item: any) => ({value: item.value, type: item._id})),
+        etc: point.etc,
+      })
     })
-  })
-  const resolvedList: any = await Promise.all(results)
-  publicState.points = resolvedList.map(prop('res')) // 생성된 _id 세팅
-  state.loading = false
-  state.pointInit = true
-  state.editable = false
-  // await Message({message: '저장 완료', type: 'success'})
-  // @ts-ignore
-  Notification.success({message: '저장 완료', position: 'bottom-right'})
+    const resolvedList: any = await Promise.all(results)
+    publicState.points = resolvedList.map(prop('res')) // 생성된 _id 세팅
+    state.loading = false
+    state.pointInit = true
+    state.editable = false
+    // await Message({message: '저장 완료', type: 'success'})
+    // @ts-ignore
+    Notification.success({message: '저장 완료', position: 'bottom-right'})
+  } catch (e) {
+    state.loading = false
+    await MessageBox.alert('저장 실패', {type: 'error'})
+    throw e
+  }
 }
 
 export function useHandleDateChange({root, state, publicState}: IAllState) {
@@ -284,6 +287,8 @@ export function useHandleRemove({root, state}: any) {
       await initPoints({root, state, publicState})
     } catch (e) {
       if (e !== 'cancel') {
+        state.loading = false
+        await MessageBox.alert('삭제 실패', {type: 'error'})
         throw e
       }
     }

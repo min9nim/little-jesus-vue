@@ -51,7 +51,7 @@ export default {
         if (!items) {
           return 200
         }
-        return items.reduce((acc, item) => acc + item.value * item.type.priority, 0)
+        return items.reduce((acc: any, item: any) => acc + item.value * item.type.priority, 0)
       },
     }
   },
