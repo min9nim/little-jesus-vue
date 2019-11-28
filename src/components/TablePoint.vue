@@ -40,6 +40,10 @@ export default {
           if (!point.items) {
             return acc
           }
+          if (!point.items[index]) {
+            // 포인트 입력 이후 새로 추가된 항목이 있을 경우 예외 처리
+            return acc
+          }
           const val = point.items[index].value
           const priority = point.items[index].type.priority
           // console.log({point, val, priority})
