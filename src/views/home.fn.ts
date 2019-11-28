@@ -112,7 +112,8 @@ export async function initPoints({root, state, publicState}: any) {
     const newStudnets = differenceWith(
       (a: any, b: any) => {
         if (!b.owner) {
-          console.warn('owner 없는 포인트가 있다고? differenceWith 버그인가?', b)
+          // 여기를 자꾸 들어온다. 모르겠지만..
+          // console.warn('owner 없는 포인트가 있다고? differenceWith 버그인가?', b)
           return false
         }
 
@@ -237,7 +238,7 @@ export async function createPoint({state, publicState}: any) {
       return req(qCreatePoint, {
         owner: point.owner._id,
         date: state.date,
-        items: point.items.map((item: any) => ({value: item.value, type: item._id})),
+        items: point.items.map((item: any) => ({value: item.value, type: item.type._id})),
         etc: point.etc,
       })
     })
