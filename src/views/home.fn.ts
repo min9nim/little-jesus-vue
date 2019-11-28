@@ -78,7 +78,7 @@ const studentToDefaultPointMap = (student: IStudent, pointMenus: IPointMenu[]) =
   return {
     owner: student,
     items: pointMenus.map((menu: IPointMenu) => ({
-      _id: menu._id,
+      type: menu,
       value: 0,
     })),
     etc: '',
@@ -112,7 +112,7 @@ export async function initPoints({root, state, publicState}: any) {
     const newStudnets = differenceWith(
       (a: any, b: any) => {
         if (!b.owner) {
-          // console.warn('여기도 owner 없는 포인트가 있다고? differenceWith 버그인가?', b)
+          console.warn('owner 없는 포인트가 있다고? differenceWith 버그인가?', b)
           return false
         }
 
