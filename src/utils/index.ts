@@ -1,8 +1,8 @@
 import axios from 'axios'
 import {print} from 'graphql/language/printer'
 
-const prod_url = 'https://little-jesus-api.now.sh'
-const dev_url = 'https://little-jesus-api-git-develop.min1.now.sh'
+const prod_url = process.env.VUE_APP_PROD_API_SERVER
+const dev_url = process.env.VUE_APP_DEV_API_SERVER
 const BASEURL = window.location.host === 'little-jesus.now.sh' ? prod_url : dev_url
 // const BASEURL = prod_url
 console.info('api-server: ' + BASEURL)
