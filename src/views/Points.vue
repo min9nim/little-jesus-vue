@@ -32,10 +32,10 @@
 
 <script lang="ts">
 import {createComponent, onBeforeMount} from '@vue/composition-api'
-import {usePublicState} from './home.fn'
+import {usePublicState as useHomeState} from './home.fn'
 import TablePoint from '../components/TablePoint.vue'
 import {useState, IState, useHandleDateChange, useBeforeMount, useHandleClick} from './points.fn'
-import {IPublicState, IPoint, ITeacher} from '../biz/type'
+import {IPublicState as IHomeState, IPoint, ITeacher} from '../biz/type'
 import {propEq, omit} from 'ramda'
 
 export default {
@@ -43,14 +43,14 @@ export default {
   components: {TablePoint},
   methods: {omit, propEq},
   setup(props: any, {root}: any) {
-    const publicState: IPublicState = usePublicState()
+    const homeState: IHomeState = useHomeState()
     const state: IState = useState(root)
     const handleDateChange = useHandleDateChange({root, state})
-    const handleClick = useHandleClick(root, publicState)
+    const handleClick = useHandleClick(root, homeState)
     onBeforeMount(useBeforeMount({root, state}))
     return {
       state,
-      publicState,
+      homeState,
       handleClick,
       handleDateChange,
       teacherVisible(teacherName: string) {
