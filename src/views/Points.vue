@@ -14,14 +14,14 @@
       .title(slot="header")
         h3.teacher {{teacherName}}
         router-link(to="/?edit")
-          el-button.btn(size="mini" @click="handleClick(teacherName)") {{points.length ? '수정' : '입력'}}
+          el-button.btn(size="mini" icon="el-icon-edit" @click="handleClick(teacherName)") {{points.length ? '수정' : '입력'}}
       table-point(:points="points")
   .result(v-if="state.pointsByTeacher && state.etcStudents.length > 0")
     el-card(shadow="hover")
       .title(slot="header")
         h3.teacher 반미정
         router-link(to="/?edit")
-          el-button.btn(size="mini" @click="handleClick('반미정')") {{state.pointsByTeacher['반미정'].length ? '수정' : '입력'}}
+          el-button.btn(size="mini" icon="el-icon-edit" @click="handleClick('반미정')") {{state.pointsByTeacher['반미정'].length ? '수정' : '입력'}}
       table-point(:points="state.pointsByTeacher['반미정']")      
   hr
   .sum
@@ -97,8 +97,7 @@ export default {
         height: 25px;
         display: inline-block;
         margin-left: 15px;
-        width: 45px;
-        padding: 7px 3px;
+        padding: 7px 7px;
       }
     }
   }

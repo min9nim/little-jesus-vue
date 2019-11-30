@@ -29,11 +29,11 @@
     .no-result(v-show="hasNoStudent()") 반 학생이 없습니다.
     .btn(v-show="publicState.points.length > 0")
       template(v-if="state.editable")
-        el-button(@click="handleSave") 저장
-        el-button(v-if="state.pointInit" @click="handleCancel") 취소
+        el-button(@click="handleSave" icon="el-icon-check") 저장
+        el-button(v-if="state.pointInit" icon="el-icon-close" @click="handleCancel") 취소
       template(v-else)
-        el-button(@click="handleEdit") 수정
-        el-button(@click="handleRemove") 삭제
+        el-button(icon="el-icon-edit" @click="handleEdit") 수정
+        el-button(icon="el-icon-delete" @click="handleRemove") 삭제
 </template>
 
 <script lang="ts">
