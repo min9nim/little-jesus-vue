@@ -25,7 +25,7 @@ export interface IAllState {
   publicState?: IPublicState
 }
 
-export function useHandleDateChange({state, root}: IAllState) {
+export function useHandleDateChange({root, state}: IAllState) {
   return async (value: string) => {
     if (moment(value, 'YYYYMMDD').format('dddd') !== 'Sunday') {
       await MessageBox.alert('일요일만 선택가능합니다', {type: 'warning'})
