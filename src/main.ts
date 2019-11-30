@@ -10,10 +10,14 @@ import locale from 'element-ui/lib/locale/lang/ko'
 import * as Sentry from '@sentry/browser'
 import * as Integrations from '@sentry/integrations'
 
-console.log('VUE_APP_SENTRY_DSN', process.env.VUE_APP_SENTRY_DSN)
+const {
+  VUE_APP_SENTRY_DSN = 'https://0900362973204fe39f4d3c815e03ec9e@sentry.io/1839663',
+} = process.env
+
+console.log({VUE_APP_SENTRY_DSN})
 
 Sentry.init({
-  dsn: process.env.VUE_APP_SENTRY_DSN,
+  dsn: VUE_APP_SENTRY_DSN,
   integrations: [new Integrations.Vue({Vue, attachProps: true, logErrors: true})],
 })
 
