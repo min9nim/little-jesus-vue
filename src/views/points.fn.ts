@@ -4,7 +4,7 @@ import {req, nameAscending} from '@/utils'
 import {prop, groupBy, path, differenceWith, propEq, pathEq, find, filter} from 'ramda'
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
-import {IPublicState, IPoint, ITeacher, IStudent} from '@/biz/type'
+import {IPublicState as IHomeState, IPoint, ITeacher, IStudent} from '@/biz/type'
 import {initialize} from './home.fn'
 import {studentToDefaultPointMap} from '@/biz'
 import isNil from 'ramda/es/isNil'
@@ -22,7 +22,7 @@ export interface IState {
 export interface IAllState {
   root?: any
   state: IState
-  publicState?: IPublicState
+  homeState?: IHomeState
 }
 
 export function useHandleDateChange({root, state}: IAllState) {
@@ -147,12 +147,18 @@ export function useState(root: any): IState {
   return state
 }
 
-export function useHandleClick(root: any, publicState: IPublicState) {
+export function useHandleClick(root: any, homeState: IHomeState) {
   return (teacherName: string) => {
+    const tab1 = window.document.getElementById('tab-/')
+    if (!tab1) {
+      throw Error('Not found tab1')
+    }
+    tab1.click()
     const teacher = root.$store.state.teachers.find(propEq('name', teacherName))
     if (!teacher) {
       throw Error('Not found teacher')
     }
-    publicState.teacherId = teacher._id
+    homeState.teacherId = teacher._id
+    // root.$router.push('/?edit')
   }
 }
