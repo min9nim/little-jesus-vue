@@ -44,7 +44,7 @@ export default {
   setup(props: any, {root}: any) {
     const publicState: IPublicState = usePublicState()
     const state: IState = useState(root)
-    const handleDateChange = useHandleDateChange({state, publicState})
+    const handleDateChange = useHandleDateChange({root, state})
     const handleClick = useHandleClick(root, publicState)
     onBeforeMount(useBeforeMount({root, state}))
     return {
