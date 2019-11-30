@@ -61,7 +61,7 @@ export default {
     const publicState: IPublicState = usePublicState()
     const state: IState = useState()
     const handleTeacherChange = useHandleTeacherChange({root, state, publicState})
-    const handleDateChange = useHandleDateChange({state, publicState})
+    const handleDateChange = useHandleDateChange({root, state, publicState})
     const handleSave = useHandleSave({state, publicState})
     const handleEdit = useHandleEdit({state})
     const handleRemove = useHandleRemove({state})
