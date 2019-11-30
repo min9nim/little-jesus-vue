@@ -22,18 +22,21 @@ export interface IAllState {
   publicState?: IPublicState
 }
 
-export function useState(): IState {
+export function useState({root}: any): IState {
   const state: IState = reactive({
     teachers: [] as ITeacher[],
-    date: moment()
-      .startOf('week')
-      .format('YYYYMMDD'),
+    date:
+      root.$store.state.date ||
+      moment()
+        .startOf('week')
+        .format('YYYYMMDD'),
     loading: false,
     pointInit: false,
     editable: false,
     originalPoints: [],
   })
   state.oldDate = state.date
+  root.$store.commit('setDate', state.date)
   return state
 }
 
@@ -152,6 +155,12 @@ export async function initPoints({root, state, publicState}: any) {
 }
 
 export async function initialize({root, state}: IAllState) {
+  // root.$store.commit(
+  //   'setDate',
+  //   moment()
+  //     .startOf('week')
+  //     .format('YYYYMMDD'),
+  // )
   state.loading = true
   const result = await req(qInitialize)
   state.loading = false
@@ -265,6 +274,7 @@ export function useHandleDateChange({root, state, publicState}: IAllState) {
       return
     }
     state.oldDate = state.date
+    root.$store.commit('setDate', state.date)
     await initPoints({root, state, publicState})
   }
 }

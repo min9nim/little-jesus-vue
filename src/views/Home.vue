@@ -59,7 +59,7 @@ export default {
   components: {EditPoint, ReadPoint},
   setup(props: any, {root}: any) {
     const publicState: IPublicState = usePublicState()
-    const state: IState = useState()
+    const state: IState = useState({root})
     const handleTeacherChange = useHandleTeacherChange({root, state, publicState})
     const handleDateChange = useHandleDateChange({root, state, publicState})
     const handleSave = useHandleSave({state, publicState})

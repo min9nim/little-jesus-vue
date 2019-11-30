@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    date: '',
     teachers: [] as ITeacher[],
     pointMenus: [] as IPointMenu[],
     asisPointMenus: [
@@ -52,6 +53,9 @@ export default new Vuex.Store({
     ],
   },
   mutations: {
+    setDate(state, date) {
+      state.date = date
+    },
     setTeachers(state, teachers) {
       state.teachers = teachers
     },
