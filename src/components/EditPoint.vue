@@ -6,7 +6,7 @@
     .item(v-for="item in state.point.items" :key="item._id")
       .label {{item.type.label}}
       .control
-        el-radio(
+        el-radio.radio(
           v-for="num in Array.from(Array(Number(item.type.type)).keys())"
           v-model="item.value" :label="num"
           :key="num"
@@ -62,28 +62,6 @@ export default createComponent({
       border-top: 1px solid #f7f7f7;
     }
 
-    &.attendance {
-      .label {
-        font-weight: bold;
-      }
-    }
-
-    &.meditation {
-      .label {
-        font-weight: bold;
-      }
-
-      .el-radio {
-        margin: 10px 20px 10px 0;
-      }
-    }
-
-    &.invitation {
-      .el-radio {
-        margin: 10px 20px 10px 0;
-      }
-    }
-
     .label {
       margin-right: 20px;
       width: 70px;
@@ -95,6 +73,10 @@ export default createComponent({
     .control {
       margin-left: 10px;
       flex: 1;
+
+      .radio {
+        margin: 8px 10px;
+      }
     }
   }
 }
