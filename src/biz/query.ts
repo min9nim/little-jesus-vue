@@ -107,7 +107,7 @@ export const qInitialize = gql`
         name
       }
     }
-    pointMenus {
+    pointMenus(hidden: false) {
       _id
       label
       type
