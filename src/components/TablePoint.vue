@@ -15,7 +15,7 @@ table.items
   tfoot
     tr.row
       td.name 합계
-      td(v-for="(item, index) in $store.state.pointMenus") {{pointSum(index)}} / {{points.length * item.priority * (Number(item.type)-1)}}
+      td(v-for="(item, index) in $store.state.pointMenus") {{pointSum(index)}} / {{points.length * (Number(item.type)-1)}}
       td.etc -    
       td.point -        
 </template>
@@ -47,15 +47,26 @@ export default {
           const val = point.items[index].value
           const priority = point.items[index].type.priority
           // console.log({point, val, priority})
-          return acc + val * priority
+          // return acc + val * priority
+          return acc + val
         }
         return props.points.reduce(reducer, 0)
       },
       itemSum(items: any) {
         if (!items) {
-          return 200
+          throw Error('Not found items')
         }
         return items.reduce((acc: any, item: any) => acc + item.value * item.type.priority, 0)
+      },
+      perfectScoreSum(items: any) {
+        if (!items) {
+          throw Error('Not found items')
+        }
+        return items.reduce((acc: any, item: any) => {
+          const perfectScore = (Number(item.type.type) - 1) * item.type.priority
+          // console.log(item.type.label, perfectScore)
+          return acc + perfectScore * item.type.priority
+        }, 0)
       },
     }
   },
