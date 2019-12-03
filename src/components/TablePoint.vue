@@ -15,7 +15,7 @@ table.items
   tfoot
     tr.row
       td.name 합계
-      td(v-for="(item, index) in $store.state.pointMenus") {{pointSum(index)}} / {{points.length * item.priority}}
+      td(v-for="(item, index) in $store.state.pointMenus") {{pointSum(index)}} / {{points.length * item.priority * (Number(item.type)-1)}}
       td.etc -    
       td.point -        
 </template>
