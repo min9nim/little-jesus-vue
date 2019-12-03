@@ -4,6 +4,7 @@
     el-tabs(v-model="state.activeName" @tab-click="handleClick")
       el-tab-pane(label="출석체크" name="/")
       el-tab-pane(label="포인트현황" name="/points")
+      el-tab-pane(label="월별합계" name="/monthly")
   router-view  
 </template>
 <script lang="ts">
