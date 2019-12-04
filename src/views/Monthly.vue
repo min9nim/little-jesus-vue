@@ -3,11 +3,11 @@
   .options
     el-date-picker.date(
       v-model="state.date"
-      type="date"
-      format="yyyy-MM-dd"
+      type="month"
+      format="yyyy-MM"
       value-format="yyyyMMdd"
-      placeholder="날짜 선택"
-      @change="handleDateChange"
+      placeholder="월 선택"
+      @change="handleMonthChange"
     )
   .pointsByTeacher(v-if="!state.loading")
     .result(v-for="(points, teacherName) in omit(['반미정'], state.pointsByTeacher)")
@@ -37,6 +37,7 @@ import TablePoint from '../components/TablePoint.vue'
 import {useState, IState, useHandleDateChange, useBeforeMount, useHandleClick} from './points.fn'
 import {IPublicState as IHomeState, IPoint, ITeacher} from '../biz/type'
 import {propEq, omit} from 'ramda'
+import {useHandleMonthChange} from './monthly.fn'
 
 export default {
   name: 'v-points',
@@ -45,14 +46,14 @@ export default {
   setup(props: any, {root}: any) {
     const homeState: IHomeState = useHomeState()
     const state: IState = useState(root)
-    const handleDateChange = useHandleDateChange({root, state})
+    const handleMonthChange = useHandleMonthChange({root, state})
     const handleClick = useHandleClick(root, homeState)
     onBeforeMount(useBeforeMount({root, state}))
     return {
       state,
       homeState,
       handleClick,
-      handleDateChange,
+      handleMonthChange,
       teacherVisible(teacherName: string) {
         const teacher: any = root.$store.state.teachers.find(propEq('name', '반미정'))
         return teacherName !== '반미정' || teacher.students.length > 0
