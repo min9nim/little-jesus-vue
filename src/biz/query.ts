@@ -151,6 +151,39 @@ export const qPoints = gql`
   }
 `
 
+export const qPointsFromTo = gql`
+  query pointsFromTo($startDate: String!, $endDate: String!) {
+    res: pointsFromTo(startDate: $startDate, endDate: $endDate) {
+      _id
+      owner {
+        _id
+        name
+        teacher {
+          _id
+          name
+        }
+      }
+      date
+      attendance
+      meditation
+      invitation
+      visitcall
+      recitation
+      items {
+        type {
+          _id
+          label
+          type
+          priority
+          disable
+        }
+        value
+      }
+      etc
+    }
+  }
+`
+
 export const qRemovePoint = gql`
   mutation removePoint($_id: ObjectId!) {
     removePoint(_id: $_id) {
