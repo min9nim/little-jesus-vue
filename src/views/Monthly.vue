@@ -1,5 +1,5 @@
 <template lang="pug">
-.home(v-loading='state.loading')
+.monthly(v-loading='state.loading')
   .options
     el-date-picker.date(
       v-model="state.date"
@@ -9,99 +9,25 @@
       placeholder="월 선택"
       @change="handleMonthChange"
     )
-  .pointsByTeacher(v-if="!state.loading")
-    .result(v-for="(points, teacherName) in omit(['반미정'], state.pointsByTeacher)")
-      el-card(shadow="hover")
-        .title(slot="header")
-          h3.teacher {{teacherName}}
-          router-link(to="/?edit")
-            el-button.btn(size="mini" icon="el-icon-edit" @click="handleClick(teacherName)") {{points.length ? '수정' : '입력'}}
-        table-point(:points="points")
-    .result(v-if="state.pointsByTeacher && state.etcStudents.length > 0")
-      el-card(shadow="hover")
-        .title(slot="header")
-          h3.teacher 반미정
-          router-link(to="/?edit")
-            el-button.btn(size="mini" icon="el-icon-edit" @click="handleClick('반미정')") {{state.pointsByTeacher['반미정'].length ? '수정' : '입력'}}
-        table-point(:points="state.pointsByTeacher['반미정']")      
-  hr
-  .sum
-    h2 전체합계
-    table-point(:points="state.points" :table-body-hidden="true")
 </template>
 
 <script lang="ts">
-import {createComponent, onBeforeMount} from '@vue/composition-api'
-import {usePublicState as useHomeState} from './home.fn'
-import TablePoint from '../components/TablePoint.vue'
-import {useState, IState, useHandleDateChange, useBeforeMount, useHandleClick} from './points.fn'
-import {IPublicState as IHomeState, IPoint, ITeacher} from '../biz/type'
-import {propEq, omit} from 'ramda'
+import {createComponent, onBeforeMount, reactive} from '@vue/composition-api'
 import {useHandleMonthChange} from './monthly.fn'
 
 export default {
-  name: 'v-points',
-  components: {TablePoint},
-  methods: {omit, propEq},
+  name: 'v-monthly',
   setup(props: any, {root}: any) {
-    const homeState: IHomeState = useHomeState()
-    const state: IState = useState(root)
+    const state = reactive({
+      date: '',
+      loading: false,
+    })
     const handleMonthChange = useHandleMonthChange({root, state})
-    const handleClick = useHandleClick(root, homeState)
-    onBeforeMount(useBeforeMount({root, state}))
     return {
       state,
-      homeState,
-      handleClick,
       handleMonthChange,
-      teacherVisible(teacherName: string) {
-        const teacher: any = root.$store.state.teachers.find(propEq('name', '반미정'))
-        return teacherName !== '반미정' || teacher.students.length > 0
-      },
     }
   },
 }
 </script>
-<style scoped lang="stylus">
-.home {
-  // margin: 0 10px;
-  padding: 5px;
-  text-align: left;
-
-  .options {
-    .teacher {
-      width: 150px;
-    }
-
-    .date {
-      margin-left: 0;
-      width: 140px;
-    }
-  }
-
-  hr {
-    margin-top: 30px;
-  }
-
-  .result {
-    margin-top: 10px;
-
-    .title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .teacher {
-        margin: 0;
-      }
-
-      .btn {
-        height: 25px;
-        display: inline-block;
-        margin-left: 15px;
-        padding: 7px 7px;
-      }
-    }
-  }
-}
-</style>
+<style scoped lang="stylus"></style>
