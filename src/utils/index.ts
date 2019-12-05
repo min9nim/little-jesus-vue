@@ -5,8 +5,12 @@ import {print} from 'graphql/language/printer'
 // const dev_url = process.env.VUE_APP_DEV_API_SERVER
 const prod_url = 'https://little-jesus-api.now.sh'
 const dev_url = 'https://little-jesus-api-git-develop.min1.now.sh'
+const local_url = 'http://localhost:5050'
 
-const BASEURL = window.location.host === 'little-jesus.now.sh' ? prod_url : dev_url
+let BASEURL = window.location.host === 'little-jesus.now.sh' ? prod_url : dev_url
+if (window.location.host.indexOf('localhost') === 0) {
+  BASEURL = local_url
+}
 // const BASEURL = prod_url
 console.info('api-server: ' + BASEURL)
 
