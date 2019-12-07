@@ -30,6 +30,8 @@ export function getPointSumOfWeek(point: any) {
 export function getTableData({pointsByStudent, yearMonth}: any) {
   const sundays = getSundaysOfMonth(yearMonth, 'YYYYMMDD')
   return Object.entries(pointsByStudent).map(([name, points]: any) => {
+    const teacher = points[0].owner.teacher
+    const teacherName = teacher ? teacher.name : 'N/A'
     const pointList = sundays.map(sunday => {
       return points.find(propEq('date', sunday))
     })
@@ -43,6 +45,7 @@ export function getTableData({pointsByStudent, yearMonth}: any) {
 
     return {
       name,
+      teacher: teacherName,
       ...sumByWeek,
       totalSum,
     }
