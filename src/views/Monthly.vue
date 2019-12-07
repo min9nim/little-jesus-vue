@@ -30,8 +30,16 @@
 </template>
 
 <script lang="ts">
-import {createComponent, onBeforeMount, reactive, computed, Ref} from '@vue/composition-api'
+import {
+  createComponent,
+  onBeforeMount,
+  reactive,
+  computed,
+  Ref,
+  onMounted,
+} from '@vue/composition-api'
 import {useHandleMonthChange, getSundaysOfMonth} from './monthly.fn'
+import moment from 'moment'
 interface IState {
   yearMonth: string
   loading: boolean
@@ -42,12 +50,13 @@ export default {
   name: 'v-monthly',
   setup(props: any, {root}: any) {
     const state: any = reactive({
-      yearMonth: '',
+      yearMonth: moment().format('YYYYMM'),
       loading: false,
       tableData: [],
       sundays: computed(() => getSundaysOfMonth(state.yearMonth, 'DD')),
     })
-    const handleMonthChange = useHandleMonthChange({root, state})
+    const handleMonthChange = useHandleMonthChange({state})
+    onMounted(() => handleMonthChange(state.yearMonth))
     return {
       state,
       handleMonthChange,

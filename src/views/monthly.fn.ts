@@ -3,7 +3,7 @@ import {req} from '@/utils'
 import {qPointsFromTo} from '@/biz/query'
 import {groupBy, path, propEq} from 'ramda'
 
-export function useHandleMonthChange({root, state}: any) {
+export function useHandleMonthChange({state}: any) {
   return async (value: string) => {
     const start = moment(value, 'YYYYMM').format('YYYYMMDD')
     const end = moment(value, 'YYYYMM')
