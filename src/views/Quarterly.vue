@@ -19,7 +19,7 @@
   el-table.table(
     v-if="state.year && state.quarter"
     :data="state.tableData"
-    :default-sort = "{prop: 'name', order: 'ascending'}"
+    :default-sort = "{prop: 'totalSum', order: 'descending'}"
     size="mini"
     :border="false"
   )
