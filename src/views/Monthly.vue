@@ -17,7 +17,7 @@
     :border="false"
   )
     el-table-column(prop="name" label="학생" sortable min-width="70")
-    el-table-column(prop="teacher" label="선생님" sortable min-width="76")
+    el-table-column(prop="teacher" label="선생님" sortable min-width="80")
     el-table-column(
       v-for='(date, index) in state.sundays'
       :key="index"
