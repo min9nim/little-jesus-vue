@@ -1,7 +1,7 @@
 import moment from 'moment'
 import {req} from '@/utils'
 import {qPointsFromTo} from '@/biz/query'
-import {groupBy, path, map} from 'ramda'
+import {groupBy, path, propEq} from 'ramda'
 
 export function useHandleMonthChange({root, state}: any) {
   return async (value: string) => {
@@ -19,14 +19,21 @@ export function useHandleMonthChange({root, state}: any) {
     const points = result.res
     const pointsByStudent = groupBy(path(['owner', 'name']) as any)(points)
     console.log(pointsByStudent)
-    state.tableData = Object.entries(pointsByStudent).map(([key, value]: any) => {
-      console.log({key, value})
+    const sundays = getSundaysOfMonth(value, 'YYYYMMDD')
+    console.log(sundays)
+    state.tableData = Object.entries(pointsByStudent).map(([name, points]: any) => {
+      const pointList = sundays.map(sunday => {
+        return points.find(propEq('date', sunday))
+      })
+      const sumByWeek: any = {}
+      pointList.forEach((point, index) => {
+        sumByWeek['week' + (index + 1)] = point ? getPointSumOfWeek(point) : 0
+      })
+      console.log(sumByWeek)
+
       return {
-        name: key,
-        week1: value[0] ? getPointSumOfWeek(value[0]) : 0,
-        week2: value[1] ? getPointSumOfWeek(value[1]) : 0,
-        week3: value[2] ? getPointSumOfWeek(value[2]) : 0,
-        week4: value[3] ? getPointSumOfWeek(value[3]) : 0,
+        name,
+        ...sumByWeek,
       }
     })
   }
@@ -39,38 +46,36 @@ export function getPointSumOfWeek(point: any) {
 export function getSundaysOfMonth(yearMonth: string, outputFormat = 'MM/DD') {
   const month = yearMonth.slice(-2)
   const result = []
-  const sunday1 = moment(yearMonth, 'YYYYMM')
-    .startOf('week')
-    .format(outputFormat)
-  if (sunday1.slice(0, 2) === month) {
-    result.push(sunday1)
+  const sunday1 = moment(yearMonth, 'YYYYMM').startOf('week')
+  if (sunday1.format('MM') === month) {
+    result.push(sunday1.format(outputFormat))
   }
   const sunday2 = moment(yearMonth, 'YYYYMM')
     .startOf('week')
     .add(1, 'week')
-    .format(outputFormat)
   const sunday3 = moment(yearMonth, 'YYYYMM')
     .startOf('week')
     .add(2, 'week')
-    .format(outputFormat)
   const sunday4 = moment(yearMonth, 'YYYYMM')
     .startOf('week')
     .add(3, 'week')
-    .format(outputFormat)
-  result.push(sunday2, sunday3, sunday4)
+  result.push(
+    sunday2.format(outputFormat),
+    sunday3.format(outputFormat),
+    sunday4.format(outputFormat),
+  )
   const sunday5 = moment(yearMonth, 'YYYYMM')
     .startOf('week')
     .add(4, 'week')
-    .format(outputFormat)
-  if (sunday5.slice(0, 2) === month) {
-    result.push(sunday5)
+  if (sunday5.format('MM') === month) {
+    result.push(sunday5.format(outputFormat))
   }
   const sunday6 = moment(yearMonth, 'YYYYMM')
     .startOf('week')
     .add(5, 'week')
-    .format(outputFormat)
-  if (sunday6.slice(0, 2) === month) {
-    result.push(sunday6)
+
+  if (sunday6.format('MM') === month) {
+    result.push(sunday6.format(outputFormat))
   }
   return result
 }
