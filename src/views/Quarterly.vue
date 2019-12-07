@@ -23,17 +23,17 @@
     size="mini"
     :border="false"
   )
-    el-table-column(prop="name" label="학생" sortable min-width="70")
-    el-table-column(prop="teacher" label="선생님" sortable min-width="78")
+    el-table-column(prop="name" label="학생" sortable min-width="40")
+    el-table-column(prop="teacher" label="선생님" sortable min-width="50")
     el-table-column(
       v-for='(month, index) in state.months'
       :key="index"
       :prop="'month' + (index+1)"
       :label="month + '월'"
       :resizable="true"
-      min-width="35"
+      min-width="30"
     )
-    el-table-column(prop="totalSum" label="합계" sortable min-width="65")
+    el-table-column(prop="totalSum" label="합계" sortable min-width="40")
 </template>
 
 <script lang="ts">
