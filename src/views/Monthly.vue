@@ -17,6 +17,7 @@
       :prop="'week' + (index+1)"
       :label="date"
     )
+    el-table-column(prop="totalSum" label="합계")
 </template>
 
 <script lang="ts">
