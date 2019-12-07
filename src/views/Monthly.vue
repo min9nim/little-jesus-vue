@@ -26,7 +26,7 @@
       :resizable="true"
       min-width="35"
     )
-    el-table-column(prop="totalSum" label="합계" sortable min-width="65")
+    el-table-column(prop="totalSum" label="합계" sortable min-width="70")
 </template>
 
 <script lang="ts">
