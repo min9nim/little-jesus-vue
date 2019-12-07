@@ -1,7 +1,7 @@
 <template lang="pug">
 .monthly(v-loading='state.loading')
   .options
-    el-date-picker.date(
+    el-date-picker.year-month(
       v-model="state.yearMonth"
       type="month"
       format="yyyy-MM"
@@ -9,21 +9,24 @@
       placeholder="월 선택"
       @change="handleMonthChange"
     )
-  el-table(
+  el-table.table(
     v-if="state.yearMonth"
     :data="state.tableData"
     :default-sort = "{prop: 'name', order: 'ascending'}"
-    style="width: 100%"
+    size="mini"
+    :border="false"
   )
-    el-table-column(prop="name" label="이름" sortable)
+    el-table-column(prop="name" label="학생" sortable min-width="70")
+    el-table-column(prop="teacher" label="선생님" sortable min-width="78")
     el-table-column(
       v-for='(date, index) in state.sundays'
       :key="index"
       :prop="'week' + (index+1)"
       :label="date"
-      sortable
+      :resizable="true"
+      min-width="35"
     )
-    el-table-column(prop="totalSum" label="합계" sortable)
+    el-table-column(prop="totalSum" label="합계" sortable min-width="65")
 </template>
 
 <script lang="ts">
@@ -42,7 +45,7 @@ export default {
       yearMonth: '',
       loading: false,
       tableData: [],
-      sundays: computed(() => getSundaysOfMonth(state.yearMonth)),
+      sundays: computed(() => getSundaysOfMonth(state.yearMonth, 'DD')),
     })
     const handleMonthChange = useHandleMonthChange({root, state})
     return {
@@ -52,4 +55,9 @@ export default {
   },
 }
 </script>
-<style scoped lang="stylus"></style>
+<style scoped lang="stylus">
+.options {
+  margin-bottom: 10px;
+  text-align: left;
+}
+</style>
