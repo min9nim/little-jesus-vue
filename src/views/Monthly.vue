@@ -4,7 +4,7 @@
     el-date-picker.year-month(
       v-model="state.yearMonth"
       type="month"
-      format="yyyy-MM"
+      format="yyyy년 MM월"
       value-format="yyyyMM"
       placeholder="월 선택"
       @change="handleMonthChange"
@@ -68,5 +68,9 @@ export default {
 .options {
   margin-bottom: 10px;
   text-align: left;
+
+  .year-month {
+    width: 150px;
+  }
 }
 </style>
