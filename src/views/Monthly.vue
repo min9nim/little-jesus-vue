@@ -9,15 +9,21 @@
       placeholder="월 선택"
       @change="handleMonthChange"
     )
-  el-table(v-if="state.yearMonth" :data="state.tableData" style="width: 100%")
-    el-table-column(prop="name" label="이름")
+  el-table(
+    v-if="state.yearMonth"
+    :data="state.tableData"
+    :default-sort = "{prop: 'name', order: 'ascending'}"
+    style="width: 100%"
+  )
+    el-table-column(prop="name" label="이름" sortable)
     el-table-column(
       v-for='(date, index) in state.sundays'
       :key="index"
       :prop="'week' + (index+1)"
       :label="date"
+      sortable
     )
-    el-table-column(prop="totalSum" label="합계")
+    el-table-column(prop="totalSum" label="합계" sortable)
 </template>
 
 <script lang="ts">
