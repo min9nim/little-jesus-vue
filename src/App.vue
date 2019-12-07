@@ -5,6 +5,7 @@
       el-tab-pane(label="출석체크" name="/")
       el-tab-pane(label="포인트현황" name="/points")
       el-tab-pane(label="월별합계" name="/monthly")
+      el-tab-pane(label="분기별합계" name="/quarterly")
   router-view  
 </template>
 <script lang="ts">

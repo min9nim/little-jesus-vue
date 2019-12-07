@@ -23,6 +23,11 @@ const routes = [
     name: 'monthly',
     component: () => import(/* webpackChunkName: "monthly" */ '../views/Monthly.vue'),
   },
+  {
+    path: '/quarterly',
+    name: 'quarterly',
+    component: () => import(/* webpackChunkName: "quarterly" */ '../views/Quarterly.vue'),
+  },
 ]
 
 const router = new VueRouter({
