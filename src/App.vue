@@ -86,5 +86,15 @@ export default {
   .el-input--prefix .el-input__inner {
     cursor: pointer;
   }
+
+  .el-table__header {
+    thead {
+      tr {
+        th {
+          background-color: #f9f9f9;
+        }
+      }
+    }
+  }
 }
 </style>
