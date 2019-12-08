@@ -15,10 +15,10 @@ export function useHandleMonthChange({state}: any) {
       endDate: end,
     })
     state.loading = false
-    console.log(result)
+    // console.log(result)
     const points = result.res
     const pointsByStudent = groupBy(path(['owner', 'name']) as any)(points)
-    console.log(pointsByStudent)
+    // console.log(pointsByStudent)
     state.tableData = getTableData({pointsByStudent, yearMonth: value})
   }
 }
@@ -41,7 +41,7 @@ export function getTableData({pointsByStudent, yearMonth}: any) {
       sumByWeek['week' + (index + 1)] = point ? getPointSumOfWeek(point) : 0
       totalSum += sumByWeek['week' + (index + 1)]
     })
-    console.log(sumByWeek)
+    // console.log(sumByWeek)
 
     return {
       name,
