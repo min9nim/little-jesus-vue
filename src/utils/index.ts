@@ -4,7 +4,11 @@ import {pipe, complement, filter} from 'ramda'
 
 const prod_url = 'https://little-jesus-api.now.sh'
 const dev_url = 'https://little-jesus-api-git-develop.min1.now.sh'
-const BASEURL = window.location.host === 'little-jesus.now.sh' ? prod_url : dev_url
+let BASEURL = window.location.host === 'little-jesus.now.sh' ? prod_url : dev_url
+if (window.location.host.indexOf('ver') > 0) {
+  // 특정 버젼을 명시한 경우에 prod_url 로 연결
+  BASEURL = prod_url
+}
 // const BASEURL = prod_url
 console.info({BASEURL})
 
