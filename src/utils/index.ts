@@ -9,8 +9,7 @@ if (window.location.host.indexOf('ver') > 0) {
   // 특정 버젼을 명시한 경우에 prod_url 로 연결
   BASEURL = prod_url
 }
-// const BASEURL = prod_url
-console.info({BASEURL})
+console.info('api server = ' + BASEURL)
 
 export async function req(query: any, variables = {}) {
   let config = {headers: {'Content-Type': 'application/json'}}
