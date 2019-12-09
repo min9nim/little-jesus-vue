@@ -3,7 +3,7 @@ table.items
   thead
     tr.row
       td.name 이름
-      td(v-for="item in $store.state.pointMenus") {{item.label}}
+      td(v-for="item in points[0].items") {{item.type.label}}
       td.etc 기타
       td.point 점수
   tbody(v-if="!tableBodyHidden")
@@ -14,8 +14,8 @@ table.items
       td.point {{itemSum(point.items)}}
   tfoot
     tr.row
-      td.name 합계
-      td(v-for="(item, index) in $store.state.pointMenus") {{pointSum(index)}} / {{points.length * (Number(item.type)-1)}}
+      td.name 점수
+      td(v-for="(item, index) in points[0].items") {{pointSum(index)}} / {{points.length * item.type.priority* (Number(item.type.type)-1)}}
       td.etc -    
       td.point -        
 </template>
@@ -44,11 +44,12 @@ export default {
             // 포인트 입력 이후 새로 추가된 항목이 있을 경우 예외 처리
             return acc
           }
-          const val = point.items[index].value
+          const value = point.items[index].value
+          const label = point.items[index].type.label
           const priority = point.items[index].type.priority
-          // console.log({point, val, priority})
-          // return acc + val * priority
-          return acc + val
+          console.log({label, value, priority})
+          return acc + value * priority
+          // return acc + value
         }
         return props.points.reduce(reducer, 0)
       },
