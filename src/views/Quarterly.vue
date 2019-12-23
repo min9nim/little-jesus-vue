@@ -53,6 +53,7 @@ interface IState {
   tableData: any[]
   sundays: Ref<string[]>
 }
+import {errorHandler} from '../utils'
 export default {
   name: 'v-monthly',
   setup(props: any, {root}: any) {
@@ -65,7 +66,7 @@ export default {
       months: computed(() => getMonthsOfQuarter(state.quarter)),
     })
     const handleQuarterChange = useHandleQuarterChange({state})
-    onMounted(() => handleQuarterChange(state.quarter))
+    onMounted(() => handleQuarterChange(state.quarter).catch(errorHandler))
     return {
       state,
       handleQuarterChange,

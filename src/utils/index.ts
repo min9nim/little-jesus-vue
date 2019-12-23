@@ -1,6 +1,7 @@
 import axios from 'axios'
 import {print} from 'graphql/language/printer'
-import {getQueryParams} from '@mgsong/min-utils'
+import {getQueryParams, nl2br} from '@mgsong/min-utils'
+import {MessageBox} from 'element-ui'
 
 const url: any = {
   prod: 'https://little-jesus-api.now.sh',
@@ -46,4 +47,12 @@ export function nameAscending(path: any) {
     if (path(b) > path(a)) return -1
     return 0
   }
+}
+
+export function errorHandler(e: any) {
+  console.error(e)
+  const dom: any = document.getElementById('app')
+  dom.innerHTML = '<pre>' + JSON.stringify(e, null, 2) + '</pre>'
+  dom.style.textAlign = 'left'
+  MessageBox.alert(e.message, {type: 'error'})
 }
