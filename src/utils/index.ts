@@ -51,7 +51,8 @@ export function nameAscending(path: any) {
 
 export function errorHandler(e: any) {
   console.error(e)
-  const dom: any = document.getElementById('app')
+  // @ts-ignore
+  const dom: any = document.querySelector('.el-loading-mask').parentElement
   dom.innerHTML = '<pre>' + JSON.stringify(e, null, 2) + '</pre>'
   dom.style.textAlign = 'left'
   MessageBox.alert(e.message, {type: 'error'})
