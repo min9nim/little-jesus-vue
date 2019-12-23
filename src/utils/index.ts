@@ -1,17 +1,24 @@
 import axios from 'axios'
 import {print} from 'graphql/language/printer'
+import {getQueryParams} from '@mgsong/min-utils'
 
-// const prod_url = process.env.VUE_APP_PROD_API_SERVER
-// const dev_url = process.env.VUE_APP_DEV_API_SERVER
-const prod_url = 'https://little-jesus-api.now.sh'
-const dev_url = 'https://little-jesus-api-git-develop.min1.now.sh'
-const local_url = 'http://localhost:5050'
-
-let BASEURL = window.location.host === 'little-jesus.now.sh' ? prod_url : dev_url
-if (window.location.host.indexOf('localhost') === 0) {
-  BASEURL = local_url
+const url: any = {
+  prod: 'https://little-jesus-api.now.sh',
+  dev: 'https://little-jesus-api-git-develop.min1.now.sh',
+  local: 'http://localhost:5050',
 }
-// const BASEURL = prod_url
+
+let BASEURL = url.dev
+if (window.location.host.indexOf('localhost') === 0) {
+  BASEURL = url.local
+}
+if (window.location.host === 'little-jesus.now.sh') {
+  BASEURL = url.prod
+}
+const queryParam = getQueryParams(window.location.href)
+if (queryParam.api) {
+  BASEURL = url[queryParam.api]
+}
 console.info('api-server: ' + BASEURL)
 
 export async function req(query: any, variables = {}) {
