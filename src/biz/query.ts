@@ -174,7 +174,7 @@ export const qPointsFromTo = gql`
           _id
           label
           type
-          # priority
+          priority
           disable
         }
         value

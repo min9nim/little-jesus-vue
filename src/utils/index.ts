@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {print} from 'graphql/language/printer'
-import {getQueryParams, nl2br} from '@mgsong/min-utils'
+import {getQueryParams} from '@mgsong/min-utils'
 import {MessageBox} from 'element-ui'
 
 const url: any = {
