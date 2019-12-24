@@ -172,10 +172,10 @@ export const qPointsFromTo = gql`
       items {
         type {
           _id
-          label
-          type
-          priority
-          disable
+          # label
+          # type
+          # priority
+          # disable
         }
         value
       }
