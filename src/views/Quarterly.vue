@@ -44,6 +44,7 @@ import {
   computed,
   Ref,
   onMounted,
+  watch,
 } from '@vue/composition-api'
 import {useHandleQuarterChange, getMonthsOfQuarter, quarterOptions} from './quarterly.fn'
 import moment from 'moment'
@@ -60,13 +61,17 @@ export default {
     const state: any = reactive({
       year: moment().format('YYYY'),
       quarter: Math.ceil(new Date().getMonth() / 3),
-      loading: false,
+      loading: true,
       quarterOptions,
       tableData: [],
       months: computed(() => getMonthsOfQuarter(state.quarter)),
     })
     const handleQuarterChange = useHandleQuarterChange({state, root})
-    onMounted(() => handleQuarterChange(state.quarter).catch(errorHandler))
+    // onMounted(() => handleQuarterChange(state.quarter).catch(errorHandler))
+    watch(
+      () => root.$store.state.teachers.length,
+      () => handleQuarterChange(state.quarter).catch(errorHandler),
+    )
     return {
       state,
       handleQuarterChange,
