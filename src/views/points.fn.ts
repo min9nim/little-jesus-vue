@@ -5,7 +5,6 @@ import {prop, groupBy, path, differenceWith, propEq, pathEq, find, filter} from 
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 import {IPublicState as IHomeState, IPoint, ITeacher, IStudent} from '@/biz/type'
-import {initialize} from './home.fn'
 import {studentToDefaultPointMap} from '@/biz'
 import isNil from 'ramda/es/isNil'
 import {go, exclude} from '@mgsong/min-utils'
