@@ -56,9 +56,9 @@ export default {
           }
           const value = item.value
           const label = root.$store.getters.pointMenuMap[item.type].label
-          console.log('item.type = ' + item.type)
+          // console.log('item.type = ' + item.type)
           const priority = root.$store.getters.pointMenuMap[item.type].priority
-          console.log({label, value, priority})
+          // console.log({label, value, priority})
           return acc + value * priority
           // return acc + value
         }
@@ -83,7 +83,7 @@ export default {
         }
 
         return items.reduce((acc: any, item: any) => {
-          console.log('item.type = ' + item.type)
+          // console.log('item.type = ' + item.type)
           flatLog('root.$store.getters.pointMenuMap = ', root.$store.getters.pointMenuMap)
 
           return acc + item.value * root.$store.getters.pointMenuMap[item.type].priority
