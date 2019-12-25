@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts">
-import {createComponent, onBeforeMount} from '@vue/composition-api'
+import {createComponent, onBeforeMount, watch} from '@vue/composition-api'
 import {usePublicState as useHomeState} from './home.fn'
 import TablePoint from '../components/TablePoint.vue'
 import {useState, IState, useHandleDateChange, useBeforeMount, useHandleClick} from './points.fn'
@@ -47,7 +47,8 @@ export default {
     const state: IState = useState(root)
     const handleDateChange = useHandleDateChange({root, state})
     const handleClick = useHandleClick(root, homeState)
-    onBeforeMount(useBeforeMount({root, state}))
+    // onBeforeMount(useBeforeMount({root, state}))
+    watch(() => root.$store.state.teachers.length, useBeforeMount({root, state}))
     return {
       state,
       homeState,

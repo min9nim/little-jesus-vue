@@ -9,13 +9,17 @@
   router-view  
 </template>
 <script lang="ts">
-import {reactive, onMounted} from '@vue/composition-api'
+import {reactive, onMounted, onBeforeMount} from '@vue/composition-api'
 import Vue from 'vue'
-
+import {initialize} from './views/home.fn'
 export default {
   setup(props: any, {root}: any) {
     const state = reactive({
+      loading: false,
       activeName: location.pathname,
+    })
+    onBeforeMount(() => {
+      initialize({root, state})
     })
     // onMounted(() => {
     //   setTimeout(() => {

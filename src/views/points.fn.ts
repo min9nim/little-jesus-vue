@@ -42,7 +42,7 @@ export function useHandleDateChange({root, state}: IAllState) {
 export function useBeforeMount({root, state}: IAllState) {
   return async () => {
     if (root.$store.state.teachers.length === 0) {
-      await initialize({root, state})
+      return
     }
     await initPoints({root, state})
   }

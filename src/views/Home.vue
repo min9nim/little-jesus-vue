@@ -37,7 +37,7 @@
 </template>
 
 <script lang="ts">
-import {createComponent, onBeforeMount, onMounted} from '@vue/composition-api'
+import {createComponent, onBeforeMount, onMounted, watch} from '@vue/composition-api'
 import {
   useState,
   useBeforeMount,
@@ -65,7 +65,8 @@ export default {
     const handleSave = useHandleSave({state, publicState})
     const handleEdit = useHandleEdit({state})
     const handleRemove = useHandleRemove({state})
-    onBeforeMount(useBeforeMount({root, state, publicState}))
+    // onBeforeMount(useBeforeMount({root, state, publicState}))
+    watch(() => root.$store.state.teachers.length, useBeforeMount({root, state, publicState}))
     return {
       state,
       publicState,

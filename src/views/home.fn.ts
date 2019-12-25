@@ -4,7 +4,7 @@ import {clone, propEq, prop, find, differenceWith, isNil, filter, pathEq, path} 
 import moment from 'moment'
 import {qCreatePoint, qInitialize, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
 import {MessageBox, Notification} from 'element-ui'
-import {IPublicState, ITeacher, IPoint, IStudent, IPointMenu} from '@/biz/type'
+import {IPublicState, ITeacher, IPoint} from '@/biz/type'
 import {findById, go} from '@mgsong/min-utils'
 import equals from 'ramda/es/equals'
 import {studentToDefaultPointMap} from '@/biz'
@@ -31,7 +31,7 @@ export function useState({root}: any): IState {
       moment()
         .startOf('week')
         .format('YYYYMMDD'),
-    loading: false,
+    loading: true,
     pointInit: false,
     editable: false,
     originalPoints: [],
@@ -56,8 +56,11 @@ export function usePublicState(): IPublicState {
 
 export function useBeforeMount({root, state, publicState}: any) {
   return async () => {
+    // if (root.$store.state.teachers.length === 0) {
+    //   await initialize({root, state, publicState})
+    // }
     if (root.$store.state.teachers.length === 0) {
-      await initialize({root, state, publicState})
+      return
     }
     await initPoints({root, state, publicState})
     // console.log(root.$route)
@@ -67,27 +70,6 @@ export function useBeforeMount({root, state, publicState}: any) {
   }
 }
 
-// const studentToDefaultPointMap = (student: IStudent) => {
-//   return {
-//     owner: student,
-//     attendance: false,
-//     visitcall: false,
-//     meditation: 0,
-//     invitation: 0,
-//     recitation: false,
-//     etc: '',
-//   }
-// }
-// const studentToDefaultPointMap = (student: IStudent, pointMenus: IPointMenu[]) => {
-//   return {
-//     owner: student,
-//     items: pointMenus.map((menu: IPointMenu) => ({
-//       type: menu._id,
-//       value: 0,
-//     })),
-//     etc: '',
-//   }
-// }
 export async function initPoints({root, state, publicState}: any) {
   if (isNil(publicState.teacherId)) {
     publicState.points = []
