@@ -23,16 +23,13 @@ export function useHandleQuarterChange({state, root}: any) {
     const points = result.res
     const pointsByStudent = groupBy(path(['owner', 'name']) as any)(points)
     // console.log(pointsByStudent)
-    const pointMenu = root.$store.state.pointMenus.reduce((acc: any, value: any) => {
-      acc[value._id] = value
-      return acc
-    }, {})
+    const pointMenuMap = root.$store.getters.pointMenuMap
 
-    state.tableData = getTableData({pointsByStudent, quarter: value, pointMenu})
+    state.tableData = getTableData({pointsByStudent, quarter: value, pointMenuMap})
   }
 }
 
-export function getTableData({pointsByStudent, quarter, pointMenu}: any) {
+export function getTableData({pointsByStudent, quarter, pointMenuMap}: any) {
   const months = getMonthsOfQuarter(quarter)
   // console.log('*** months: ', months)
   return Object.entries(pointsByStudent).map(([name, points]: any) => {
@@ -49,7 +46,10 @@ export function getTableData({pointsByStudent, quarter, pointMenu}: any) {
     months.forEach((month, index) => {
       // console.log(44, pointsByMonth[month])
       sumByMonth['month' + (index + 1)] = pointsByMonth[month]
-        ? pointsByMonth[month].reduce((acc, point) => acc + getPointSumOfWeek(point, pointMenu), 0)
+        ? pointsByMonth[month].reduce(
+            (acc, point) => acc + getPointSumOfWeek(point, pointMenuMap),
+            0,
+          )
         : 0
       totalSum += sumByMonth['month' + (index + 1)]
     })

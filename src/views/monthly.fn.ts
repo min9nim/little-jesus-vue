@@ -19,23 +19,20 @@ export function useHandleMonthChange({state, root}: any) {
     const points = result.res
     const pointsByStudent = groupBy(path(['owner', 'name']) as any)(points)
     // console.log(pointsByStudent)
-    const pointMenu = root.$store.state.pointMenus.reduce((acc: any, value: any) => {
-      acc[value._id] = value
-      return acc
-    }, {})
+    const pointMenuMap = root.$store.getters.pointMenuMap
     // console.log(pointMenu)
-    state.tableData = getTableData({pointsByStudent, yearMonth: value, pointMenu})
+    state.tableData = getTableData({pointsByStudent, yearMonth: value, pointMenuMap})
   }
 }
 
-export function getPointSumOfWeek(point: any, pointMenu: any) {
+export function getPointSumOfWeek(point: any, pointMenuMap: any) {
   return point.items.reduce(
-    (acc: number, item: any) => acc + pointMenu[item.type._id].priority * item.value,
+    (acc: number, item: any) => acc + pointMenuMap[item.type].priority * item.value,
     0,
   )
 }
 
-export function getTableData({pointsByStudent, yearMonth, pointMenu}: any) {
+export function getTableData({pointsByStudent, yearMonth, pointMenuMap}: any) {
   const sundays = getSundaysOfMonth(yearMonth, 'YYYYMMDD')
   return Object.entries(pointsByStudent).map(([name, points]: any) => {
     const teacher = points[0].owner.teacher
@@ -46,7 +43,7 @@ export function getTableData({pointsByStudent, yearMonth, pointMenu}: any) {
     const sumByWeek: any = {}
     let totalSum = 0
     pointList.forEach((point, index) => {
-      sumByWeek['week' + (index + 1)] = point ? getPointSumOfWeek(point, pointMenu) : 0
+      sumByWeek['week' + (index + 1)] = point ? getPointSumOfWeek(point, pointMenuMap) : 0
       totalSum += sumByWeek['week' + (index + 1)]
     })
     // console.log(sumByWeek)
