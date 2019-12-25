@@ -55,7 +55,7 @@ export default {
       tableData: [],
       sundays: computed(() => getSundaysOfMonth(state.yearMonth, 'DD')),
     })
-    const handleMonthChange = useHandleMonthChange({state})
+    const handleMonthChange = useHandleMonthChange({state, root})
     onMounted(() => handleMonthChange(state.yearMonth))
     return {
       state,

@@ -4,7 +4,7 @@ import {qPointsFromTo} from '@/biz/query'
 import {groupBy, path} from 'ramda'
 import {getPointSumOfWeek} from './monthly.fn'
 
-export function useHandleQuarterChange({state}: any) {
+export function useHandleQuarterChange({state, root}: any) {
   return async (value: number) => {
     const startMonth = (value - 1) * 3 + 1
     const start = moment(state.year + String(startMonth).padStart(2, '0'), 'YYYYMM').format(
@@ -23,11 +23,16 @@ export function useHandleQuarterChange({state}: any) {
     const points = result.res
     const pointsByStudent = groupBy(path(['owner', 'name']) as any)(points)
     // console.log(pointsByStudent)
-    state.tableData = getTableData({pointsByStudent, quarter: value})
+    const pointMenu = root.$store.state.pointMenus.reduce((acc: any, value: any) => {
+      acc[value._id] = value
+      return acc
+    }, {})
+
+    state.tableData = getTableData({pointsByStudent, quarter: value, pointMenu})
   }
 }
 
-export function getTableData({pointsByStudent, quarter}: any) {
+export function getTableData({pointsByStudent, quarter, pointMenu}: any) {
   const months = getMonthsOfQuarter(quarter)
   // console.log('*** months: ', months)
   return Object.entries(pointsByStudent).map(([name, points]: any) => {
@@ -44,7 +49,7 @@ export function getTableData({pointsByStudent, quarter}: any) {
     months.forEach((month, index) => {
       // console.log(44, pointsByMonth[month])
       sumByMonth['month' + (index + 1)] = pointsByMonth[month]
-        ? pointsByMonth[month].reduce((acc, point) => acc + getPointSumOfWeek(point), 0)
+        ? pointsByMonth[month].reduce((acc, point) => acc + getPointSumOfWeek(point, pointMenu), 0)
         : 0
       totalSum += sumByMonth['month' + (index + 1)]
     })

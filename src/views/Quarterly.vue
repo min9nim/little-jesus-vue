@@ -65,7 +65,7 @@ export default {
       tableData: [],
       months: computed(() => getMonthsOfQuarter(state.quarter)),
     })
-    const handleQuarterChange = useHandleQuarterChange({state})
+    const handleQuarterChange = useHandleQuarterChange({state, root})
     onMounted(() => handleQuarterChange(state.quarter).catch(errorHandler))
     return {
       state,
