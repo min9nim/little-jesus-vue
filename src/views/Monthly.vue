@@ -37,6 +37,7 @@ import {
   computed,
   Ref,
   onMounted,
+  watch,
 } from '@vue/composition-api'
 import {useHandleMonthChange, getSundaysOfMonth} from './monthly.fn'
 import moment from 'moment'
@@ -56,7 +57,8 @@ export default {
       sundays: computed(() => getSundaysOfMonth(state.yearMonth, 'DD')),
     })
     const handleMonthChange = useHandleMonthChange({state, root})
-    onMounted(() => handleMonthChange(state.yearMonth))
+    // onMounted(() => handleMonthChange(state.yearMonth))
+    watch(() => root.$store.state.teachers.length, () => handleMonthChange(state.yearMonth))
     return {
       state,
       handleMonthChange,
