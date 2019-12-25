@@ -84,7 +84,7 @@ export default {
 
         return items.reduce((acc: any, item: any) => {
           // console.log('item.type = ' + item.type)
-          flatLog('root.$store.getters.pointMenuMap = ', root.$store.getters.pointMenuMap)
+          // flatLog('root.$store.getters.pointMenuMap = ', root.$store.getters.pointMenuMap)
 
           return acc + item.value * root.$store.getters.pointMenuMap[item.type].priority
         }, 0)
