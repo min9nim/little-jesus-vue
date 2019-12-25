@@ -128,7 +128,7 @@ export function useState(root: any): IState {
       moment()
         .startOf('week')
         .format('YYYYMMDD'),
-    loading: false,
+    loading: true,
     points: [],
     etcStudents: computed(() => {
       if (root.$store.state.teachers.length === 0) {
