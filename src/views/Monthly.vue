@@ -52,7 +52,7 @@ export default {
   setup(props: any, {root}: any) {
     const state: any = reactive({
       yearMonth: moment().format('YYYYMM'),
-      loading: false,
+      loading: true,
       tableData: [],
       sundays: computed(() => getSundaysOfMonth(state.yearMonth, 'DD')),
     })
