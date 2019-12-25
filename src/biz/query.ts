@@ -11,13 +11,7 @@ export const qCreatePoint = gql`
       }
       date
       items {
-        type {
-          _id
-          label
-          type
-          priority
-          disable
-        }
+        type
         value
       }
       etc
@@ -41,13 +35,7 @@ export const qUpdatePoint = gql`
       }
       date
       items {
-        type {
-          _id
-          label
-          type
-          priority
-          disable
-        }
+        type
         value
       }
       etc
@@ -137,13 +125,7 @@ export const qPoints = gql`
       visitcall
       recitation
       items {
-        type {
-          _id
-          label
-          type
-          priority
-          disable
-        }
+        type
         value
       }
       etc
@@ -170,52 +152,13 @@ export const qPointsFromTo = gql`
       visitcall
       recitation
       items {
-        type {
-          _id
-          # label
-          # type
-          # priority
-          # disable
-        }
+        type
         value
       }
       etc
     }
   }
 `
-
-// export const qPointsFromToOnlyItemId = gql`
-//   query pointsFromTo($startDate: String!, $endDate: String!) {
-//     res: pointsFromTo(startDate: $startDate, endDate: $endDate) {
-//       _id
-//       owner {
-//         _id
-//         name
-//         teacher {
-//           _id
-//           name
-//         }
-//       }
-//       date
-//       attendance
-//       meditation
-//       invitation
-//       visitcall
-//       recitation
-//       items {
-//         type {
-//           _id
-//           # label
-//           # type
-//           # priority
-//           # disable
-//         }
-//         value
-//       }
-//       etc
-//     }
-//   }
-// `
 
 export const qRemovePoint = gql`
   mutation removePoint($_id: ObjectId!) {
