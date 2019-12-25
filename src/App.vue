@@ -29,7 +29,9 @@ export default {
     return {
       state,
       handleClick(tab: any, event: any) {
-        // console.log(tab, event)
+        if (location.pathname === tab.name) {
+          return
+        }
         root.$router.push(tab.name)
       },
     }
