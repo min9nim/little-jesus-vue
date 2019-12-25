@@ -4,10 +4,10 @@
     div(slot="header")
       h3 {{ state.point.owner.name }}
     .item(v-for="item in state.point.items" :key="item._id")
-      .label {{item.type.label}}
+      .label {{menuLabel(item.type)}}
       .control
         el-radio.radio(
-          v-for="num in Array.from(Array(Number(item.type.type)).keys())"
+          v-for="num in getSeqArray(item.type)"
           v-model="item.value" :label="num"
           :key="num"
         ) {{num}}        
@@ -24,13 +24,13 @@
 <script lang="ts">
 import {createComponent, reactive, computed, watch} from '@vue/composition-api'
 import {useState, usePublicState as useHomeState} from '../views/home.fn'
-import {propEq, pathEq} from 'ramda'
+import {propEq, pathEq, prop} from 'ramda'
 import Vue from 'vue'
 
 export default createComponent({
   props: {studentId: String},
-  methods: {propEq},
-  setup(props, {root}) {
+  methods: {propEq, prop},
+  setup(props, {root}: any) {
     const homeState = useHomeState()
     let state = reactive({
       point: homeState.points.find(pathEq(['owner', '_id'], props.studentId)),
@@ -43,6 +43,15 @@ export default createComponent({
     )
     return {
       state,
+      getSeqArray(menuId) {
+        if (!root.$store.getters.pointMenuMap[menuId]) {
+          return []
+        }
+        return Array.from(Array(Number(root.$store.getters.pointMenuMap[menuId].type)).keys())
+      },
+      menuLabel(menuId) {
+        return prop('label', root.$store.getters.pointMenuMap[menuId])
+      },
     }
   },
 })

@@ -81,7 +81,7 @@ const studentToDefaultPointMap = (student: IStudent, pointMenus: IPointMenu[]) =
   return {
     owner: student,
     items: pointMenus.map((menu: IPointMenu) => ({
-      type: menu,
+      type: menu._id,
       value: 0,
     })),
     etc: '',
@@ -205,7 +205,7 @@ export async function updatePoint({state, publicState}: any) {
         return req(qCreatePoint, {
           owner: point.owner._id,
           date: state.date,
-          items: point.items.map((item: any) => ({value: item.value, type: item.type._id})),
+          items: point.items.map((item: any) => ({value: item.value, type: item.type})),
           etc: point.etc,
         })
       }
@@ -219,7 +219,7 @@ export async function updatePoint({state, publicState}: any) {
         _id: point._id,
         owner: point.owner._id,
         date: state.date,
-        items: point.items.map((item: any) => ({value: item.value, type: item.type._id})),
+        items: point.items.map((item: any) => ({value: item.value, type: item.type})),
         etc: point.etc,
       })
     })
@@ -247,7 +247,7 @@ export async function createPoint({state, publicState}: any) {
       return req(qCreatePoint, {
         owner: point.owner._id,
         date: state.date,
-        items: point.items.map((item: any) => ({value: item.value, type: item.type._id})),
+        items: point.items.map((item: any) => ({value: item.value, type: item.type})),
         etc: point.etc,
       })
     })

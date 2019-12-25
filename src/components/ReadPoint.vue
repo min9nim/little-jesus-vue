@@ -7,7 +7,7 @@
       v-for="(item, index) in point.items"
       :key="index"
     )
-      .label {{item.type.label}}
+      .label {{$store.getters.pointMenuMap[item.type].label}}
       .control {{item.value}}
     .item
       .label 기타사항

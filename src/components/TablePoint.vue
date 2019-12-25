@@ -3,7 +3,7 @@ table.items
   thead
     tr.row
       td.name 이름
-      td(v-for="item in points[0].items") {{item.type.label}}
+      td(v-for="item in points[0].items") {{$store.getters.pointMenuMap[item.type].label}}
       td.etc 기타
       td.point 점수
   tbody(v-if="!tableBodyHidden")
@@ -15,7 +15,7 @@ table.items
   tfoot
     tr.row
       td.name 점수
-      td(v-for="(item, index) in points[0].items") {{pointSum(index)}} / {{points.length * item.type.priority* (Number(item.type.type)-1)}}
+      td(v-for="(item, index) in points[0].items") {{pointSum(index)}} / {{points.length * $store.getters.pointMenuMap[item.type].priority* (Number($store.getters.pointMenuMap[item.type].type)-1)}}
       td.etc -    
       td.point -        
 </template>
@@ -31,7 +31,7 @@ export default {
     points: Array,
     tableBodyHidden: Boolean,
   },
-  setup(props: any) {
+  setup(props: any, {root}: any) {
     const computed: IComputed = useComputed(props)
     return {
       computed,
@@ -57,16 +57,22 @@ export default {
         if (!items) {
           throw Error('Not found items')
         }
-        return items.reduce((acc: any, item: any) => acc + item.value * item.type.priority, 0)
+        return items.reduce(
+          (acc: any, item: any) =>
+            acc + item.value * root.$store.getters.pointMenuMap[item.type].priority,
+          0,
+        )
       },
       perfectScoreSum(items: any) {
         if (!items) {
           throw Error('Not found items')
         }
         return items.reduce((acc: any, item: any) => {
-          const perfectScore = (Number(item.type.type) - 1) * item.type.priority
-          // console.log(item.type.label, perfectScore)
-          return acc + perfectScore * item.type.priority
+          const perfectScore =
+            (Number(root.$store.getters.pointMenuMap[item.type].type) - 1) *
+            root.$store.getters.pointMenuMap[item.type].priority
+          // console.log($store.getters.pointMenuMap[item.type].label, perfectScore)
+          return acc + perfectScore * root.$store.getters.pointMenuMap[item.type].priority
         }, 0)
       },
     }
