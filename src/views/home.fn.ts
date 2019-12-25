@@ -7,6 +7,7 @@ import {MessageBox, Notification} from 'element-ui'
 import {IPublicState, ITeacher, IPoint, IStudent, IPointMenu} from '@/biz/type'
 import {findById, go} from '@mgsong/min-utils'
 import equals from 'ramda/es/equals'
+import {studentToDefaultPointMap} from '@/biz'
 
 export interface IState {
   date?: string
@@ -77,16 +78,16 @@ export function useBeforeMount({root, state, publicState}: any) {
 //     etc: '',
 //   }
 // }
-const studentToDefaultPointMap = (student: IStudent, pointMenus: IPointMenu[]) => {
-  return {
-    owner: student,
-    items: pointMenus.map((menu: IPointMenu) => ({
-      type: menu._id,
-      value: 0,
-    })),
-    etc: '',
-  }
-}
+// const studentToDefaultPointMap = (student: IStudent, pointMenus: IPointMenu[]) => {
+//   return {
+//     owner: student,
+//     items: pointMenus.map((menu: IPointMenu) => ({
+//       type: menu._id,
+//       value: 0,
+//     })),
+//     etc: '',
+//   }
+// }
 export async function initPoints({root, state, publicState}: any) {
   if (isNil(publicState.teacherId)) {
     publicState.points = []
@@ -126,7 +127,7 @@ export async function initPoints({root, state, publicState}: any) {
       result.res,
     )
     const pointsOfNewStudents = newStudnets.map(student =>
-      studentToDefaultPointMap(student, root.$store.state.pointMenus),
+      studentToDefaultPointMap(root.$store.state.pointMenus)(student),
     )
     points.push(...pointsOfNewStudents)
   }
@@ -147,7 +148,7 @@ export async function initPoints({root, state, publicState}: any) {
   }
 
   publicState.points = teacher.students.map(student =>
-    studentToDefaultPointMap(student, root.$store.state.pointMenus),
+    studentToDefaultPointMap(root.$store.state.pointMenus)(student),
   )
   state.originalPoints = clone(publicState.points)
   state.pointInit = false

@@ -9,7 +9,7 @@ export function studentToDefaultPointMap(pointMenus: any) {
       meditation: 0,
       invitation: 0,
       recitation: false,
-      items: pointMenus.map((menu: any) => ({type: menu, value: 0})),
+      items: pointMenus.map((menu: any) => ({type: menu._id, value: 0})),
       etc: '',
     }
   }

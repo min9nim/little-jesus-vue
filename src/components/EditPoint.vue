@@ -43,13 +43,13 @@ export default createComponent({
     )
     return {
       state,
-      getSeqArray(menuId) {
+      getSeqArray(menuId: any) {
         if (!root.$store.getters.pointMenuMap[menuId]) {
           return []
         }
         return Array.from(Array(Number(root.$store.getters.pointMenuMap[menuId].type)).keys())
       },
-      menuLabel(menuId) {
+      menuLabel(menuId: string) {
         return prop('label', root.$store.getters.pointMenuMap[menuId])
       },
     }

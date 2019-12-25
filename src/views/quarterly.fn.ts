@@ -3,9 +3,15 @@ import {req} from '@/utils'
 import {qPointsFromTo} from '@/biz/query'
 import {groupBy, path} from 'ramda'
 import {getPointSumOfWeek} from './monthly.fn'
+import {initialize, usePublicState} from './home.fn'
 
 export function useHandleQuarterChange({state, root}: any) {
   return async (value: number) => {
+    if (root.$store.state.teachers.length === 0) {
+      const publicState = usePublicState()
+      await initialize({root, state, publicState})
+    }
+
     const startMonth = (value - 1) * 3 + 1
     const start = moment(state.year + String(startMonth).padStart(2, '0'), 'YYYYMM').format(
       'YYYYMMDD',

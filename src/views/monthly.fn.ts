@@ -2,9 +2,15 @@ import moment from 'moment'
 import {req} from '@/utils'
 import {qPointsFromTo} from '@/biz/query'
 import {groupBy, path, propEq} from 'ramda'
+import {initialize, usePublicState} from './home.fn'
 
 export function useHandleMonthChange({state, root}: any) {
   return async (value: string) => {
+    if (root.$store.state.teachers.length === 0) {
+      const publicState = usePublicState()
+      await initialize({root, state, publicState})
+    }
+
     const start = moment(value, 'YYYYMM').format('YYYYMMDD')
     const end = moment(value, 'YYYYMM')
       .endOf('month')
