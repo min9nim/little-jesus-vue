@@ -66,6 +66,14 @@ export default new Vuex.Store({
       state.teachers.push(teacher)
     },
   },
+  getters: {
+    pointMenuMap(state) {
+      return state.pointMenus.reduce((acc: any, value: any) => {
+        acc[value._id] = value
+        return acc
+      }, {})
+    },
+  },
   actions: {},
   modules: {},
 })
