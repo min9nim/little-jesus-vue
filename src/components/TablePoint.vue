@@ -15,7 +15,7 @@ table.items
   tfoot
     tr.row
       td.name 점수
-      td(v-for="(item, index) in points[0].items") {{pointSum(index)}} / {{points.length * $store.getters.pointMenuMap[item.type].priority* (Number($store.getters.pointMenuMap[item.type].type)-1)}}
+      td(v-for="(item, index) in points[0].items") {{pointSum(index)}} / {{points.length * $store.getters.pointMenuMap[item.type].priority * (Number($store.getters.pointMenuMap[item.type].type)-1)}}
       td.etc -    
       td.point -        
 </template>
@@ -36,17 +36,19 @@ export default {
     return {
       computed,
       pointSum(index: number) {
+        const pointMenuMap = root.$store.getters.pointMenuMap
         const reducer = (acc: number, point: any) => {
+          const item = point.items[index]
           if (!point.items) {
             return acc
           }
-          if (!point.items[index]) {
+          if (!item) {
             // 포인트 입력 이후 새로 추가된 항목이 있을 경우 예외 처리
             return acc
           }
-          const value = point.items[index].value
-          const label = point.items[index].type.label
-          const priority = point.items[index].type.priority
+          const value = item.value
+          const label = pointMenuMap[item.type].label
+          const priority = pointMenuMap[item.type].priority
           console.log({label, value, priority})
           return acc + value * priority
           // return acc + value
