@@ -8,6 +8,7 @@ export default new Vuex.Store({
   state: {
     date: '',
     teachers: [] as ITeacher[],
+    students: [] as IStudent[],
     pointMenus: [] as IPointMenu[],
     asisPointMenus: [
       {
@@ -59,6 +60,9 @@ export default new Vuex.Store({
     setTeachers(state, teachers) {
       state.teachers = teachers
     },
+    setStudents(state, students) {
+      state.students = students
+    },
     setPointMenus(state, pointMenus) {
       state.pointMenus = pointMenus
     },
@@ -69,6 +73,12 @@ export default new Vuex.Store({
   getters: {
     pointMenuMap(state) {
       return state.pointMenus.reduce((acc: any, value: any) => {
+        acc[value._id] = value
+        return acc
+      }, {})
+    },
+    studentMap(state) {
+      return state.students.reduce((acc: any, value: any) => {
         acc[value._id] = value
         return acc
       }, {})

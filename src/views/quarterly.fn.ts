@@ -24,7 +24,11 @@ export function useHandleQuarterChange({state, root}: any) {
       endDate: end,
     })
     state.loading = false
-    const points = result.res
+    // const points = result.res
+    const points = result.res.map((point: any) => ({
+      ...point,
+      owner: root.$store.getters.studentMap[point.owner],
+    }))
     const pointsByStudent = groupBy(path(['owner', 'name']) as any)(points)
     // console.log(pointsByStudent)
     const pointMenuMap = root.$store.getters.pointMenuMap

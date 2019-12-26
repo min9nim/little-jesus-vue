@@ -99,14 +99,7 @@ export const qPoints = gql`
   query points($date: String, $teacherId: ObjectId) {
     res: points(date: $date, teacherId: $teacherId) {
       _id
-      owner {
-        _id
-        name
-        teacher {
-          _id
-          name
-        }
-      }
+      owner
       date
       attendance
       meditation
@@ -126,14 +119,7 @@ export const qPointsFromTo = gql`
   query pointsFromTo($startDate: String!, $endDate: String!) {
     res: pointsFromTo(startDate: $startDate, endDate: $endDate) {
       _id
-      owner {
-        _id
-        name
-        teacher {
-          _id
-          name
-        }
-      }
+      owner
       date
       attendance
       meditation

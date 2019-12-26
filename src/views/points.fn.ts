@@ -1,7 +1,7 @@
 import {reactive, computed} from '@vue/composition-api'
 import moment from 'moment'
 import {req, nameAscending} from '@/utils'
-import {prop, groupBy, path, differenceWith, propEq, pathEq, find, filter} from 'ramda'
+import {prop, groupBy, path, differenceWith, propEq, map, pathEq, find, filter} from 'ramda'
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 import {IPublicState as IHomeState, IPoint, ITeacher, IStudent} from '@/biz/type'
@@ -56,7 +56,17 @@ export async function initPoints({root, state}: IAllState) {
   state.loading = false
 
   // 반미정 친구들 제외
-  const points: IPoint[] = exclude(pathEq(['owner', 'teacher'], null))(result.res)
+  const points: IPoint[] = go(
+    result.res,
+    map((point: any) => ({
+      ...point,
+      owner: root.$store.getters.studentMap[point.owner],
+    })),
+    exclude(pathEq(['owner', 'teacher'], null)),
+  )
+
+  console.log(99, points)
+
   if (isNil(points)) {
     throw Error('points is undefined or null')
   }

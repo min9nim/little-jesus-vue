@@ -2,6 +2,7 @@ import moment from 'moment'
 import {req} from '@/utils'
 import {qPointsFromTo} from '@/biz/query'
 import {groupBy, path, propEq} from 'ramda'
+import {IPoint} from '@/biz/type'
 
 export function useHandleMonthChange({state, root}: any) {
   return async (value: string) => {
@@ -20,7 +21,10 @@ export function useHandleMonthChange({state, root}: any) {
     })
     state.loading = false
     // console.log(result)
-    const points = result.res
+    const points = result.res.map((point: any) => ({
+      ...point,
+      owner: root.$store.getters.studentMap[point.owner],
+    }))
     const pointsByStudent = groupBy(path(['owner', 'name']) as any)(points)
     // console.log(pointsByStudent)
     const pointMenuMap = root.$store.getters.pointMenuMap

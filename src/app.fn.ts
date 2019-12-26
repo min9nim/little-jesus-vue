@@ -22,18 +22,18 @@ export async function initialize({root, state}: any) {
   // 포인트메뉴 상태 초기화
   root.$store.commit('setPointMenus', result.pointMenus)
 
-  // const teacherMap = result.teachers.reduce((acc: any, value: any) => {
-  //   acc[value._id] = value
-  // }, {})
-
-  const studentMap = result.students.reduce((acc: any, value: any) => {
-    acc[value._id] = {...value, teacher: findTeacherByStudentId(result.teachers)(value._id)}
-    return acc
-  }, {})
+  //학생상태 초기화
+  root.$store.commit(
+    'setStudents',
+    result.students.map((student: any) => ({
+      ...student,
+      teacher: findTeacherByStudentId(result.teachers)(student._id),
+    })),
+  )
 
   // api 결과를 정렬
   result.teachers.forEach((teacher: any) => {
-    teacher.students = teacher.students.map((_id: string) => studentMap[_id])
+    teacher.students = teacher.students.map((_id: string) => root.$store.getters.studentMap[_id])
     teacher.students.sort(nameAscending(path(['name'])))
   })
   result.teachers.sort(nameAscending(path(['name'])))
@@ -41,7 +41,7 @@ export async function initialize({root, state}: any) {
   // 선생님목록 상태 초기화
   root.$store.commit('setTeachers', result.teachers)
   // const etcStudents = result.students.filter(propEq('teacher', null))
-  const etcStudents = values(studentMap).filter(propEq('teacher', null))
+  const etcStudents = root.$store.state.students.filter(propEq('teacher', null))
   if (etcStudents.length > 0) {
     root.$store.commit('addTeacher', {
       _id: '',
