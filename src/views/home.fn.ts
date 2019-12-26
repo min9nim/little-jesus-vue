@@ -137,38 +137,6 @@ export async function initPoints({root, state, publicState}: any) {
   state.editable = true
 }
 
-export async function initialize({root, state}: IAllState) {
-  // root.$store.commit(
-  //   'setDate',
-  //   moment()
-  //     .startOf('week')
-  //     .format('YYYYMMDD'),
-  // )
-  state.loading = true
-  const result = await req(qInitialize)
-  state.loading = false
-
-  // 포인트메뉴 상태 초기화
-  root.$store.commit('setPointMenus', result.pointMenus)
-
-  // api 결과를 정렬
-  result.teachers.forEach((teacher: any) => {
-    teacher.students.sort(nameAscending(path(['name'])))
-  })
-  result.teachers.sort(nameAscending(path(['name'])))
-
-  // 선생님목록 상태 초기화
-  root.$store.commit('setTeachers', result.teachers)
-  const etcStudents = result.students.filter(propEq('teacher', null))
-  if (etcStudents.length > 0) {
-    root.$store.commit('addTeacher', {
-      _id: '',
-      name: '반미정',
-      students: etcStudents,
-    })
-  }
-}
-
 export function useHandleSave({state, publicState}: IAllState) {
   return async () => {
     if (state.pointInit) {

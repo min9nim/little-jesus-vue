@@ -12,7 +12,8 @@
 <script lang="ts">
 import {reactive, onMounted, onBeforeMount} from '@vue/composition-api'
 import Vue from 'vue'
-import {initialize} from './views/home.fn'
+import {initialize} from './app.fn'
+
 export default {
   setup(props: any, {root}: any) {
     const state = reactive({
