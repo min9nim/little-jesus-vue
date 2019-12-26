@@ -65,8 +65,6 @@ export async function initPoints({root, state}: IAllState) {
     exclude(pathEq(['owner', 'teacher'], null)),
   )
 
-  console.log(99, points)
-
   if (isNil(points)) {
     throw Error('points is undefined or null')
   }
