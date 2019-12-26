@@ -78,22 +78,11 @@ export const qInitialize = gql`
     teachers {
       _id
       name
-      students {
-        _id
-        name
-        teacher {
-          _id
-          name
-        }
-      }
+      students
     }
     students {
       _id
       name
-      teacher {
-        _id
-        name
-      }
     }
     pointMenus(hidden: false) {
       _id
