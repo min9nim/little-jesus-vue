@@ -1,12 +1,11 @@
 import {reactive, computed} from '@vue/composition-api'
 import moment from 'moment'
 import {req, nameAscending} from '@/utils'
-import {prop, groupBy, path, differenceWith, propEq, map, pathEq, find, filter} from 'ramda'
+import {prop, groupBy, path, differenceWith, propEq, map, pathEq, find, filter, isNil} from 'ramda'
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 import {IPublicState as IHomeState, IPoint, ITeacher, IStudent} from '@/biz/type'
 import {studentToDefaultPointMap} from '@/biz'
-import isNil from 'ramda/es/isNil'
 import {go, exclude} from '@mgsong/min-utils'
 
 export interface IState {
@@ -55,9 +54,14 @@ export async function initPoints({root, state}: IAllState) {
   })
   state.loading = false
 
+  const pointsWithoutDeletedStudents = go(
+    result.res,
+    filter((point: any) => root.$store.getters.studentMap[point.owner]), // 혹시 삭제된 학생의 포인트가 있다면 제거
+  )
+
   // 반미정 친구들 제외
   const points: IPoint[] = go(
-    result.res,
+    pointsWithoutDeletedStudents,
     map((point: any) => ({
       ...point,
       owner: root.$store.getters.studentMap[point.owner],
@@ -77,10 +81,12 @@ export async function initPoints({root, state}: IAllState) {
       root.$store.state.teachers,
       find(propEq('name', teacherName)),
       prop('students'),
+      exclude(isNil), // 이상하게 학생들 중 undefined 가 포함된 경우가 발견되서 제외시킴 -19/12/28 mgsong
     )
     // console.log(JSON.stringify(points, null, 2))
     if (students.length !== points.length) {
       // 포인트 입력 후 신규학생을 반에 추가 배정한 경우
+      console.log(44, students)
       const newStudents = differenceWith(isEqualStudent, students, points)
       const pointsOfNewStudents = newStudents.map(defaultPoint)
       points.push(...pointsOfNewStudents)
@@ -101,7 +107,9 @@ export async function initPoints({root, state}: IAllState) {
   })
 
   // 반미정인 친구들 목록에 추가
-  const etcStudentPoints: any = filter<IPoint>(pathEq(['owner', 'teacher'], null))(result.res)
+  const etcStudentPoints: any = filter<IPoint>(pathEq(['owner', 'teacher'], null))(
+    pointsWithoutDeletedStudents,
+  )
   if (etcStudentPoints.length !== state.etcStudents.length) {
     const newStudents = differenceWith(isEqualStudent, state.etcStudents, etcStudentPoints)
     const pointsOfNewStudents = newStudents.map(defaultPoint)
@@ -125,6 +133,12 @@ export function isEqualStudent(a: IStudent, b: IPoint) {
   if (!b.owner) {
     // console.warn('owner 없는 포인트가 있다고? differenceWith 버그인가?', b)
     return false
+  }
+  if (!a) {
+    throw Error('a is not defined')
+  }
+  if (!b.owner) {
+    throw Error('b.owner is not defined')
   }
   return a._id === b.owner._id
 }
