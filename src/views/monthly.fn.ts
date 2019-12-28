@@ -1,8 +1,9 @@
 import moment from 'moment'
 import {req} from '@/utils'
 import {qPointsFromTo} from '@/biz/query'
-import {groupBy, path, propEq} from 'ramda'
+import {groupBy, filter, path, propEq, map} from 'ramda'
 import {IPoint} from '@/biz/type'
+import {exclude, go} from '@mgsong/min-utils'
 
 export function useHandleMonthChange({state, root}: any) {
   return async (value: string) => {
@@ -21,14 +22,18 @@ export function useHandleMonthChange({state, root}: any) {
     })
     state.loading = false
     // console.log(result)
-    const points = result.res.map((point: any) => ({
-      ...point,
-      owner: root.$store.getters.studentMap[point.owner],
-    }))
+    const points = go(
+      result.res,
+      filter((point: any) => root.$store.getters.studentMap[point.owner]), // 혹시 삭제된 학생의 포인트가 있다면 제거
+      map((point: any) => ({
+        ...point,
+        owner: root.$store.getters.studentMap[point.owner],
+      })),
+    )
     const pointsByStudent = groupBy(path(['owner', 'name']) as any)(points)
     // console.log(pointsByStudent)
     const pointMenuMap = root.$store.getters.pointMenuMap
-    // console.log(pointMenu)
+    // console.log(pointMenuMap)
     state.tableData = getTableData({pointsByStudent, yearMonth: value, pointMenuMap})
   }
 }
