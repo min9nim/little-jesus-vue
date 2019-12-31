@@ -19,6 +19,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "points" */ '../views/Points.vue'),
   },
   {
+    path: '/points-by-month',
+    name: 'points-by-month',
+    component: () => import(/* webpackChunkName: "points-by-month" */ '../views/PointsByMonth.vue'),
+  },
+  {
     path: '/monthly',
     name: 'monthly',
     component: () => import(/* webpackChunkName: "monthly" */ '../views/Monthly.vue'),
