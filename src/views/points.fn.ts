@@ -86,7 +86,7 @@ export async function initPoints({root, state}: IAllState) {
     // console.log(JSON.stringify(points, null, 2))
     if (students.length !== points.length) {
       // 포인트 입력 후 신규학생을 반에 추가 배정한 경우
-      console.log(44, students)
+      // console.log(44, students)
       const newStudents = differenceWith(isEqualStudent, students, points)
       const pointsOfNewStudents = newStudents.map(defaultPoint)
       points.push(...pointsOfNewStudents)
