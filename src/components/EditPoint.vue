@@ -2,7 +2,7 @@
 .input-form
   el-card(shadow="hover")
     div(slot="header")
-      h3 {{ state.point.owner.name }}
+      h3 {{state.point.owner.name}}
     .item(v-for="item in state.point.items" :key="item._id")
       .label {{menuLabel(item.type)}}
       .control
@@ -43,6 +43,7 @@ export default createComponent({
     )
     return {
       state,
+      studentMap: root.$store.getters.studentMap,
       getSeqArray(menuId: any) {
         if (!root.$store.getters.pointMenuMap[menuId]) {
           return []

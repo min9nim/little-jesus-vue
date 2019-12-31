@@ -25,7 +25,7 @@
   template(v-if="!state.loading")
     .form(v-for="(point, index) in publicState.points" :key="index")
       read-point(v-if="!state.editable" :point="point")
-      edit-point(v-else :studentId="point.owner._id")
+      edit-point(v-else :studentId="point.owner && point.owner._id")
     .no-result(v-show="hasNoStudent()") 반 학생이 없습니다.
     .btn(v-show="publicState.points.length > 0")
       template(v-if="state.editable")

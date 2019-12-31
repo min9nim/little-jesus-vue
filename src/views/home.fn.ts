@@ -81,7 +81,9 @@ export async function initPoints({root, state, publicState}: any) {
     teacherId: publicState.teacherId || null,
   })
   state.loading = false
+
   let points: IPoint[] = result.res
+  // console.log(33, points)
   if (publicState.teacherId === '') {
     // 반미정을 선택한 경우에는 전체 포인트목록이 리턴되는데 이를 필터링해야 한다.
     points = filter(pathEq(['owner', 'teacher'], null))(points)
@@ -129,6 +131,7 @@ export async function initPoints({root, state, publicState}: any) {
     return
   }
 
+  // console.log(88, teacher.students)
   publicState.points = teacher.students.map(student =>
     studentToDefaultPointMap(root.$store.state.pointMenus)(student),
   )
