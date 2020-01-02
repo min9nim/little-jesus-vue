@@ -4,7 +4,7 @@ import {qPointsFromTo} from '@/biz/query'
 import {groupBy, filter, path, propEq, map} from 'ramda'
 import {go} from '@mgsong/min-utils'
 
-export function useHandleMonthChange({state, root}: any) {
+export function useHandleMonthChange({state, root}) {
   return async (value: string) => {
     if (root.$store.state.teachers.length === 0) {
       return
