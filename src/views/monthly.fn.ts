@@ -2,8 +2,7 @@ import moment from 'moment'
 import {req} from '@/utils'
 import {qPointsFromTo} from '@/biz/query'
 import {groupBy, filter, path, propEq, map} from 'ramda'
-import {IPoint} from '@/biz/type'
-import {exclude, go} from '@mgsong/min-utils'
+import {go} from '@mgsong/min-utils'
 
 export function useHandleMonthChange({state, root}: any) {
   return async (value: string) => {
@@ -72,7 +71,7 @@ export function getTableData({pointsByStudent, yearMonth, pointMenuMap}: any) {
 
 export function getSundaysOfMonth(yearMonth: string, outputFormat = 'MM/DD') {
   const month = yearMonth.slice(-2)
-  const result = []
+  const result: string[] = []
   const sunday1 = moment(yearMonth, 'YYYYMM').startOf('week')
   if (sunday1.format('MM') === month) {
     result.push(sunday1.format(outputFormat))
