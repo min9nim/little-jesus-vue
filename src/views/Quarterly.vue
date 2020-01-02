@@ -60,7 +60,7 @@ export default {
   setup(props: any, {root}: any) {
     const state: any = reactive({
       year: moment().format('YYYY'),
-      quarter: Math.ceil(new Date().getMonth() / 3),
+      quarter: Math.ceil((new Date().getMonth()+1) / 3),
       loading: true,
       quarterOptions,
       tableData: [],
