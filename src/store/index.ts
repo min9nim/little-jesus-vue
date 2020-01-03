@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import {IPointMenu, ITeacher, IPoint, IStudent} from '@/biz/type'
+import {split, map} from 'ramda'
+import {go} from '@mgsong/min-utils'
 
 Vue.use(Vuex)
 
@@ -82,6 +84,22 @@ export default new Vuex.Store({
         acc[value._id] = value
         return acc
       }, {})
+    },
+    menuItemOptions(state, getters) {
+      return menuId => {
+        if (!getters.pointMenuMap[menuId]) {
+          return []
+        }
+        const items = go(
+          getters.pointMenuMap[menuId].type,
+          split(','),
+          map((type: string) => {
+            const [label, value] = type.split(':')
+            return {label, value}
+          }),
+        )
+        return items
+      }
     },
   },
   actions: {},

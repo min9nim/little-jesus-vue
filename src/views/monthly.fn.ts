@@ -1,7 +1,7 @@
 import moment from 'moment'
 import {req} from '@/utils'
 import {qPointsFromTo} from '@/biz/query'
-import {groupBy, filter, path, propEq, map} from 'ramda'
+import {groupBy, filter, path, propEq, map, split, last} from 'ramda'
 import {go} from '@mgsong/min-utils'
 
 export function useHandleMonthChange({state, root}) {
@@ -38,10 +38,12 @@ export function useHandleMonthChange({state, root}) {
 }
 
 export function getPointSumOfWeek(point: any, pointMenuMap: any) {
-  return point.items.reduce(
-    (acc: number, item: any) => acc + pointMenuMap[item.type].priority * item.value,
-    0,
-  )
+  return point.items.reduce((acc: number, item: any) => {
+    const value = go(item.value, split(':'), last, Number)
+    const priority = pointMenuMap[item.type].priority
+    console.log({value, priority})
+    return acc + priority * value
+  }, 0)
 }
 
 export function getTableData({pointsByStudent, yearMonth, pointMenuMap}: any) {

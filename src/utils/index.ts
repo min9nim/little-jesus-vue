@@ -53,6 +53,12 @@ export function nameAscending(path: any) {
   }
 }
 
+export function _idAscending(a: any, b: any) {
+  if (a._id > b._id) return 1
+  if (b._id > a._id) return -1
+  return 0
+}
+
 export function errorHandler(e: any) {
   console.error(e)
   // @ts-ignore

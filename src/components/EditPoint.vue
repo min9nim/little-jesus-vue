@@ -7,10 +7,10 @@
       .label {{menuLabel(item.type)}}
       .control
         el-radio.radio(
-          v-for="num in getSeqArray(item.type)"
-          v-model="item.value" :label="num"
-          :key="num"
-        ) {{num}}        
+          v-for="(option, index) in getOptions(item.type)"
+          v-model="item.value" :label="option.label + ':' + option.value"
+          :key="index"
+        ) {{option.label}}        
     .item
       .label 기타사항
       .control
@@ -24,7 +24,8 @@
 <script lang="ts">
 import {createComponent, reactive, computed, watch} from '@vue/composition-api'
 import {useState, usePublicState as useHomeState} from '../views/home.fn'
-import {propEq, pathEq, prop} from 'ramda'
+import {propEq, pathEq, prop, split, map} from 'ramda'
+import {go} from '@mgsong/min-utils'
 import Vue from 'vue'
 
 export default createComponent({
@@ -44,11 +45,8 @@ export default createComponent({
     return {
       state,
       studentMap: root.$store.getters.studentMap,
-      getSeqArray(menuId: any) {
-        if (!root.$store.getters.pointMenuMap[menuId]) {
-          return []
-        }
-        return Array.from(Array(Number(root.$store.getters.pointMenuMap[menuId].type)).keys())
+      getOptions(menuId: any) {
+        return root.$store.getters.menuItemOptions(menuId)
       },
       menuLabel(menuId: string) {
         return prop('label', root.$store.getters.pointMenuMap[menuId])

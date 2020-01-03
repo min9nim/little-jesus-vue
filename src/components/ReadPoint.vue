@@ -8,7 +8,7 @@
       :key="index"
     )
       .label {{$store.getters.pointMenuMap[item.type].label}}
-      .control {{item.value}}
+      .control {{item.value.split(':')[0]}}
     .item
       .label 기타사항
       .control

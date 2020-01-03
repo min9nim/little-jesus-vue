@@ -1,15 +1,22 @@
 import {IStudent} from './type'
+import {map, sort} from 'ramda'
+import {go} from '@mgsong/min-utils'
+import {nameAscending, _idAscending} from '@/utils'
 
 export function studentToDefaultPointMap(pointMenus: any) {
   return (student: IStudent) => {
     return {
       owner: student,
-      attendance: false,
-      visitcall: false,
-      meditation: 0,
-      invitation: 0,
-      recitation: false,
-      items: pointMenus.map((menu: any) => ({type: menu._id, value: 0})),
+      items: go(
+        pointMenus,
+        sort(_idAscending),
+        map((menu: any) => {
+          const options = menu.type.split(',')
+          const option = options.find(option => option.includes(menu.defaultValue))
+          const value = option.trim()
+          return {type: menu._id, value}
+        }),
+      ),
       etc: '',
     }
   }

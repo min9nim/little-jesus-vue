@@ -82,6 +82,7 @@ export const qInitialize = gql`
       _id
       label
       type
+      defaultValue
       priority
       hidden
       disable
@@ -95,11 +96,6 @@ export const qPoints = gql`
       _id
       owner
       date
-      attendance
-      meditation
-      invitation
-      visitcall
-      recitation
       items {
         type
         value
@@ -115,11 +111,6 @@ export const qPointsFromTo = gql`
       _id
       owner
       date
-      attendance
-      meditation
-      invitation
-      visitcall
-      recitation
       items {
         type
         value

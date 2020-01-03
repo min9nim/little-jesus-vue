@@ -15,7 +15,7 @@ export interface IPointMenu {
   _id: string
   label: string
   type: string
-  priority: number
+  defaultValue: string
   hidden: boolean
   disable: boolean
 }

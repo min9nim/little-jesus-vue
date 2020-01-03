@@ -9,7 +9,7 @@ table.items
   tbody(v-if="!tableBodyHidden")
     tr.row(v-for="(point, index) in points" :key="index")
       td.name {{point.owner.name}}
-      td(v-for="item in point.items") {{item.value}}
+      td(v-for="item in point.items") {{item.value.split(':')[1]}}
       td.etc {{point.etc}}
       td.point {{itemSum(point.items)}}
   tfoot
@@ -24,8 +24,8 @@ table.items
 import {IComputed, useComputed} from '../components/table-point.fn'
 import {IPublicState, IPoint, ITeacher} from '../biz/type'
 import {usePublicState} from '../views/home.fn'
-import {prop} from 'ramda'
-import {flatLog} from '@mgsong/min-utils'
+import {prop, head, last, split, map, pipe, reduce} from 'ramda'
+import {flatLog, go} from '@mgsong/min-utils'
 
 export default {
   name: 'table-point',
@@ -54,7 +54,7 @@ export default {
             // 포인트 입력 이후 새로 추가된 항목이 있을 경우 예외 처리
             return acc
           }
-          const value = item.value
+          const value = go(item.value, split(':'), last, Number)
           const label = root.$store.getters.pointMenuMap[item.type].label
           // console.log('item.type = ' + item.type)
           const priority = root.$store.getters.pointMenuMap[item.type].priority
@@ -68,11 +68,22 @@ export default {
         if (root.$store.state.pointMenus.length === 0) {
           return 0
         }
-        return (
-          props.points.length *
-          root.$store.getters.pointMenuMap[menuId].priority *
-          (Number(root.$store.getters.pointMenuMap[menuId].type) - 1)
+
+        const maxValue = go(
+          root.$store.getters.pointMenuMap[menuId].type,
+          split(','),
+          map(
+            pipe(
+              split(':'),
+              last,
+              Number,
+            ),
+          ),
+          reduce((a, b) => (a > b ? a : b), 0),
         )
+        const priority = root.$store.getters.pointMenuMap[menuId].priority
+
+        return props.points.length * maxValue * priority
       },
       itemSum(items: any) {
         if (root.$store.state.pointMenus.length === 0) {
@@ -85,8 +96,9 @@ export default {
         return items.reduce((acc: any, item: any) => {
           // console.log('item.type = ' + item.type)
           // flatLog('root.$store.getters.pointMenuMap = ', root.$store.getters.pointMenuMap)
-
-          return acc + item.value * root.$store.getters.pointMenuMap[item.type].priority
+          const priority = root.$store.getters.pointMenuMap[item.type].priority
+          const value = go(item.value, split(':'), last, Number)
+          return acc + value * priority
         }, 0)
       },
       perfectScoreSum(items: any) {
