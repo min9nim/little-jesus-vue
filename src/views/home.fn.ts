@@ -1,6 +1,6 @@
 import {reactive} from '@vue/composition-api'
 import {req, nameAscending} from '@/utils'
-import {clone, propEq, prop, find, differenceWith, isNil, filter, pathEq, path} from 'ramda'
+import {clone, propEq, prop, find, differenceWith, isNil, filter, pathEq, path, map} from 'ramda'
 import moment from 'moment'
 import {qCreatePoint, qInitialize, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
 import {MessageBox, Notification} from 'element-ui'
@@ -82,12 +82,19 @@ export async function initPoints({root, state, publicState}: any) {
   })
   state.loading = false
 
-  let points: IPoint[] = result.res
+  let points: IPoint[] = go(
+    result.res,
+    map((point: any) => ({...point, owner: root.$store.getters.studentMap[point.owner]})),
+  )
   // console.log(33, points)
   if (publicState.teacherId === '') {
     // 반미정을 선택한 경우에는 전체 포인트목록이 리턴되는데 이를 필터링해야 한다.
     points = filter(pathEq(['owner', 'teacher'], null))(points)
     // console.log({points})
+  }
+
+  if (!root) {
+    throw Error('root 가 undefined???')
   }
   let students = go(
     root.$store.state.teachers,
@@ -245,7 +252,7 @@ export function useHandleEdit({state}: {state: IState}) {
     state.editable = true
   }
 }
-export function useHandleRemove({root, state}: any) {
+export function useHandleRemove({root, state}) {
   return async () => {
     try {
       await MessageBox.confirm('입력했던 내용을 전부 삭제합니다', {type: 'warning'})
@@ -257,10 +264,10 @@ export function useHandleRemove({root, state}: any) {
       await Promise.all(results)
       state.loading = false
       // await Message({message: '삭제 완료', type: 'success'})
+      await initPoints({root, state, publicState})
+
       // @ts-ignore
       Notification.success({message: '삭제 완료', position: 'bottom-right'})
-
-      await initPoints({root, state, publicState})
     } catch (e) {
       if (e !== 'cancel') {
         state.loading = false

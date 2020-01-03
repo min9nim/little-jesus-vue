@@ -5,10 +5,7 @@ export const qCreatePoint = gql`
   mutation createPoint($owner: ObjectId!, $date: String!, $items: [PointItemArg!]!, $etc: String) {
     res: createPoint(owner: $owner, date: $date, items: $items, etc: $etc) {
       _id
-      owner {
-        _id
-        name
-      }
+      owner
       date
       items {
         type
@@ -29,10 +26,7 @@ export const qUpdatePoint = gql`
   ) {
     res: updatePoint(_id: $_id, owner: $owner, date: $date, items: $items, etc: $etc) {
       _id
-      owner {
-        _id
-        name
-      }
+      owner
       date
       items {
         type

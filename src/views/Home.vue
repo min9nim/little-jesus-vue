@@ -64,7 +64,7 @@ export default {
     const handleDateChange = useHandleDateChange({root, state, publicState})
     const handleSave = useHandleSave({state, publicState})
     const handleEdit = useHandleEdit({state})
-    const handleRemove = useHandleRemove({state})
+    const handleRemove = useHandleRemove({root, state})
     // onBeforeMount(useBeforeMount({root, state, publicState}))
     watch(() => root.$store.state.teachers.length, useBeforeMount({root, state, publicState}))
     return {
