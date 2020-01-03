@@ -3,9 +3,5 @@
   "version": 2,
   "github": {
     "autoJobCancelation": false
-  },
-  "env": {
-    "VUE_APP_PROD_API_SERVER": "@vue-app-prod-api-server",
-    "VUE_APP_DEV_API_SERVER": "@vue-app-dev-api-server"
   }
 }
