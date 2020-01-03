@@ -79,7 +79,7 @@ export default {
               Number,
             ),
           ),
-          reduce((a, b) => (a > b ? a : b), 0),
+          reduce((a: any, b: any) => (a > b ? a : b), 0),
         )
         const priority = root.$store.getters.pointMenuMap[menuId].priority
 

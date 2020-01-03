@@ -1,7 +1,7 @@
 import {IStudent} from './type'
 import {map, sort} from 'ramda'
 import {go} from '@mgsong/min-utils'
-import {nameAscending, _idAscending} from '@/utils'
+import {_idAscending} from '@/utils'
 
 export function studentToDefaultPointMap(pointMenus: any) {
   return (student: IStudent) => {

@@ -41,7 +41,7 @@ export function getPointSumOfWeek(point: any, pointMenuMap: any) {
   return point.items.reduce((acc: number, item: any) => {
     const value = go(item.value, split(':'), last, Number)
     const priority = pointMenuMap[item.type].priority
-    console.log({value, priority})
+    // console.log({value, priority})
     return acc + priority * value
   }, 0)
 }
