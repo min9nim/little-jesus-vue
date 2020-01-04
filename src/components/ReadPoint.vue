@@ -8,7 +8,7 @@
       :key="index"
     )
       .label {{$store.getters.pointMenuMap[item.type].label}}
-      .control {{item.value.split(':')[0]}}
+      .control(:class="item.value.split(':')[1] === '0' ? 'red' : 'green' ") {{item.value.split(':')[0]}}
     .item
       .label 기타사항
       .control

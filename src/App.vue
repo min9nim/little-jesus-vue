@@ -106,4 +106,12 @@ export default {
     }
   }
 }
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
+}
 </style>
