@@ -62,7 +62,7 @@ export default {
     const state: IState = useState({root})
     const handleTeacherChange = useHandleTeacherChange({root, state, publicState})
     const handleDateChange = useHandleDateChange({root, state, publicState})
-    const handleSave = useHandleSave({state, publicState})
+    const handleSave = useHandleSave({root, state, publicState})
     const handleEdit = useHandleEdit({state})
     const handleRemove = useHandleRemove({root, state})
     // onBeforeMount(useBeforeMount({root, state, publicState}))

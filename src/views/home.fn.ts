@@ -147,12 +147,12 @@ export async function initPoints({root, state, publicState}: any) {
   state.editable = true
 }
 
-export function useHandleSave({state, publicState}: IAllState) {
+export function useHandleSave({root, state, publicState}: IAllState) {
   return async () => {
     if (state.pointInit) {
       await updatePoint({state, publicState})
     } else {
-      await createPoint({state, publicState})
+      await createPoint({root, state, publicState})
     }
   }
 }
@@ -200,7 +200,7 @@ export async function updatePoint({state, publicState}: any) {
   }
 }
 
-export async function createPoint({state, publicState}: any) {
+export async function createPoint({root, state, publicState}: any) {
   // console.log(publicState.points)
   state.loading = true
   try {
@@ -214,6 +214,10 @@ export async function createPoint({state, publicState}: any) {
     })
     const resolvedList: any = await Promise.all(results)
     publicState.points = resolvedList.map(prop('res')) // 생성된 _id 세팅
+    publicState.points = go(
+      publicState.points,
+      map((point: any) => ({...point, owner: root.$store.getters.studentMap[point.owner]})),
+    )
     state.loading = false
     state.pointInit = true
     state.editable = false
