@@ -40,6 +40,7 @@ export function useHandleMonthChange({state, root}) {
 export function getPointSumOfWeek(point: any, pointMenuMap: any) {
   return point.items.reduce((acc: number, item: any) => {
     const value = go(item.value, split(':'), last, Number)
+    // console.log(pointMenuMap[item.type].label, value)
     const priority = pointMenuMap[item.type].priority
     // console.log({value, priority})
     return acc + priority * value

@@ -56,18 +56,20 @@ export function getTableData({pointsByStudent, quarter, pointMenuMap}: any) {
 
     const sumByMonth: any = {}
     let totalSum = 0
-    months.forEach((month, index) => {
-      // console.log(44, pointsByMonth[month])
-      sumByMonth['month' + (index + 1)] = pointsByMonth[month]
-        ? pointsByMonth[month].reduce(
-            (acc, point) => acc + getPointSumOfWeek(point, pointMenuMap),
-            0,
-          )
-        : 0
-      totalSum += sumByMonth['month' + (index + 1)]
-    })
+    months
+      .map(month => String(month).padStart(2, '0'))
+      .forEach((month, index) => {
+        // console.log(44, month, pointsByMonth[month])
+        sumByMonth['month' + (index + 1)] = pointsByMonth[month]
+          ? pointsByMonth[month].reduce(
+              (acc, point) => acc + getPointSumOfWeek(point, pointMenuMap),
+              0,
+            )
+          : 0
+        totalSum += sumByMonth['month' + (index + 1)]
+      })
 
-    // console.log(sumByMonth)
+    // console.log(name, sumByMonth)
 
     return {
       name,
