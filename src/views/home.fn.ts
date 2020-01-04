@@ -1,5 +1,5 @@
 import {reactive} from '@vue/composition-api'
-import {req, nameAscending} from '@/utils'
+import {req, ascending} from '@/utils'
 import {clone, propEq, prop, find, differenceWith, isNil, filter, pathEq, path, map} from 'ramda'
 import moment from 'moment'
 import {qCreatePoint, qInitialize, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
@@ -101,7 +101,7 @@ export async function initPoints({root, state, publicState}: any) {
     find(propEq('_id', publicState.teacherId)),
     prop('students'),
   )
-  points.sort(nameAscending(path(['owner', 'name'])))
+  points.sort(ascending(path(['owner', 'name'])))
   if (result.res.length > 0 && students && students.length !== result.res.length) {
     // 포인트 입력 후 신규학생을 반에 추가 배정한 경우
     const newStudnets = differenceWith(

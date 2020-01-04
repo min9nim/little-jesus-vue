@@ -2,6 +2,7 @@ import {IStudent} from './type'
 import {map, sort} from 'ramda'
 import {go} from '@mgsong/min-utils'
 import {_idAscending} from '@/utils'
+import {MessageBox} from 'element-ui'
 
 export function studentToDefaultPointMap(pointMenus: any) {
   return (student: IStudent) => {
@@ -20,4 +21,13 @@ export function studentToDefaultPointMap(pointMenus: any) {
       etc: '',
     }
   }
+}
+
+export function errorHandler(e: any) {
+  console.error(e)
+  // @ts-ignore
+  const dom: any = document.querySelector('.el-loading-mask').parentElement
+  dom.innerHTML = '<pre>' + JSON.stringify(e, null, 2) + '</pre>'
+  dom.style.textAlign = 'left'
+  MessageBox.alert(e.message, {type: 'error'})
 }

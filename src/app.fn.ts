@@ -1,6 +1,6 @@
 import {qInitialize} from '@/biz/query'
 import {nameAscending, req} from '@/utils'
-import {path, propEq, find, pipe, omit, prop, includes, map, sort} from 'ramda'
+import {propEq, find, pipe, omit, prop, includes, map, sort} from 'ramda'
 import {go, exclude} from '@mgsong/min-utils'
 import isNil from 'ramda/es/isNil'
 
@@ -39,10 +39,10 @@ export async function initialize({root, state}: any) {
       teacher.students,
       map((_id: string) => root.$store.getters.studentMap[_id]),
       exclude(isNil), // 혹시 이미 삭제된 학생이 선생님의 students 필드에 포함되어 있는 경우가 있다면 제거
-      sort(nameAscending(path(['name']))),
+      sort(nameAscending),
     )
   })
-  result.teachers.sort(nameAscending(path(['name'])))
+  result.teachers.sort(nameAscending)
 
   // 선생님목록 상태 초기화
   root.$store.commit('setTeachers', result.teachers)

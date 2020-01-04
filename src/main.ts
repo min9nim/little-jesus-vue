@@ -10,6 +10,7 @@ import locale from 'element-ui/lib/locale/lang/ko'
 import * as Sentry from '@sentry/browser'
 import * as Integrations from '@sentry/integrations'
 import {flatLog} from '@mgsong/min-utils'
+import {setApiServer} from '@/utils'
 
 if (window.location.host === 'little-jesus.now.sh') {
   const {
@@ -21,6 +22,8 @@ if (window.location.host === 'little-jesus.now.sh') {
     integrations: [new Integrations.Vue({Vue, attachProps: true, logErrors: true})],
   })
 }
+
+setApiServer()
 
 Vue.config.productionTip = false
 Vue.use(VueCompositionApi)

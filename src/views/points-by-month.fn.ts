@@ -1,6 +1,6 @@
 import {reactive, computed} from '@vue/composition-api'
 import moment from 'moment'
-import {req, nameAscending} from '@/utils'
+import {req, ascending} from '@/utils'
 import {prop, groupBy, path, differenceWith, propEq, map, pathEq, find, filter, isNil} from 'ramda'
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
@@ -91,7 +91,7 @@ export async function initPoints({root, state}: IAllState) {
       const pointsOfNewStudents = newStudents.map(defaultPoint)
       points.push(...pointsOfNewStudents)
     }
-    points.sort(nameAscending(path(['owner', 'name'])))
+    points.sort(ascending(path(['owner', 'name'])))
   })
 
   // 아직 포인트입력 안한 선생님들 목록에 추가
