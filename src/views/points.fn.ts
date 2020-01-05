@@ -72,10 +72,11 @@ export async function initPoints({root, state}: IAllState) {
   if (isNil(points)) {
     throw Error('points is undefined or null')
   }
-  state.points = points
+  // @ts-ignore
+  state.points = filter(path(['owner', 'teacher', 'name']))(points)
 
   // @ts-ignore
-  state.pointsByTeacher = groupBy(path(['owner', 'teacher', 'name']))(points)
+  state.pointsByTeacher = groupBy(path(['owner', 'teacher', 'name']))(state.points)
   Object.entries(state.pointsByTeacher).forEach(([teacherName, points]: any) => {
     let students = go(
       root.$store.state.teachers,
