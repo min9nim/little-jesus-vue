@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test": "mocha -r test/mocha.env -r ts-node/register -p tsconfig.mocha.json -r tsconfig-paths/register test/**/*.spec.ts",
+    "test": "mocha -r test/mocha.env -r ts-node/register -p tsconfig.mocha.json -r tsconfig-paths/register test/**/*.spec.ts test/**/**/*.spec.ts",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
