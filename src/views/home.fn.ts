@@ -84,7 +84,7 @@ export async function initPoints({root, state, publicState}: any) {
 
   let points: IPoint[] = go(
     result.res,
-    map((point: any) => ({...point, owner: root.$store.getters.studentMap[point.owner]})),
+    map((point: any) => ({...point, owner: root.$store.getters.studentMap[point.owner]})), // 삭제된 학생 제거
   )
   // console.log(33, points)
   if (publicState.teacherId === '') {
@@ -93,16 +93,13 @@ export async function initPoints({root, state, publicState}: any) {
     // console.log({points})
   }
 
-  if (!root) {
-    throw Error('root 가 undefined???')
-  }
   let students = go(
     root.$store.state.teachers,
     find(propEq('_id', publicState.teacherId)),
     prop('students'),
   )
   points.sort(ascending(path(['owner', 'name'])))
-  if (result.res.length > 0 && students && students.length !== result.res.length) {
+  if (points.length > 0 && students && students.length > points.length) {
     // 포인트 입력 후 신규학생을 반에 추가 배정한 경우
     const newStudnets = differenceWith(
       (a: any, b: any) => {
@@ -115,12 +112,14 @@ export async function initPoints({root, state, publicState}: any) {
         return a._id === b.owner._id
       },
       students,
-      result.res,
+      points,
     )
     const pointsOfNewStudents = newStudnets.map(student =>
       studentToDefaultPointMap(root.$store.state.pointMenus)(student),
     )
+    console.log(11, points.length)
     points.push(...pointsOfNewStudents)
+    console.log(22, points.length)
   }
 
   if (points.length > 0) {
