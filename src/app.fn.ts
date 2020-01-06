@@ -12,6 +12,9 @@ export function findTeacherByStudentId(teachers: any[]) {
         includes(studentId),
       ),
     )(teachers)
+    if (!teacher) {
+      return null
+    }
     return omit(['students'], teacher)
   }
 }
