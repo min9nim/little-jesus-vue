@@ -117,9 +117,7 @@ export async function initPoints({root, state, publicState}: any) {
     const pointsOfNewStudents = newStudnets.map(student =>
       studentToDefaultPointMap(root.$store.state.pointMenus)(student),
     )
-    console.log(11, points.length)
     points.push(...pointsOfNewStudents)
-    console.log(22, points.length)
   }
 
   if (points.length > 0) {

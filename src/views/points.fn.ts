@@ -57,15 +57,15 @@ export async function initPoints({root, state}: IAllState) {
   const pointsWithoutDeletedStudents = go(
     result.res,
     filter((point: any) => root.$store.getters.studentMap[point.owner]), // 혹시 삭제된 학생의 포인트가 있다면 제거
+    map((point: any) => ({
+      ...point,
+      owner: root.$store.getters.studentMap[point.owner],
+    })),
   )
 
   // 반미정 친구들 제외
   const points: IPoint[] = go(
     pointsWithoutDeletedStudents,
-    map((point: any) => ({
-      ...point,
-      owner: root.$store.getters.studentMap[point.owner],
-    })),
     exclude(pathEq(['owner', 'teacher'], null)),
   )
 
@@ -111,6 +111,8 @@ export async function initPoints({root, state}: IAllState) {
   const etcStudentPoints: any = filter<IPoint>(pathEq(['owner', 'teacher'], null))(
     pointsWithoutDeletedStudents,
   )
+  console.log('etcStudentPoints.length = ', etcStudentPoints.length)
+  console.log('state.etcStudents.length = ', state.etcStudents.length)
   if (etcStudentPoints.length !== state.etcStudents.length) {
     const newStudents = differenceWith(isEqualStudent, state.etcStudents, etcStudentPoints)
     const pointsOfNewStudents = newStudents.map(defaultPoint)
