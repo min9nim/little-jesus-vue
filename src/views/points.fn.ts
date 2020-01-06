@@ -108,20 +108,11 @@ export async function initPoints({root, state}: IAllState) {
   })
 
   // 반미정인 친구들 목록에 추가
-  const etcStudentPoints: any = filter<IPoint>(pathEq(['owner', 'teacher'], null))(
-    pointsWithoutDeletedStudents,
-  )
-  console.log('etcStudentPoints.length = ', etcStudentPoints.length)
-  console.log('state.etcStudents.length = ', state.etcStudents.length)
-  if (etcStudentPoints.length !== state.etcStudents.length) {
-    const newStudents = differenceWith(isEqualStudent, state.etcStudents, etcStudentPoints)
-    const pointsOfNewStudents = newStudents.map(defaultPoint)
-    etcStudentPoints.push(...pointsOfNewStudents)
-  }
-  state.pointsByTeacher['반미정'] = etcStudentPoints
-
-  // 전체 포인트 합계에 반미정학생들도 추가
-  // state.points.push(...etcStudentPoints)
+  state.pointsByTeacher['반미정'] = getEtcStudentPoints({
+    points: pointsWithoutDeletedStudents,
+    etcStudents: state.etcStudents,
+    defaultPoint,
+  })
 
   // 선생님 목록 가나다 정렬
   const names = Object.keys(state.pointsByTeacher)
@@ -130,6 +121,18 @@ export async function initPoints({root, state}: IAllState) {
     tmp[name] = state.pointsByTeacher[name]
   })
   state.pointsByTeacher = tmp
+}
+
+export function getEtcStudentPoints({points, etcStudents, defaultPoint}) {
+  const etcStudentPoints: any = filter<IPoint>(pathEq(['owner', 'teacher'], null))(points)
+  // console.log('etcStudentPoints.length = ', etcStudentPoints.length)
+  // console.log('state.etcStudents.length = ', state.etcStudents.length)
+  if (etcStudentPoints.length !== etcStudents.length) {
+    const newStudents = differenceWith(isEqualStudent, etcStudents, etcStudentPoints)
+    const pointsOfNewStudents = newStudents.map(defaultPoint)
+    etcStudentPoints.push(...pointsOfNewStudents)
+  }
+  return etcStudentPoints
 }
 
 export function isEqualStudent(a: IStudent, b: IPoint) {
