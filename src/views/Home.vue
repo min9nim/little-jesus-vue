@@ -79,9 +79,9 @@ export default {
         state.editable = false
       },
       hasNoStudent() {
-        if (publicState.teacherId === '') {
-          return true
-        }
+        // if (publicState.teacherId === '') {
+        //   return true
+        // }
         const teacher: any = root.$store.state.teachers.find(propEq('_id', publicState.teacherId))
         if (!teacher) {
           console.log('Not found teacher', publicState.teacherId)
