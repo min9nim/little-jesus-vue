@@ -54,7 +54,7 @@ export async function initPoints({root, state}: IAllState) {
   })
   state.loading = false
 
-  const pointsWithoutDeletedStudents = go(
+  const allStudentPoints = go(
     result.res,
     filter((point: any) => root.$store.getters.studentMap[point.owner]), // 혹시 삭제된 학생의 포인트가 있다면 제거
     map((point: any) => ({
@@ -63,23 +63,24 @@ export async function initPoints({root, state}: IAllState) {
     })),
   )
 
+  const {points, pointsByTeacher} = getPointsByTeacher({
+    allStudentPoints,
+    allTeachers: root.$store.state.teachers,
+    defaultPoint,
+    etcStudents: state.etcStudents,
+  })
+  state.pointsByTeacher = pointsByTeacher
+  state.points = points
+}
+
+export function getPointsByTeacher({allStudentPoints, allTeachers, defaultPoint, etcStudents}) {
   // 반미정 친구들 제외
-  const points: IPoint[] = go(
-    pointsWithoutDeletedStudents,
-    exclude(pathEq(['owner', 'teacher'], null)),
-  )
-
-  if (isNil(points)) {
-    throw Error('points is undefined or null')
-  }
+  const points: IPoint[] = go(allStudentPoints, exclude(pathEq(['owner', 'teacher'], null)))
   // @ts-ignore
-  state.points = filter(path(['owner', 'teacher', 'name']))(points)
-
-  // @ts-ignore
-  state.pointsByTeacher = groupBy(path(['owner', 'teacher', 'name']))(state.points)
-  Object.entries(state.pointsByTeacher).forEach(([teacherName, points]: any) => {
+  const pointsByTeacher = groupBy(path(['owner', 'teacher', 'name']))(points)
+  Object.entries(pointsByTeacher).forEach(([teacherName, points]: any) => {
     let students = go(
-      root.$store.state.teachers,
+      allTeachers,
       find(propEq('name', teacherName)),
       prop('students'),
       exclude(isNil), // 이상하게 학생들 중 undefined 가 포함된 경우가 발견되서 제외시킴 -19/12/28 mgsong
@@ -98,33 +99,40 @@ export async function initPoints({root, state}: IAllState) {
   // 아직 포인트입력 안한 선생님들 목록에 추가
   const diffTeachers: ITeacher[] = differenceWith(
     (t1, t2) => t1.name === t2,
-    root.$store.state.teachers,
-    Object.keys(state.pointsByTeacher),
+    allTeachers,
+    Object.keys(pointsByTeacher),
   )
   diffTeachers.forEach(teacher => {
-    state.pointsByTeacher[teacher.name] = []
+    pointsByTeacher[teacher.name] = []
     const points = teacher.students.map(defaultPoint)
-    state.points.push(...points)
+    points.push(...points)
   })
 
   // 반미정인 친구들 목록에 추가
-  state.pointsByTeacher['반미정'] = getEtcStudentPoints({
-    points: pointsWithoutDeletedStudents,
-    etcStudents: state.etcStudents,
+  pointsByTeacher['반미정'] = getEtcStudentPoints({
+    allStudentPoints,
+    etcStudents,
     defaultPoint,
   })
+  points.push(...pointsByTeacher['반미정'])
 
   // 선생님 목록 가나다 정렬
-  const names = Object.keys(state.pointsByTeacher)
+  const names = Object.keys(pointsByTeacher)
   const tmp: any = {}
   names.sort().forEach(name => {
-    tmp[name] = state.pointsByTeacher[name]
+    tmp[name] = pointsByTeacher[name]
   })
-  state.pointsByTeacher = tmp
+
+  // console.log(points.map(path(['owner', 'name'])))
+
+  return {
+    points,
+    pointsByTeacher: tmp,
+  }
 }
 
-export function getEtcStudentPoints({points, etcStudents, defaultPoint}) {
-  const etcStudentPoints: any = filter<IPoint>(pathEq(['owner', 'teacher'], null))(points)
+export function getEtcStudentPoints({allStudentPoints, etcStudents, defaultPoint}) {
+  const etcStudentPoints: any = filter<IPoint>(pathEq(['owner', 'teacher'], null))(allStudentPoints)
   // console.log('etcStudentPoints.length = ', etcStudentPoints.length)
   // console.log('state.etcStudents.length = ', state.etcStudents.length)
   if (etcStudentPoints.length !== etcStudents.length) {
