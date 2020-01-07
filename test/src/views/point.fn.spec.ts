@@ -7,7 +7,7 @@ describe('point.fn.ts test', () => {
   describe('getEtcStudentPoints', () => {
     it('should return etcStudentPoints', () => {
       const result = getEtcStudentPoints({
-        points,
+        allStudentPoints: points,
         etcStudents,
         defaultPoint: studentToDefaultPointMap(pointMenus),
       })
