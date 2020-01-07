@@ -5,7 +5,7 @@ import {prop, groupBy, path, differenceWith, propEq, map, pathEq, find, filter, 
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 import {IPublicState as IHomeState, IPoint, ITeacher, IStudent} from '@/biz/type'
-import {studentToDefaultPointMap} from '@/biz'
+import {studentToDefaultPointMap, sortKeys} from '@/biz'
 import {go, exclude} from '@mgsong/min-utils'
 
 export interface IState {
@@ -116,18 +116,11 @@ export function getPointsByTeacher({allStudentPoints, allTeachers, defaultPoint,
   })
   points.push(...pointsByTeacher['반미정'])
 
-  // 선생님 목록 가나다 정렬
-  const names = Object.keys(pointsByTeacher)
-  const tmp: any = {}
-  names.sort().forEach(name => {
-    tmp[name] = pointsByTeacher[name]
-  })
-
   // console.log(points.map(path(['owner', 'name'])))
 
   return {
     points,
-    pointsByTeacher: tmp,
+    pointsByTeacher: sortKeys(pointsByTeacher),
   }
 }
 
