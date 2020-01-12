@@ -83,7 +83,11 @@ export default {
         )
         const priority = root.$store.getters.pointMenuMap[menuId].priority
 
-        return props.points.length * maxValue * priority
+        const studentsLength = props.tableBodyHidden
+          ? root.$store.state.students.length
+          : props.points.length
+
+        return studentsLength * maxValue * priority
       },
       itemSum(items: any) {
         if (root.$store.state.pointMenus.length === 0) {
