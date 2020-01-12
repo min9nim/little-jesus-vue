@@ -1,5 +1,5 @@
 <template lang="pug">
-.monthly(v-loading='state.loading')
+.main(v-loading='state.loading')
   .options
     el-date-picker.year-month(
       v-model="state.yearMonth"
@@ -10,8 +10,14 @@
       @change="handleMonthChange"
     )
   .flex-container
-    .item(v-for="date in state.sundays")  
-      points-by-class(:date="date" :use-default-point="true")
+    .item(v-for="(date, index) in state.sundays")  
+      points-by-class(
+        :date="date"
+        :use-default-point="true"
+        :student-name-hidden="index > 0"
+        :teacher-name-hidden="index > 0"
+        :etc-ellipsis="true"
+      )
 </template>
 
 <script lang="ts">
@@ -54,6 +60,10 @@ export default {
 }
 </script>
 <style scoped lang="stylus">
+.main {
+  min-width: 1350px;
+}
+
 .options {
   margin-bottom: 10px;
   text-align: left;

@@ -1,20 +1,20 @@
 <template lang="pug">
-table.items
+table.items(:class="{'etc-ellipsis': etcEllipsis}")
   thead
     tr.row
-      td.name 이름
+      td.name(v-if="!studentNameHidden") 이름
       td(v-for="item in computed.menuItems") {{menuLabel(item.type)}}
       td.etc 기타
       td.point 점수
   tbody(v-if="!tableBodyHidden")
     tr.row(v-for="(point, index) in points" :key="index")
-      td.name {{point.owner.name}}
+      td.name(v-if="!studentNameHidden") {{point.owner.name}}
       td(v-for="item in point.items") {{item.value.split(':')[1]}}
-      td.etc(v-html="nl2br(point.etc.replace(/script/ig, ''))")
+      td.etc.ellipsis(v-html="nl2br(point.etc.replace(/script/ig, ''))")
       td.point {{itemSum(point.items)}}
   tfoot
     tr.row
-      td.name 점수
+      td.name(v-if="!studentNameHidden") 점수
       td(v-for="(item, index) in computed.menuItems") {{pointSum(index)}} / {{totalPointSum(item.type)}}
       td.etc -    
       td.point -        
@@ -39,7 +39,9 @@ export default {
   props: {
     points: Array,
     tableBodyHidden: Boolean,
+    studentNameHidden: Boolean,
     teacherName: String,
+    etcEllipsis: Boolean,
   },
   methods: {prop, nl2br},
   setup(props: any, {root}: any) {
@@ -62,7 +64,7 @@ export default {
 }
 </script>
 <style scoped lang="stylus">
-.items {
+table.items {
   width: 100%;
   font-size: 12px;
   border-collapse: collapse;
@@ -76,13 +78,13 @@ export default {
 
   thead {
     background-color: #f9f9f9;
+
+    .name {
+      width: 50px;
+    }
   }
 
   tbody {
-    .name {
-      min-width: 35px;
-    }
-
     .etc {
       font-size: 10px;
       text-align: left;
@@ -102,5 +104,15 @@ table, th, td {
 td {
   padding: 3px;
   text-align: center;
+}
+
+.etc-ellipsis {
+  table-layout: fixed;
+
+  .ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
 }
 </style>

@@ -13,25 +13,35 @@
     .result(v-for="(points, teacherName) in omit(['반미정'], state.pointsByTeacher)")
       el-card(shadow="hover")
         .title(slot="header")
-          h3.teacher {{teacherName}}
+          h3.teacher(v-if="!teacherNameHidden") {{teacherName}}
           router-link(to="/?edit")
             el-button.btn(
               size="mini"
               icon="el-icon-edit"
               @click="handleClick(teacherName)"
             ) {{points.length ? '수정' : '입력'}}
-        table-point(:points="points" :teacher-name="teacherName")
+        table-point(
+          :etc-ellipsis="etcEllipsis"
+          :student-name-hidden="studentNameHidden"
+          :points="points"
+          :teacher-name="teacherName"
+        )
     .result(v-if="state.pointsByTeacher && state.etcStudents.length > 0")
       el-card(shadow="hover")
         .title(slot="header")
-          h3.teacher 반미정
+          h3.teacher(v-if="!teacherNameHidden") 반미정
           router-link(to="/?edit")
             el-button.btn(
               size="mini"
               icon="el-icon-edit"
               @click="handleClick('반미정')"
             ) {{state.pointsByTeacher['반미정'].length ? '수정' : '입력'}}
-        table-point(:points="state.pointsByTeacher['반미정']" teacher-name="반미정")
+        table-point(
+          :etc-ellipsis="etcEllipsis"
+          :student-name-hidden="studentNameHidden"
+          :points="state.pointsByTeacher['반미정']"
+          teacher-name="반미정"
+        )
   hr
   .sum
     h2 전체합계
@@ -54,7 +64,7 @@ import {propEq, omit} from 'ramda'
 
 export default {
   name: 'points-by-class',
-  props: ['date', 'useDefaultPoint'],
+  props: ['date', 'useDefaultPoint', 'teacherNameHidden', 'studentNameHidden', 'etcEllipsis'],
   components: {TablePoint},
   methods: {omit, propEq},
   setup(props: any, {root}: any) {
