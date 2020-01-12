@@ -1,7 +1,8 @@
 import {IPublicState, IPoint, ITeacher, IStudent} from '@/biz/type'
 import {IState} from '@/views/points.fn'
 import {reactive, computed} from '@vue/composition-api'
-import {prop} from 'ramda'
+import {prop, head, last, split, map, pipe, reduce, filter, propEq, length, find, path} from 'ramda'
+import {flatLog, go, nl2br} from 'mingutils'
 
 export interface IComputed {
   attendanceSum: number
@@ -46,4 +47,98 @@ export function useComputed({root, props}: any) {
     recitationSum: computed(() => props.points.reduce(recitationReducer, 0)),
     invitationSum: computed(() => props.points.reduce(invitationReducer, 0)),
   })
+}
+
+export function usePointSum({props, root}) {
+  return (index: number) => {
+    if (root.$store.state.pointMenus.length === 0) {
+      return 0
+    }
+    const reducer = (acc: number, point: any) => {
+      const item = point.items[index]
+      if (!point.items) {
+        return acc
+      }
+      if (!item) {
+        // 포인트 입력 이후 새로 추가된 항목이 있을 경우 예외 처리
+        return acc
+      }
+      const value = go(item.value, split(':'), last, Number)
+      const label = root.$store.getters.pointMenuMap[item.type].label
+      // console.log('item.type = ' + item.type)
+      const priority = root.$store.getters.pointMenuMap[item.type].priority
+      // console.log({label, value, priority})
+      return acc + value * priority
+      // return acc + value
+    }
+    return props.points.reduce(reducer, 0)
+  }
+}
+
+export function useTotalPointSum({props, root}) {
+  return (menuId: string) => {
+    if (root.$store.state.pointMenus.length === 0) {
+      return 0
+    }
+
+    const maxValue = go(
+      root.$store.getters.pointMenuMap[menuId].type,
+      split(','),
+      map(
+        pipe(
+          split(':'),
+          last,
+          Number,
+        ),
+      ),
+      reduce((a: any, b: any) => (a > b ? a : b), 0),
+    )
+    const priority = root.$store.getters.pointMenuMap[menuId].priority
+
+    const studentsLength = props.tableBodyHidden
+      ? root.$store.state.students.length
+      : go(
+          root.$store.state.teachers,
+          find(propEq('name', props.teacherName)),
+          path(['students', 'length']),
+        )
+
+    return studentsLength * maxValue * priority
+  }
+}
+
+export function useItemSum({root}) {
+  return (items: any) => {
+    if (root.$store.state.pointMenus.length === 0) {
+      return 0
+    }
+    if (!items) {
+      throw Error('Not found items')
+    }
+
+    return items.reduce((acc: any, item: any) => {
+      // console.log('item.type = ' + item.type)
+      // flatLog('root.$store.getters.pointMenuMap = ', root.$store.getters.pointMenuMap)
+      const priority = root.$store.getters.pointMenuMap[item.type].priority
+      const value = go(item.value, split(':'), last, Number)
+      return acc + value * priority
+    }, 0)
+  }
+}
+
+export function usePerfectScoreSum({root}) {
+  return (items: any) => {
+    if (root.$store.state.pointMenus.length === 0) {
+      return 0
+    }
+    if (!items) {
+      throw Error('Not found items')
+    }
+    return items.reduce((acc: any, item: any) => {
+      const perfectScore =
+        (Number(root.$store.getters.pointMenuMap[item.type].type) - 1) *
+        root.$store.getters.pointMenuMap[item.type].priority
+      return acc + perfectScore * root.$store.getters.pointMenuMap[item.type].priority
+    }, 0)
+  }
 }
