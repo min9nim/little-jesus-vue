@@ -10,7 +10,7 @@ table.items
     tr.row(v-for="(point, index) in points" :key="index")
       td.name {{point.owner.name}}
       td(v-for="item in point.items") {{item.value.split(':')[1]}}
-      td.etc(v-html="nl2br(point.etc)")
+      td.etc(v-html="nl2br(point.etc.replace(/script/ig, ''))")
       td.point {{itemSum(point.items)}}
   tfoot
     tr.row
