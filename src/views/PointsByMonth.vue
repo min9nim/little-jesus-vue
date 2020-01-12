@@ -11,7 +11,7 @@
     )
   .flex-container
     .item(v-for="date in state.sundays")  
-      points-by-class(:date="date")
+      points-by-class(:date="date" :use-default-point="true")
 </template>
 
 <script lang="ts">

@@ -54,16 +54,16 @@ import {propEq, omit} from 'ramda'
 
 export default {
   name: 'points-by-class',
-  props: ['date', 'showList'],
+  props: ['date', 'useDefaultPoint'],
   components: {TablePoint},
   methods: {omit, propEq},
   setup(props: any, {root}: any) {
     const homeState: IHomeState = useHomeState()
     const state: IState = useState({props, root})
-    const handleDateChange = useHandleDateChange({root, state})
+    const handleDateChange = useHandleDateChange({props, root, state})
     const handleClick = useHandleClick(root, homeState)
     // onBeforeMount(useBeforeMount({root, state}))
-    watch(() => root.$store.state.teachers.length, useBeforeMount({root, state}))
+    watch(() => root.$store.state.teachers.length, useBeforeMount({props, root, state}))
     return {
       state,
       homeState,

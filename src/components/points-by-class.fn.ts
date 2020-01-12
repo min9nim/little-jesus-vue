@@ -6,7 +6,7 @@ import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 import {IPublicState as IHomeState, IPoint, ITeacher, IStudent} from '@/biz/type'
 import {studentToDefaultPointMap, sortKeys} from '@/biz'
-import {go, exclude} from 'mingutils'
+import {go, exclude, flatLog} from 'mingutils'
 
 export interface IState {
   date?: string
@@ -23,7 +23,7 @@ export interface IAllState {
   homeState?: IHomeState
 }
 
-export function useHandleDateChange({root, state}: IAllState) {
+export function useHandleDateChange({props, root, state}) {
   return async (value: string) => {
     if (moment(value, 'YYYYMMDD').format('dddd') !== 'Sunday') {
       await MessageBox.alert('일요일만 선택가능합니다', {type: 'warning'})
@@ -33,19 +33,19 @@ export function useHandleDateChange({root, state}: IAllState) {
     state.oldDate = state.date
     root.$store.commit('setDate', state.date)
 
-    await initPoints({root, state})
+    await initPoints({props, root, state})
   }
 }
 
-export function useBeforeMount({root, state}: IAllState) {
+export function useBeforeMount({props, root, state}) {
   return async () => {
     if (root.$store.state.teachers.length === 0) {
       return
     }
-    await initPoints({root, state})
+    await initPoints({props, root, state})
   }
 }
-export async function initPoints({root, state}: IAllState) {
+export async function initPoints({props, root, state}) {
   const {pointMenus} = root.$store.state
   const defaultPoint = studentToDefaultPointMap(pointMenus)
   state.loading = true
@@ -68,18 +68,30 @@ export async function initPoints({root, state}: IAllState) {
     allTeachers: root.$store.state.teachers,
     defaultPoint,
     etcStudents: state.etcStudents,
+    useDefaultPoint: props.useDefaultPoint,
   })
   state.pointsByTeacher = pointsByTeacher
   state.points = points
 }
 
-export function getPointsByTeacher({allStudentPoints, allTeachers, defaultPoint, etcStudents}) {
+export function getPointsByTeacher({
+  allStudentPoints,
+  allTeachers,
+  defaultPoint,
+  etcStudents,
+  useDefaultPoint,
+}) {
   // 반미정 친구들 제외
   const points: IPoint[] = go(allStudentPoints, exclude(pathEq(['owner', 'teacher'], null)))
   // @ts-ignore
   const pointsByTeacher = groupBy(path(['owner', 'teacher', 'name']))(points)
-  console.log(pointsByTeacher)
-  console.log(allTeachers)
+  if (useDefaultPoint) {
+    allTeachers.forEach(teacher => {
+      if (!pointsByTeacher[teacher.name]) {
+        pointsByTeacher[teacher.name] = []
+      }
+    })
+  }
   Object.entries(pointsByTeacher).forEach(([teacherName, points]: any) => {
     let students = go(
       allTeachers,
