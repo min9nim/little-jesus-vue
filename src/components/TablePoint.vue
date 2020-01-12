@@ -10,7 +10,7 @@ table.items
     tr.row(v-for="(point, index) in points" :key="index")
       td.name {{point.owner.name}}
       td(v-for="item in point.items") {{item.value.split(':')[1]}}
-      td.etc {{point.etc}}
+      td.etc(v-html="nl2br(point.etc)")
       td.point {{itemSum(point.items)}}
   tfoot
     tr.row
@@ -25,7 +25,7 @@ import {IComputed, useComputed} from '../components/table-point.fn'
 import {IPublicState, IPoint, ITeacher} from '../biz/type'
 import {usePublicState} from '../views/home.fn'
 import {prop, head, last, split, map, pipe, reduce, filter, propEq, length, find, path} from 'ramda'
-import {flatLog, go} from '@mgsong/min-utils'
+import {flatLog, go, nl2br} from '@mgsong/min-utils'
 
 export default {
   name: 'table-point',
@@ -34,7 +34,7 @@ export default {
     tableBodyHidden: Boolean,
     teacherName: String,
   },
-  methods: {prop},
+  methods: {prop, nl2br},
   setup(props: any, {root}: any) {
     const computed: IComputed = useComputed({root, props})
     return {
