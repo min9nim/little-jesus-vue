@@ -5,7 +5,7 @@ import moment from 'moment'
 import {qCreatePoint, qInitialize, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
 import {MessageBox, Notification} from 'element-ui'
 import {IPublicState, ITeacher, IPoint} from '@/biz/type'
-import {findById, go} from '@mgsong/min-utils'
+import {findById, go} from 'mingutils'
 import equals from 'ramda/es/equals'
 import {studentToDefaultPointMap} from '@/biz'
 

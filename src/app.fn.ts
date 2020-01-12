@@ -1,7 +1,7 @@
 import {qInitialize} from '@/biz/query'
 import {nameAscending, req} from '@/utils'
 import {propEq, find, pipe, omit, prop, includes, map, sort} from 'ramda'
-import {go, exclude} from '@mgsong/min-utils'
+import {go, exclude} from 'mingutils'
 import isNil from 'ramda/es/isNil'
 
 export function findTeacherByStudentId(teachers: any[]) {

@@ -9,7 +9,7 @@ import locale from 'element-ui/lib/locale/lang/ko'
 // import {ko} from 'element-ui/locale'   // not exist
 import * as Sentry from '@sentry/browser'
 import * as Integrations from '@sentry/integrations'
-import {flatLog} from '@mgsong/min-utils'
+import {flatLog} from 'mingutils'
 import {setApiServer} from '@/utils'
 
 if (window.location.host === 'little-jesus.now.sh') {

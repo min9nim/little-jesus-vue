@@ -6,7 +6,7 @@ import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 import {IPublicState as IHomeState, IPoint, ITeacher, IStudent} from '@/biz/type'
 import {studentToDefaultPointMap, sortKeys} from '@/biz'
-import {go, exclude} from '@mgsong/min-utils'
+import {go, exclude} from 'mingutils'
 
 export interface IState {
   date?: string

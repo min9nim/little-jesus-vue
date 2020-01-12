@@ -781,13 +781,6 @@
     request-promise "^4.1.1"
     yargs "^8.0.2"
 
-"@mgsong/min-utils@0.0.13":
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/@mgsong/min-utils/-/min-utils-0.0.13.tgz#7a35d96a0fb78cfcb633694cc40aa597472b45b2"
-  integrity sha512-bKsuWrtqmZbWq7MEbt3mX3t6srsJSYnKu1PfkxAlfGIF4aG2xZ/wxjYzFiOnyXjrCC9H5eox2V+iTvInWxq5hQ==
-  dependencies:
-    ramda "^0.26.1"
-
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -6627,6 +6620,13 @@ mimic-fn@^2.0.0, mimic-fn@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
+
+mingutils@0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/mingutils/-/mingutils-0.0.7.tgz#017d437de87bab56d1575ae971a7a80cc1a2e898"
+  integrity sha512-u3JFT2k9zHkpTphXUOQ2p67T2FqKuiaEVb7nkOn57k85wVlqmcwze+Oo16bQdBVboz2uDs0N37Fg8uTPWOtd7w==
+  dependencies:
+    ramda "^0.26.1"
 
 mini-css-extract-plugin@^0.8.0:
   version "0.8.0"

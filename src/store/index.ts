@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import {IPointMenu, ITeacher, IPoint, IStudent} from '@/biz/type'
 import {split, map} from 'ramda'
-import {go} from '@mgsong/min-utils'
+import {go} from 'mingutils'
 
 Vue.use(Vuex)
 

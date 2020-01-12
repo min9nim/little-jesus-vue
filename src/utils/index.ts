@@ -1,6 +1,6 @@
 import axios from 'axios'
 import {print} from 'graphql/language/printer'
-import {getQueryParams} from '@mgsong/min-utils'
+import {getQueryParams} from 'mingutils'
 import {path} from 'ramda'
 
 const url: any = {

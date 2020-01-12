@@ -25,7 +25,7 @@
 import {createComponent, reactive, computed, watch} from '@vue/composition-api'
 import {useState, usePublicState as useHomeState} from '../views/home.fn'
 import {propEq, pathEq, prop, split, map} from 'ramda'
-import {go} from '@mgsong/min-utils'
+import {go} from 'mingutils'
 import Vue from 'vue'
 
 export default createComponent({

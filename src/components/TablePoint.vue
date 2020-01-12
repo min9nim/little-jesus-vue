@@ -25,7 +25,7 @@ import {IComputed, useComputed} from '../components/table-point.fn'
 import {IPublicState, IPoint, ITeacher} from '../biz/type'
 import {usePublicState} from '../views/home.fn'
 import {prop, head, last, split, map, pipe, reduce, filter, propEq, length, find, path} from 'ramda'
-import {flatLog, go, nl2br} from '@mgsong/min-utils'
+import {flatLog, go, nl2br} from 'mingutils'
 
 export default {
   name: 'table-point',

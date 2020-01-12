@@ -2,7 +2,7 @@ import moment from 'moment'
 import {req} from '@/utils'
 import {qPointsFromTo} from '@/biz/query'
 import {groupBy, filter, path, propEq, map, split, last} from 'ramda'
-import {go} from '@mgsong/min-utils'
+import {go} from 'mingutils'
 
 export function useHandleMonthChange({state, root}) {
   return async (value: string) => {

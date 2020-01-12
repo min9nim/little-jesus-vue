@@ -2,7 +2,7 @@ import moment from 'moment'
 import {req} from '@/utils'
 import {qPointsFromTo} from '@/biz/query'
 import {groupBy, path, map, filter} from 'ramda'
-import {go} from '@mgsong/min-utils'
+import {go} from 'mingutils'
 import {getPointSumOfWeek} from './monthly.fn'
 
 export function useHandleQuarterChange({state, root}: any) {

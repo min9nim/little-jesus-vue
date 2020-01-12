@@ -1,6 +1,6 @@
 import {IStudent} from './type'
 import {map, sort} from 'ramda'
-import {go} from '@mgsong/min-utils'
+import {go} from 'mingutils'
 import {_idAscending} from '@/utils'
 import {MessageBox} from 'element-ui'
 
