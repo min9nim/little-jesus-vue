@@ -20,7 +20,7 @@
               icon="el-icon-edit"
               @click="handleClick(teacherName)"
             ) {{points.length ? '수정' : '입력'}}
-        table-point(:points="points")
+        table-point(:points="points" :teacher-name="teacherName")
     .result(v-if="state.pointsByTeacher && state.etcStudents.length > 0")
       el-card(shadow="hover")
         .title(slot="header")
@@ -31,7 +31,7 @@
               icon="el-icon-edit"
               @click="handleClick('반미정')"
             ) {{state.pointsByTeacher['반미정'].length ? '수정' : '입력'}}
-        table-point(:points="state.pointsByTeacher['반미정']")      
+        table-point(:points="state.pointsByTeacher['반미정']" teacher-name="반미정")
   hr
   .sum
     h2 전체합계

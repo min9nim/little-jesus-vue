@@ -24,7 +24,7 @@ table.items
 import {IComputed, useComputed} from '../components/table-point.fn'
 import {IPublicState, IPoint, ITeacher} from '../biz/type'
 import {usePublicState} from '../views/home.fn'
-import {prop, head, last, split, map, pipe, reduce} from 'ramda'
+import {prop, head, last, split, map, pipe, reduce, filter, propEq, length, find, path} from 'ramda'
 import {flatLog, go} from '@mgsong/min-utils'
 
 export default {
@@ -32,6 +32,7 @@ export default {
   props: {
     points: Array,
     tableBodyHidden: Boolean,
+    teacherName: String,
   },
   methods: {prop},
   setup(props: any, {root}: any) {
@@ -85,7 +86,11 @@ export default {
 
         const studentsLength = props.tableBodyHidden
           ? root.$store.state.students.length
-          : props.points.length
+          : go(
+              root.$store.state.teachers,
+              find(propEq('name', props.teacherName)),
+              path(['students', 'length']),
+            )
 
         return studentsLength * maxValue * priority
       },
