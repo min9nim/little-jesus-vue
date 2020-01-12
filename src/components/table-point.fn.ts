@@ -1,8 +1,7 @@
-import {IPublicState, IPoint, ITeacher, IStudent} from '@/biz/type'
-import {IState} from '@/views/points.fn'
+import {IPoint} from '@/biz/type'
 import {reactive, computed} from '@vue/composition-api'
-import {prop, head, last, split, map, pipe, reduce, filter, propEq, length, find, path} from 'ramda'
-import {flatLog, go, nl2br} from 'mingutils'
+import {prop, last, split, map, pipe, reduce, propEq, find, path} from 'ramda'
+import {go} from 'mingutils'
 
 export interface IComputed {
   attendanceSum: number
@@ -64,7 +63,7 @@ export function usePointSum({props, root}) {
         return acc
       }
       const value = go(item.value, split(':'), last, Number)
-      const label = root.$store.getters.pointMenuMap[item.type].label
+      // const label = root.$store.getters.pointMenuMap[item.type].label
       // console.log('item.type = ' + item.type)
       const priority = root.$store.getters.pointMenuMap[item.type].priority
       // console.log({label, value, priority})

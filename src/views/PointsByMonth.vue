@@ -1,79 +1,72 @@
 <template lang="pug">
-.home 준비 중
+.monthly(v-loading='state.loading')
+  .options
+    el-date-picker.year-month(
+      v-model="state.yearMonth"
+      type="month"
+      format="yyyy년 MM월"
+      value-format="yyyyMM"
+      placeholder="월 선택"
+      @change="handleMonthChange"
+    )
+  .flex-container
+    .item(v-for="date in state.sundays")  
+      points-by-class(:date="date")
 </template>
 
 <script lang="ts">
-import {createComponent, onBeforeMount, watch} from '@vue/composition-api'
-import {usePublicState as useHomeState} from './home.fn'
-import TablePoint from '../components/TablePoint.vue'
-import {useState, IState, useHandleDateChange, useBeforeMount, useHandleClick} from './points.fn'
-import {IPublicState as IHomeState, IPoint, ITeacher} from '../biz/type'
-import {propEq, omit} from 'ramda'
-
+import {
+  createComponent,
+  onBeforeMount,
+  reactive,
+  computed,
+  Ref,
+  onMounted,
+  watch,
+} from '@vue/composition-api'
+import {useHandleMonthChange, getSundaysOfMonth} from './monthly.fn'
+import PointsByClass from '../components/PointsByClass.vue'
+import moment from 'moment'
+interface IState {
+  yearMonth: string
+  loading: boolean
+  tableData: any[]
+  sundays: Ref<string[]>
+}
 export default {
-  name: 'v-points',
-  components: {TablePoint},
-  methods: {omit, propEq},
+  name: 'points-by-month',
+  components: {PointsByClass},
   setup(props: any, {root}: any) {
-    const homeState: IHomeState = useHomeState()
-    const state: IState = useState(root)
-    const handleDateChange = useHandleDateChange({root, state})
-    const handleClick = useHandleClick(root, homeState)
-    // onBeforeMount(useBeforeMount({root, state}))
-    watch(() => root.$store.state.teachers.length, useBeforeMount({root, state}))
+    const state: any = reactive({
+      yearMonth: moment().format('YYYYMM'),
+      loading: true,
+      tableData: [],
+      sundays: computed(() => getSundaysOfMonth(state.yearMonth, 'YYYYMMDD')),
+    })
+    const handleMonthChange = useHandleMonthChange({state, root})
+    // onMounted(() => handleMonthChange(state.yearMonth))
+    watch(() => root.$store.state.teachers.length, () => handleMonthChange(state.yearMonth))
     return {
       state,
-      homeState,
-      handleClick,
-      handleDateChange,
-      teacherVisible(teacherName: string) {
-        const teacher: any = root.$store.state.teachers.find(propEq('name', '반미정'))
-        return teacherName !== '반미정' || teacher.students.length > 0
-      },
+      handleMonthChange,
     }
   },
 }
 </script>
 <style scoped lang="stylus">
-.home {
-  // margin: 0 10px;
-  padding: 5px;
+.options {
+  margin-bottom: 10px;
   text-align: left;
 
-  .options {
-    .teacher {
-      width: 150px;
-    }
-
-    .date {
-      margin-left: 0;
-      width: 140px;
-    }
+  .year-month {
+    width: 150px;
   }
+}
 
-  hr {
-    margin-top: 30px;
-  }
+.flex-container {
+  display: flex;
 
-  .result {
-    margin-top: 10px;
-
-    .title {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-
-      .teacher {
-        margin: 0;
-      }
-
-      .btn {
-        height: 25px;
-        display: inline-block;
-        margin-left: 15px;
-        padding: 7px 7px;
-      }
-    }
+  .item {
   }
 }
 </style>

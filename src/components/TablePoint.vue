@@ -28,7 +28,7 @@ import {
   useTotalPointSum,
   useItemSum,
   usePerfectScoreSum,
-} from '../components/table-point.fn'
+} from './table-point.fn'
 import {IPublicState, IPoint, ITeacher} from '../biz/type'
 import {usePublicState} from '../views/home.fn'
 import {prop, head, last, split, map, pipe, reduce, filter, propEq, length, find, path} from 'ramda'

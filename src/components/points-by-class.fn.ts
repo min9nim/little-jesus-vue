@@ -78,6 +78,8 @@ export function getPointsByTeacher({allStudentPoints, allTeachers, defaultPoint,
   const points: IPoint[] = go(allStudentPoints, exclude(pathEq(['owner', 'teacher'], null)))
   // @ts-ignore
   const pointsByTeacher = groupBy(path(['owner', 'teacher', 'name']))(points)
+  console.log(pointsByTeacher)
+  console.log(allTeachers)
   Object.entries(pointsByTeacher).forEach(([teacherName, points]: any) => {
     let students = go(
       allTeachers,

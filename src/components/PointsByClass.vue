@@ -41,13 +41,19 @@
 <script lang="ts">
 import {createComponent, onBeforeMount, watch} from '@vue/composition-api'
 import {usePublicState as useHomeState} from '../views/home.fn'
-import TablePoint from '../components/TablePoint.vue'
-import {useState, IState, useHandleDateChange, useBeforeMount, useHandleClick} from './points.fn'
+import TablePoint from './TablePoint.vue'
+import {
+  useState,
+  IState,
+  useHandleDateChange,
+  useBeforeMount,
+  useHandleClick,
+} from './points-by-class.fn'
 import {IPublicState as IHomeState, IPoint, ITeacher} from '../biz/type'
 import {propEq, omit} from 'ramda'
 
 export default {
-  name: 'v-points',
+  name: 'points-by-class',
   props: ['date', 'showList'],
   components: {TablePoint},
   methods: {omit, propEq},
