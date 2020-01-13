@@ -8,6 +8,7 @@
       value-format="yyyyMMdd"
       placeholder="날짜 선택"
       @change="handleDateChange"
+      :readonly="Boolean(date)"
     )
   .pointsByTeacher(v-if="!state.loading")
     .result(v-for="(points, teacherName) in omit(['반미정'], state.pointsByTeacher)")
