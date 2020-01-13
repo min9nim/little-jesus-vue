@@ -1,15 +1,4 @@
 import moment from 'moment'
-import {req} from '@/utils'
-import {qPointsFromTo} from '@/biz/query'
-import {groupBy, filter, path, propEq, map, split, last} from 'ramda'
-import {go} from 'mingutils'
-
-export function useHandleMonthChange({state, root}) {
-  return async (value: string) => {
-    state.sundays = getSundaysOfMonth(value, 'YYYYMMDD')
-    console.log(state.sundays)
-  }
-}
 
 export function getSundaysOfMonth(yearMonth: string, outputFormat = 'MM/DD') {
   const month = yearMonth.slice(-2)
@@ -45,6 +34,5 @@ export function getSundaysOfMonth(yearMonth: string, outputFormat = 'MM/DD') {
   if (sunday6.format('MM') === month) {
     result.push(sunday6.format(outputFormat))
   }
-  console.log(result)
   return result
 }

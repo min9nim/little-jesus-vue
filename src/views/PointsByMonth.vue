@@ -15,8 +15,8 @@
         date-format="M월 d일"
         :date="date"
         :use-default-point="true"
-        :student-name-hidden="index > 0"
-        :teacher-name-hidden="index > 0"
+        :student-name-hidden="false"
+        :teacher-name-hidden="false"
         :overflow-ellipsis="true"
       )
 </template>
@@ -31,7 +31,7 @@ import {
   onMounted,
   watch,
 } from '@vue/composition-api'
-import {useHandleMonthChange, getSundaysOfMonth} from './points-by-month.fn'
+import {getSundaysOfMonth} from './points-by-month.fn'
 import PointsByClass from '../components/PointsByClass.vue'
 import moment from 'moment'
 interface IState {
@@ -49,12 +49,13 @@ export default {
       loading: false,
       sundays: getSundaysOfMonth(moment().format('YYYYMM'), 'YYYYMMDD'),
     })
-    const handleMonthChange = useHandleMonthChange({state, root})
     // onMounted(() => handleMonthChange(state.yearMonth))
     // watch(() => root.$store.state.teachers.length, () => handleMonthChange(state.yearMonth))
     return {
       state,
-      handleMonthChange,
+      handleMonthChange: (value: string) => {
+        state.sundays = getSundaysOfMonth(value, 'YYYYMMDD')
+      },
     }
   },
 }
