@@ -12,6 +12,7 @@
   .flex-container
     .item(v-for="(date, index) in state.sundays")  
       points-by-class(
+        date-format="M월 d일"
         :date="date"
         :use-default-point="true"
         :student-name-hidden="index > 0"

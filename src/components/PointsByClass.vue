@@ -4,7 +4,7 @@
     el-date-picker.date(
       v-model="state.date"
       type="date"
-      format="yyyy-MM-dd"
+      :format="dateFormat"
       value-format="yyyyMMdd"
       placeholder="날짜 선택"
       @change="handleDateChange"
@@ -64,7 +64,14 @@ import {propEq, omit} from 'ramda'
 
 export default {
   name: 'points-by-class',
-  props: ['date', 'useDefaultPoint', 'teacherNameHidden', 'studentNameHidden', 'overflowEllipsis'],
+  props: [
+    'date',
+    'useDefaultPoint',
+    'teacherNameHidden',
+    'studentNameHidden',
+    'overflowEllipsis',
+    'dateFormat',
+  ],
   components: {TablePoint},
   methods: {omit, propEq},
   setup(props: any, {root}: any) {

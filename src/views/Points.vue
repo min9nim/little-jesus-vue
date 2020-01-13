@@ -1,5 +1,5 @@
 <template lang="pug">
-  points-by-class
+  points-by-class(date-format="M월 d일")
 </template>
 
 <script lang="ts">
