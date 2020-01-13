@@ -89,6 +89,9 @@ export default {
     watch(
       () => props.date,
       () => {
+        if (!props.date) {
+          return
+        }
         state.date = props.date
         handleDateChange(props.date)
       },
