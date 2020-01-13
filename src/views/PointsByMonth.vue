@@ -10,7 +10,7 @@
       @change="handleMonthChange"
     )
   .flex-container
-    .item(v-for="(date, index) in state.sundays")  
+    .item(v-for="(date, index) in state.sundays")
       points-by-class(
         date-format="M월 d일"
         :date="date"
@@ -31,7 +31,7 @@ import {
   onMounted,
   watch,
 } from '@vue/composition-api'
-import {useHandleMonthChange, getSundaysOfMonth} from './monthly.fn'
+import {useHandleMonthChange, getSundaysOfMonth} from './points-by-month.fn'
 import PointsByClass from '../components/PointsByClass.vue'
 import moment from 'moment'
 interface IState {
@@ -46,13 +46,12 @@ export default {
   setup(props: any, {root}: any) {
     const state: any = reactive({
       yearMonth: moment().format('YYYYMM'),
-      loading: true,
-      tableData: [],
-      sundays: computed(() => getSundaysOfMonth(state.yearMonth, 'YYYYMMDD')),
+      loading: false,
+      sundays: getSundaysOfMonth(moment().format('YYYYMM'), 'YYYYMMDD'),
     })
     const handleMonthChange = useHandleMonthChange({state, root})
     // onMounted(() => handleMonthChange(state.yearMonth))
-    watch(() => root.$store.state.teachers.length, () => handleMonthChange(state.yearMonth))
+    // watch(() => root.$store.state.teachers.length, () => handleMonthChange(state.yearMonth))
     return {
       state,
       handleMonthChange,

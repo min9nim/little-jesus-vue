@@ -82,6 +82,13 @@ export default {
     const handleClick = useHandleClick(root, state, homeState)
     // onBeforeMount(useBeforeMount({root, state}))
     watch(() => root.$store.state.teachers.length, useBeforeMount({props, root, state}))
+    watch(
+      () => props.date,
+      () => {
+        state.date = props.date
+        handleDateChange(props.date)
+      },
+    )
     return {
       state,
       homeState,
