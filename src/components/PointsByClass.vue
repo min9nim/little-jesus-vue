@@ -15,6 +15,7 @@
       el-card(shadow="hover")
         .title(slot="header")
           h3.teacher {{teacherNameHidden ? '' : teacherName}}
+          .date - {{state.dateFormatted}} -
           router-link(to="/?edit")
             el-button.btn(
               size="mini"
@@ -31,6 +32,7 @@
       el-card(shadow="hover")
         .title(slot="header")
           h3.teacher {{teacherNameHidden ? '' : '반미정'}}
+          .date - {{state.dateFormatted}} -
           router-link(to="/?edit")
             el-button.btn(
               size="mini"
@@ -134,6 +136,12 @@ export default {
 
       .teacher {
         margin: 0;
+        flex: 1;
+      }
+
+      .date {
+        font-size: 12px;
+        padding-top: 2px;
       }
 
       .btn {

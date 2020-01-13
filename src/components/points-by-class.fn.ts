@@ -174,6 +174,7 @@ export function useState({props, root}: any): IState {
         .format('YYYYMMDD'),
     loading: true,
     points: [],
+    dateFormatted: computed(() => moment(state.date, 'YYYYMMDD').format('M월 D일')),
     etcStudents: computed(() => {
       if (root.$store.state.teachers.length === 0) {
         return []
