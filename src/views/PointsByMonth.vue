@@ -17,6 +17,7 @@
         :use-default-point="true"
         :student-name-hidden="false"
         :teacher-name-hidden="false"
+        :date-visible="true"
         :overflow-ellipsis="true"
       )
 </template>

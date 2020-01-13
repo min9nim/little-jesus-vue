@@ -15,7 +15,7 @@
       el-card(shadow="hover")
         .title(slot="header")
           h3.teacher {{teacherNameHidden ? '' : teacherName}}
-          .date - {{state.dateFormatted}} -
+          .date(v-show="dateVisible") - {{state.dateFormatted}} -
           router-link(to="/?edit")
             el-button.btn(
               size="mini"
@@ -32,7 +32,7 @@
       el-card(shadow="hover")
         .title(slot="header")
           h3.teacher {{teacherNameHidden ? '' : '반미정'}}
-          .date - {{state.dateFormatted}} -
+          .date(v-show="dateVisible") - {{state.dateFormatted}} -
           router-link(to="/?edit")
             el-button.btn(
               size="mini"
@@ -49,7 +49,7 @@
   .sum
     .title
       h2 {{teacherNameHidden ? ' ' : '전체합계'}}
-      .date - {{state.dateFormatted}} -
+      .date(v-show="dateVisible") - {{state.dateFormatted}} -
     table-point(:points="state.points" :table-body-hidden="true")
 </template>
 
@@ -74,6 +74,7 @@ export default {
     'useDefaultPoint',
     'teacherNameHidden',
     'studentNameHidden',
+    'dateVisible',
     'overflowEllipsis',
     'dateFormat',
   ],
