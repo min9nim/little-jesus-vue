@@ -16,7 +16,7 @@
         :use-default-point="true"
         :student-name-hidden="index > 0"
         :teacher-name-hidden="index > 0"
-        :etc-ellipsis="true"
+        :overflow-ellipsis="true"
       )
 </template>
 

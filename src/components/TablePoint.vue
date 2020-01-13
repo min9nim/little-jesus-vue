@@ -1,21 +1,21 @@
 <template lang="pug">
-table.items(:class="{'etc-ellipsis': etcEllipsis}")
+table.items(:class="{'overflow-ellipsis': overflowEllipsis}")
   thead
     tr.row
       td.name(v-if="!studentNameHidden") 이름
-      td(v-for="item in computed.menuItems") {{menuLabel(item.type)}}
+      td.ellipsis(v-for="item in computed.menuItems") {{menuLabel(item.type)}}
       td.etc 기타
       td.point 점수
   tbody(v-if="!tableBodyHidden")
     tr.row(v-for="(point, index) in points" :key="index")
       td.name(v-if="!studentNameHidden") {{point.owner.name}}
       td(v-for="item in point.items") {{item.value.split(':')[1]}}
-      td.etc.ellipsis(v-html="nl2br(point.etc.replace(/script/ig, ''))")
+      td.etc.ellipsis(v-html="nl2br(point.etc)" :title="nl2br(point.etc)")
       td.point {{itemSum(point.items)}}
   tfoot
     tr.row
       td.name(v-if="!studentNameHidden") 점수
-      td(v-for="(item, index) in computed.menuItems") {{pointSum(index)}} / {{totalPointSum(item.type)}}
+      td.ellipsis(v-for="(item, index) in computed.menuItems") {{pointSum(index)}} / {{totalPointSum(item.type)}}
       td.etc -    
       td.point -        
 </template>
@@ -31,7 +31,22 @@ import {
 } from './table-point.fn'
 import {IPublicState, IPoint, ITeacher} from '../biz/type'
 import {usePublicState} from '../views/home.fn'
-import {prop, head, last, split, map, pipe, reduce, filter, propEq, length, find, path} from 'ramda'
+import {
+  prop,
+  head,
+  last,
+  split,
+  map,
+  pipe,
+  reduce,
+  filter,
+  propEq,
+  length,
+  find,
+  path,
+  ifElse,
+  replace,
+} from 'ramda'
 import {flatLog, go, nl2br} from 'mingutils'
 
 export default {
@@ -41,9 +56,9 @@ export default {
     tableBodyHidden: Boolean,
     studentNameHidden: Boolean,
     teacherName: String,
-    etcEllipsis: Boolean,
+    overflowEllipsis: Boolean,
   },
-  methods: {prop, nl2br},
+  methods: {prop},
   setup(props: any, {root}: any) {
     const computed: IComputed = useComputed({root, props})
     const pointSum = usePointSum({props, root})
@@ -59,6 +74,11 @@ export default {
       totalPointSum,
       itemSum,
       perfectScoreSum,
+      nl2br: str => {
+        // 개행처리가 들어가면 points-by-month 에서 테이블 높이가 조금씩 틀어져서 임시처리를 추가함
+        const removed = replace(/script/gi, '')(str)
+        return props.overflowEllipsis ? removed : nl2br(removed)
+      },
     }
   },
 }
@@ -106,7 +126,7 @@ td {
   text-align: center;
 }
 
-.etc-ellipsis {
+.overflow-ellipsis {
   table-layout: fixed;
 
   .ellipsis {

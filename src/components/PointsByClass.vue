@@ -13,7 +13,7 @@
     .result(v-for="(points, teacherName) in omit(['반미정'], state.pointsByTeacher)")
       el-card(shadow="hover")
         .title(slot="header")
-          h3.teacher(v-if="!teacherNameHidden") {{teacherName}}
+          h3.teacher {{teacherNameHidden ? '' : teacherName}}
           router-link(to="/?edit")
             el-button.btn(
               size="mini"
@@ -21,7 +21,7 @@
               @click="handleClick(teacherName)"
             ) {{points.length ? '수정' : '입력'}}
         table-point(
-          :etc-ellipsis="etcEllipsis"
+          :overflow-ellipsis="overflowEllipsis"
           :student-name-hidden="studentNameHidden"
           :points="points"
           :teacher-name="teacherName"
@@ -29,7 +29,7 @@
     .result(v-if="state.pointsByTeacher && state.etcStudents.length > 0")
       el-card(shadow="hover")
         .title(slot="header")
-          h3.teacher(v-if="!teacherNameHidden") 반미정
+          h3.teacher {{teacherNameHidden ? '' : '반미정'}}
           router-link(to="/?edit")
             el-button.btn(
               size="mini"
@@ -37,14 +37,14 @@
               @click="handleClick('반미정')"
             ) {{state.pointsByTeacher['반미정'].length ? '수정' : '입력'}}
         table-point(
-          :etc-ellipsis="etcEllipsis"
+          :overflow-ellipsis="overflowEllipsis"
           :student-name-hidden="studentNameHidden"
           :points="state.pointsByTeacher['반미정']"
           teacher-name="반미정"
         )
   hr
   .sum
-    h2 전체합계
+    h2 {{teacherNameHidden ? ' ' : '전체합계'}}
     table-point(:points="state.points" :table-body-hidden="true")
 </template>
 
@@ -64,7 +64,7 @@ import {propEq, omit} from 'ramda'
 
 export default {
   name: 'points-by-class',
-  props: ['date', 'useDefaultPoint', 'teacherNameHidden', 'studentNameHidden', 'etcEllipsis'],
+  props: ['date', 'useDefaultPoint', 'teacherNameHidden', 'studentNameHidden', 'overflowEllipsis'],
   components: {TablePoint},
   methods: {omit, propEq},
   setup(props: any, {root}: any) {
@@ -115,6 +115,7 @@ export default {
       display: flex;
       align-items: center;
       justify-content: space-between;
+      height: 20px;
 
       .teacher {
         margin: 0;
@@ -126,6 +127,13 @@ export default {
         margin-left: 15px;
         padding: 7px 7px;
       }
+    }
+  }
+
+  .sum {
+    h2 {
+      height: 30px;
+      margin: 10px 0;
     }
   }
 }
