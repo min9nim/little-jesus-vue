@@ -190,12 +190,13 @@ export function useState({props, root}: any): IState {
   return state
 }
 
-export function useHandleClick(root: any, homeState: IHomeState) {
+export function useHandleClick(root: any, state, homeState: IHomeState) {
   return (teacherName: string) => {
     const tab1 = window.document.getElementById('tab-/')
     if (!tab1) {
       throw Error('Not found tab1')
     }
+    root.$store.commit('setDate', state.date)
     tab1.click()
     const teacher = root.$store.state.teachers.find(propEq('name', teacherName))
     if (!teacher) {

@@ -78,7 +78,7 @@ export default {
     const homeState: IHomeState = useHomeState()
     const state: IState = useState({props, root})
     const handleDateChange = useHandleDateChange({props, root, state})
-    const handleClick = useHandleClick(root, homeState)
+    const handleClick = useHandleClick(root, state, homeState)
     // onBeforeMount(useBeforeMount({root, state}))
     watch(() => root.$store.state.teachers.length, useBeforeMount({props, root, state}))
     return {
