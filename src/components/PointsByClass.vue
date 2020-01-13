@@ -47,7 +47,9 @@
         )
   hr
   .sum
-    h2 {{teacherNameHidden ? ' ' : '전체합계'}}
+    .title
+      h2 {{teacherNameHidden ? ' ' : '전체합계'}}
+      .date - {{state.dateFormatted}} -
     table-point(:points="state.points" :table-body-hidden="true")
 </template>
 
@@ -154,9 +156,21 @@ export default {
   }
 
   .sum {
-    h2 {
-      height: 30px;
-      margin: 10px 0;
+    .title {
+      display: flex;
+      align-items: center;
+
+      h2 {
+        flex: 1;
+        height: 30px;
+        margin: 2px 0 7px 5px;
+      }
+
+      .date {
+        font-size: 12px;
+        padding-top: 2px;
+        margin-right: 5px;
+      }
     }
   }
 }
