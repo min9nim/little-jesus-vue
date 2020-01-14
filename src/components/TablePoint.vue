@@ -15,7 +15,7 @@ table.items(:class="{'overflow-ellipsis': overflowEllipsis}")
   tfoot
     tr.row
       td.name(v-if="!studentNameHidden") 점수
-      td.ellipsis(v-for="(item, index) in computed.menuItems") {{pointSum(index)}} / {{totalPointSum(item.type)}}
+      td(v-for="(item, index) in computed.menuItems") {{pointSum(index)}} / {{totalPointSum(item.type)}}
       td.etc -    
       td.point -        
 </template>
