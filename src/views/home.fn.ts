@@ -192,6 +192,7 @@ export async function updatePoint({state, publicState}: any) {
     state.loading = false
     state.pointInit = true
     state.editable = false
+    console.error(e)
     // @ts-ignore
     await MessageBox.alert('저장 실패', {type: 'error'})
   }
@@ -223,8 +224,8 @@ export async function createPoint({root, state, publicState}: any) {
     Notification.success({message: '저장 완료', position: 'bottom-right'})
   } catch (e) {
     state.loading = false
+    console.error(e)
     await MessageBox.alert('저장 실패', {type: 'error'})
-    throw e
   }
 }
 
