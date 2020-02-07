@@ -7,6 +7,9 @@ import {MessageBox} from 'element-ui'
 import {IPublicState as IHomeState, IPoint, ITeacher, IStudent} from '@/biz/type'
 import {studentToDefaultPointMap, sortKeys} from '@/biz'
 import {go, exclude} from 'mingutils'
+import createLogger from 'if-logger'
+
+const PATH = 'components/points-by-class.fn.ts'
 
 export interface IState {
   date?: string
@@ -25,20 +28,21 @@ export interface IAllState {
 
 export function useHandleDateChange({props, root, state}) {
   return async (value: string) => {
+    const l = createLogger().addTags(PATH)
+    l.verbose('handleDateChange start')
     if (moment(value, 'YYYYMMDD').format('dddd') !== 'Sunday') {
       await MessageBox.alert('일요일만 선택가능합니다', {type: 'warning'})
       state.date = state.oldDate
       return
     }
-    state.oldDate = state.date
-    root.$store.commit('setDate', state.date)
-
     await initPoints({props, root, state})
   }
 }
 
 export function useBeforeMount({props, root, state}) {
   return async () => {
+    const l = createLogger().addTags(PATH)
+    l.verbose('beforeMount start')
     if (root.$store.state.teachers.length === 0) {
       return
     }
@@ -186,8 +190,8 @@ export function useState({props, root}: any): IState {
       return nullTeacher.students
     }),
   })
-  state.oldDate = state.date
-  root.$store.commit('setDate', state.date)
+  // state.oldDate = state.date
+  // root.$store.commit('setDate', state.date)
   return state
 }
 

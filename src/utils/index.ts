@@ -2,6 +2,7 @@ import axios from 'axios'
 import {print} from 'graphql/language/printer'
 import {getQueryParams} from 'mingutils'
 import {path} from 'ramda'
+import createLogger from 'if-logger'
 
 const url: any = {
   prod: 'https://little-jesus-api.now.sh',
@@ -12,6 +13,7 @@ const url: any = {
 let BASEURL = url.dev
 
 export function setApiServer() {
+  const l = createLogger()
   if (window.location.host.indexOf('localhost') === 0) {
     BASEURL = url.local
   }
@@ -25,7 +27,7 @@ export function setApiServer() {
   if (queryParam.api) {
     BASEURL = url[queryParam.api]
   }
-  console.info('api-server: ' + BASEURL)
+  l.info('api-server: ' + BASEURL)
 }
 
 export async function req(query: any, variables = {}) {

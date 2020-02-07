@@ -66,6 +66,7 @@ import {
 } from './points-by-class.fn'
 import {IPublicState as IHomeState, IPoint, ITeacher} from '../biz/type'
 import {propEq, omit} from 'ramda'
+import createLogger from 'if-logger'
 
 export default {
   name: 'points-by-class',
@@ -81,6 +82,7 @@ export default {
   components: {TablePoint},
   methods: {omit, propEq},
   setup(props: any, {root}: any) {
+    const l = createLogger().addTags('PointsByClass.vue')
     const homeState: IHomeState = useHomeState()
     const state: IState = useState({props, root})
     const handleDateChange = useHandleDateChange({props, root, state})
@@ -91,6 +93,7 @@ export default {
       () => props.date,
       () => {
         if (!props.date) {
+          l.info('watch return', props.date)
           return
         }
         state.date = props.date
@@ -101,7 +104,13 @@ export default {
       state,
       homeState,
       handleClick,
-      handleDateChange,
+      handleDateChange: value => {
+        l.debug('사용자가 날짜 선택')
+        // 사용자가 직접 날짜를 선택한 경우에만 vuex 상태를 변경한다 -20.02.07 mgsong
+        state.oldDate = state.date
+        root.$store.commit('setDate', value)
+        handleDateChange(value)
+      },
       teacherVisible(teacherName: string) {
         const teacher: any = root.$store.state.teachers.find(propEq('name', '반미정'))
         return teacherName !== '반미정' || teacher.students.length > 0
