@@ -1,5 +1,5 @@
 import {expect} from 'chai'
-import {getEtcStudentPoints, getPointsByTeacher} from '../../../src/views/points.fn'
+import {getEtcStudentPoints, getPointsByTeacher} from '../../../src/components/points-by-class.fn'
 import {studentToDefaultPointMap} from '../../../src/biz'
 import {
   allStudentPoints,
