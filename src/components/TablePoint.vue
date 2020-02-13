@@ -75,6 +75,9 @@ export default {
       itemSum,
       perfectScoreSum,
       nl2br: str => {
+        if (!str) {
+          return ''
+        }
         // 개행처리가 들어가면 points-by-month 에서 테이블 높이가 조금씩 틀어져서 임시처리를 추가함
         const removed = replace(/script/gi, '')(str)
         return props.overflowEllipsis ? removed : nl2br(removed)
