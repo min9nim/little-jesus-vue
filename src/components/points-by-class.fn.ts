@@ -5,8 +5,8 @@ import {prop, groupBy, path, differenceWith, propEq, map, pathEq, find, filter, 
 import {qPoints} from '@/biz/query'
 import {MessageBox} from 'element-ui'
 import {IPublicState as IHomeState, IPoint, ITeacher, IStudent} from '@/biz/type'
-import {studentToDefaultPointMap, sortKeys} from '@/biz'
-import {go, exclude} from 'mingutils'
+import {studentToDefaultPointMap} from '@/biz'
+import {go, exclude, sortKeys} from 'mingutils'
 import createLogger from 'if-logger'
 
 const PATH = 'components/points-by-class.fn.ts'

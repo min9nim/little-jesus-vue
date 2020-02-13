@@ -1,6 +1,5 @@
 import {expect} from 'chai'
-import {sort} from 'ramda'
-import {sortKeys} from '../../src/biz'
+import {sortKeys} from 'mingutils'
 
 describe('biz', () => {
   describe('sortKeys', () => {

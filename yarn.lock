@@ -5280,7 +5280,7 @@ ieee754@^1.1.4:
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.13.tgz#ec168558e95aa181fd87d37f55c32bbcb6708b84"
   integrity sha512-4vf7I2LYV/HaWerSo3XmlMkp5eZ83i+/CDluXi/IGTs/O1sejBNhTtnxzmRZfvOUqj7lZjqHkeTvpgSFDlWZTg==
 
-if-logger@^0.8.0:
+if-logger@0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/if-logger/-/if-logger-0.8.0.tgz#f6f484eb37a040ff690a212125eefe1e8160abe4"
   integrity sha512-5tp6pASvicNDGez6h0z1kcZ3t6InTtxaUwRQjPfHntpMCVtldpubkxzNyd1aCXFUEgM715b01CNz6SjmI1D7JQ==
@@ -6626,10 +6626,10 @@ mimic-fn@^2.0.0, mimic-fn@^2.1.0:
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
 
-mingutils@0.0.7:
-  version "0.0.7"
-  resolved "https://registry.yarnpkg.com/mingutils/-/mingutils-0.0.7.tgz#017d437de87bab56d1575ae971a7a80cc1a2e898"
-  integrity sha512-u3JFT2k9zHkpTphXUOQ2p67T2FqKuiaEVb7nkOn57k85wVlqmcwze+Oo16bQdBVboz2uDs0N37Fg8uTPWOtd7w==
+mingutils@0.0.10:
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/mingutils/-/mingutils-0.0.10.tgz#156805a8747e6cc49a7f490e5dab5e0316d522c2"
+  integrity sha512-wPZTWwaK9FPC3ozxxyGAzbgGOAWoPjsjFbBF3IVqwBDBQNdYQXx+HNEudHC8Y1yszg0R6WDp5No6n3FPppAtEw==
   dependencies:
     ramda "^0.26.1"
 

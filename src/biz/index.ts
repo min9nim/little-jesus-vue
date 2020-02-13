@@ -31,12 +31,3 @@ export function errorHandler(e: any) {
   dom.style.textAlign = 'left'
   MessageBox.alert(e.message, {type: 'error'})
 }
-
-export function sortKeys(obj) {
-  const keys = Object.keys(obj)
-  const sorted: any = {}
-  keys.sort().forEach(key => {
-    sorted[key] = obj[key]
-  })
-  return sorted
-}
