@@ -1,13 +1,25 @@
 import {reactive} from '@vue/composition-api'
 import {req, ascending} from '@/utils'
-import {clone, propEq, prop, find, differenceWith, isNil, filter, pathEq, path, map} from 'ramda'
+import {
+  clone,
+  propEq,
+  prop,
+  find,
+  differenceWith,
+  isNil,
+  filter,
+  pathEq,
+  path,
+  map,
+  equals,
+} from 'ramda'
 import moment from 'moment'
 import {qCreatePoint, qPoints, qUpdatePoint, qRemovePoint} from '@/biz/query'
 import {MessageBox, Notification} from 'element-ui'
 import {IPublicState, ITeacher, IPoint} from '@/biz/type'
 import {findById, go} from 'mingutils'
-import equals from 'ramda/es/equals'
 import {studentToDefaultPointMap} from '@/biz'
+import createLogger from 'if-logger'
 
 export interface IState {
   date?: string
@@ -156,6 +168,7 @@ export function useHandleSave({root, state, publicState}: IAllState) {
 
 export async function updatePoint({state, publicState}: any) {
   try {
+    const logger = createLogger().addTags('updatePoint')
     state.loading = true
     const results = publicState.points.map((point: IPoint) => {
       if (!point._id) {
@@ -170,7 +183,7 @@ export async function updatePoint({state, publicState}: any) {
 
       const asisPoint = findById(point._id)(state.originalPoints)
       if (equals(point, asisPoint)) {
-        // console.log('변경사항 없어 스킵')
+        logger.info('No changes', point.owner.name)
         return
       }
       return req(qUpdatePoint, {
@@ -181,13 +194,18 @@ export async function updatePoint({state, publicState}: any) {
         etc: point.etc,
       })
     })
-    await Promise.all(results)
+    const resultList = await Promise.all(results)
+    logger.debug(resultList)
     state.loading = false
     state.pointInit = true
     state.editable = false
-    // @ts-ignore
-    Notification.success({message: '저장 완료', position: 'bottom-right'})
-    // await Message({message: '저장 완료', type: 'success'})
+    if (resultList.every(isNil)) {
+      // @ts-ignore
+      Notification.warning({message: '변경사항이 없습니다', position: 'bottom-right'})
+    } else {
+      // @ts-ignore
+      Notification.success({message: '저장 완료', position: 'bottom-right'})
+    }
   } catch (e) {
     state.loading = false
     state.pointInit = true
