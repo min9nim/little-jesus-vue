@@ -3,6 +3,7 @@ import * as common from '@mgsong/lj-common'
 export const {
   req,
   setApiServer,
+  initSentry,
   nameAscending,
   _idAscending,
   idEqual,
