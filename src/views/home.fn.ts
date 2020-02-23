@@ -1,5 +1,5 @@
 import {reactive} from '@vue/composition-api'
-import {req, ascending, errMsg} from '@/utils'
+import {req, ascending, errMsg, updateById} from '@/utils'
 import {
   clone,
   propEq,
@@ -159,18 +159,18 @@ export async function initPoints({root, state, publicState}: any) {
 export function useHandleSave({root, state, publicState}: IAllState) {
   return async () => {
     if (state.pointInit) {
-      await updatePoint({state, publicState})
+      await updatePoint({root, state, publicState})
     } else {
       await createPoint({root, state, publicState})
     }
   }
 }
 
-export async function updatePoint({state, publicState}: any) {
+export async function updatePoint({root, state, publicState}: any) {
   const logger = createLogger().addTags('updatePoint')
   try {
     state.loading = true
-    const results = publicState.points.map((point: IPoint) => {
+    const results = publicState.points.map(async (point: IPoint) => {
       if (!point._id) {
         // 최초 포인트입력 이후 신규로 추가된 학생이 있는 경우
         return req(qCreatePoint, {
@@ -186,16 +186,28 @@ export async function updatePoint({state, publicState}: any) {
         logger.info('No changes', point.owner.name)
         return
       }
-      return req(qUpdatePoint, {
+      const result = await req(qUpdatePoint, {
         _id: point._id,
         owner: point.owner._id,
         date: state.date,
         items: point.items.map((item: any) => ({value: item.value, type: item.type})),
         etc: point.etc,
       })
+
+      // publicState 를 최신상태로 갱신
+      logger.debug('publicState 갱신', result.res)
+      publicState.points = updateById(result._id, {
+        ...result.res,
+        owner: root.$store.getters.studentMap[result.res.owner],
+      })(publicState.points)
+
+      // originalPoints 도 갱신
+      state.originalPoints = clone(publicState.points)
+      logger.debug('originalPoints 갱신')
+      return result.res
     })
     const resultList = await Promise.all(results)
-    logger.debug(resultList)
+    logger.debug('resultList:', resultList)
     state.loading = false
     state.pointInit = true
     state.editable = false
@@ -205,8 +217,6 @@ export async function updatePoint({state, publicState}: any) {
     } else {
       // @ts-ignore
       Notification.success({message: '저장 완료', position: 'bottom-right'})
-
-      // state.originalPoints = clone(resultList)
     }
   } catch (e) {
     state.loading = false
