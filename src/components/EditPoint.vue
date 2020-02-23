@@ -2,42 +2,15 @@
 .input-form
   el-card(shadow="hover")
     div(slot="header")
-      h3 {{ state.point.owner.name }}
-    .item.attendance
-      .label 출석여부
+      h3 {{state.point.owner.name}}
+    .item(v-for="item in state.point.items" :key="item._id")
+      .label {{menuLabel(item.type)}}
       .control
-        el-radio(v-model="state.point.attendance" :label="true") O
-        el-radio(v-model="state.point.attendance" :label="false") X
-    .item
-      .label 심방여부
-      .control
-        el-radio(v-model="state.point.visitcall" :label="true") O
-        el-radio(v-model="state.point.visitcall" :label="false") X    
-    .item.meditation
-      .label 말씀묵상
-      .control
-        el-radio(v-model="state.point.meditation" :label="0") 0
-        el-radio(v-model="state.point.meditation" :label="1") 1
-        el-radio(v-model="state.point.meditation" :label="2") 2
-        el-radio(v-model="state.point.meditation" :label="3") 3
-        el-radio(v-model="state.point.meditation" :label="4") 4
-        el-radio(v-model="state.point.meditation" :label="5") 5
-        el-radio(v-model="state.point.meditation" :label="6") 6
-        el-radio(v-model="state.point.meditation" :label="7") 7
-    .item
-      .label 말씀암송
-      .control
-        el-radio(v-model="state.point.recitation" :label="true") O
-        el-radio(v-model="state.point.recitation" :label="false") X    
-    .item.invitation
-      .label 전도
-      .control
-        el-radio(v-model="state.point.invitation" :label="0") 0
-        el-radio(v-model="state.point.invitation" :label="1") 1
-        el-radio(v-model="state.point.invitation" :label="2") 2
-        el-radio(v-model="state.point.invitation" :label="3") 3
-        el-radio(v-model="state.point.invitation" :label="4") 4
-        el-radio(v-model="state.point.invitation" :label="5") 5    
+        el-radio.radio(
+          v-for="(option, index) in getOptions(item.type)"
+          v-model="item.value" :label="option.label + ':' + option.value"
+          :key="index"
+        ) {{option.label}}        
     .item
       .label 기타사항
       .control
@@ -50,25 +23,34 @@
 </template>
 <script lang="ts">
 import {createComponent, reactive, computed, watch} from '@vue/composition-api'
-import {useState, useGlobalState} from '../views/home.fn'
-import {propEq, pathEq} from 'ramda'
+import {useState, usePublicState as useHomeState} from '../views/home.fn'
+import {propEq, pathEq, prop, split, map} from 'ramda'
+import {go} from 'mingutils'
 import Vue from 'vue'
 
 export default createComponent({
   props: {studentId: String},
-  setup(props, {root}) {
-    const globalState = useGlobalState()
+  methods: {propEq, prop},
+  setup(props, {root}: any) {
+    const homeState = useHomeState()
     let state = reactive({
-      point: globalState.points.find(pathEq(['owner', '_id'], props.studentId)),
+      point: homeState.points.find(pathEq(['owner', '_id'], props.studentId)),
     })
     watch(
       () => props.studentId,
       () => {
-        state.point = globalState.points.find(pathEq(['owner', '_id'], props.studentId))
+        state.point = homeState.points.find(pathEq(['owner', '_id'], props.studentId))
       },
     )
     return {
       state,
+      studentMap: root.$store.getters.studentMap,
+      getOptions(menuId: any) {
+        return root.$store.getters.menuItemOptions(menuId)
+      },
+      menuLabel(menuId: string) {
+        return prop('label', root.$store.getters.pointMenuMap[menuId])
+      },
     }
   },
 })
@@ -88,28 +70,6 @@ export default createComponent({
       border-top: 1px solid #f7f7f7;
     }
 
-    &.attendance {
-      .label {
-        font-weight: bold;
-      }
-    }
-
-    &.meditation {
-      .label {
-        font-weight: bold;
-      }
-
-      .el-radio {
-        margin: 10px 20px 10px 0;
-      }
-    }
-
-    &.invitation {
-      .el-radio {
-        margin: 10px 20px 10px 0;
-      }
-    }
-
     .label {
       margin-right: 20px;
       width: 70px;
@@ -121,6 +81,10 @@ export default createComponent({
     .control {
       margin-left: 10px;
       flex: 1;
+
+      .radio {
+        margin: 8px 10px;
+      }
     }
   }
 }

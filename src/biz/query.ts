@@ -2,37 +2,15 @@ import gql from 'graphql-tag'
 
 export const qCreatePoint = gql`
   # Write your query or mutation here
-  mutation createPoint(
-    $owner: ObjectId!
-    $date: String!
-    $attendance: Boolean
-    $visitcall: Boolean
-    $meditation: Int
-    $recitation: Boolean
-    $invitation: Int
-    $etc: String
-  ) {
-    res: createPoint(
-      owner: $owner
-      date: $date
-      attendance: $attendance
-      visitcall: $visitcall
-      meditation: $meditation
-      recitation: $recitation
-      invitation: $invitation
-      etc: $etc
-    ) {
+  mutation createPoint($owner: ObjectId!, $date: String!, $items: [PointItemArg!]!, $etc: String) {
+    res: createPoint(owner: $owner, date: $date, items: $items, etc: $etc) {
       _id
-      owner {
-        _id
-        name
-      }
+      owner
       date
-      attendance
-      visitcall
-      meditation
-      recitation
-      invitation
+      items {
+        type
+        value
+      }
       etc
     }
   }
@@ -43,35 +21,17 @@ export const qUpdatePoint = gql`
     $_id: ObjectId!
     $owner: ObjectId
     $date: String
-    $attendance: Boolean
-    $visitcall: Boolean
-    $meditation: Int
-    $recitation: Boolean
-    $invitation: Int
+    $items: [PointItemArg!]!
     $etc: String
   ) {
-    res: updatePoint(
-      _id: $_id
-      owner: $owner
-      date: $date
-      attendance: $attendance
-      visitcall: $visitcall
-      meditation: $meditation
-      recitation: $recitation
-      invitation: $invitation
-      etc: $etc
-    ) {
+    res: updatePoint(_id: $_id, owner: $owner, date: $date, items: $items, etc: $etc) {
       _id
-      owner {
-        _id
-        name
-      }
+      owner
       date
-      attendance
-      visitcall
-      meditation
-      recitation
-      invitation
+      items {
+        type
+        value
+      }
       etc
     }
   }
@@ -107,27 +67,25 @@ export const qStudents = gql`
   }
 `
 
-export const qTeachersAndStudents = gql`
-  query teachersAndStudents {
+export const qInitialize = gql`
+  query initialize {
     teachers {
       _id
       name
-      students {
-        _id
-        name
-        teacher {
-          _id
-          name
-        }
-      }
+      students
     }
     students {
       _id
       name
-      teacher {
-        _id
-        name
-      }
+    }
+    pointMenus(hidden: false) {
+      _id
+      label
+      type
+      defaultValue
+      priority
+      hidden
+      disable
     }
   }
 `
@@ -136,20 +94,27 @@ export const qPoints = gql`
   query points($date: String, $teacherId: ObjectId) {
     res: points(date: $date, teacherId: $teacherId) {
       _id
-      owner {
-        _id
-        name
-        teacher {
-          _id
-          name
-        }
-      }
+      owner
       date
-      attendance
-      meditation
-      invitation
-      visitcall
-      recitation
+      items {
+        type
+        value
+      }
+      etc
+    }
+  }
+`
+
+export const qPointsFromTo = gql`
+  query pointsFromTo($startDate: String!, $endDate: String!) {
+    res: pointsFromTo(startDate: $startDate, endDate: $endDate) {
+      _id
+      owner
+      date
+      items {
+        type
+        value
+      }
       etc
     }
   }

@@ -4,16 +4,24 @@
     el-tabs(v-model="state.activeName" @tab-click="handleClick")
       el-tab-pane(label="출석체크" name="/")
       el-tab-pane(label="포인트현황" name="/points")
+      el-tab-pane(label="월별포인트" name="/points-by-month")
+      el-tab-pane(label="월별랭킹" name="/monthly")
+      el-tab-pane(label="분기별랭킹" name="/quarterly")
   router-view  
 </template>
 <script lang="ts">
-import {reactive, onMounted} from '@vue/composition-api'
+import {reactive, onMounted, onBeforeMount} from '@vue/composition-api'
 import Vue from 'vue'
+import {initialize} from './app.fn'
 
 export default {
   setup(props: any, {root}: any) {
     const state = reactive({
+      loading: false,
       activeName: location.pathname,
+    })
+    onBeforeMount(() => {
+      initialize({root, state})
     })
     // onMounted(() => {
     //   setTimeout(() => {
@@ -23,7 +31,9 @@ export default {
     return {
       state,
       handleClick(tab: any, event: any) {
-        // console.log(tab, event)
+        if (location.pathname === tab.name) {
+          return
+        }
         root.$router.push(tab.name)
       },
     }
@@ -85,5 +95,23 @@ export default {
   .el-input--prefix .el-input__inner {
     cursor: pointer;
   }
+
+  .el-table__header {
+    thead {
+      tr {
+        th {
+          background-color: #f9f9f9;
+        }
+      }
+    }
+  }
+}
+
+.red {
+  color: red;
+}
+
+.green {
+  color: green;
 }
 </style>

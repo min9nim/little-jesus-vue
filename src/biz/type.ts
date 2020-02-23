@@ -11,6 +11,14 @@ export interface ITeacher {
   name: string
   students: IStudent[]
 }
+export interface IPointMenu {
+  _id: string
+  label: string
+  type: string
+  defaultValue: string
+  hidden: boolean
+  disable: boolean
+}
 export interface IPoint {
   _id?: string
   owner: {
@@ -22,15 +30,16 @@ export interface IPoint {
     }
   }
   date?: string
-  attendance: boolean
-  visitcall: boolean
-  meditation: number
-  invitation: number
-  recitation: boolean
+  attendance?: boolean
+  visitcall?: boolean
+  meditation?: number
+  invitation?: number
+  recitation?: boolean
+  items: any[]
   etc: string
 }
 
-export interface IGlobalState {
+export interface IPublicState {
   teacherId?: string
   teachers: ITeacher[]
   points: IPoint[]
