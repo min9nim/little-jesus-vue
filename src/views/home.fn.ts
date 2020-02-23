@@ -83,6 +83,7 @@ export function useBeforeMount({root, state, publicState}: any) {
 }
 
 export async function initPoints({root, state, publicState}: any) {
+  const logger = createLogger().addTags('initPoints')
   if (isNil(publicState.teacherId)) {
     publicState.points = []
     return
@@ -143,7 +144,7 @@ export async function initPoints({root, state, publicState}: any) {
     propEq('_id', publicState.teacherId),
   )
   if (!teacher) {
-    console.warn('Teacher is not selected yet')
+    logger.warn('Teacher is not selected yet')
     return
   }
 
