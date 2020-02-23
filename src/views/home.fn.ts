@@ -1,5 +1,5 @@
 import {reactive} from '@vue/composition-api'
-import {req, ascending} from '@/utils'
+import {req, ascending, errMsg} from '@/utils'
 import {
   clone,
   propEq,
@@ -167,8 +167,8 @@ export function useHandleSave({root, state, publicState}: IAllState) {
 }
 
 export async function updatePoint({state, publicState}: any) {
+  const logger = createLogger().addTags('updatePoint')
   try {
-    const logger = createLogger().addTags('updatePoint')
     state.loading = true
     const results = publicState.points.map((point: IPoint) => {
       if (!point._id) {
@@ -205,12 +205,14 @@ export async function updatePoint({state, publicState}: any) {
     } else {
       // @ts-ignore
       Notification.success({message: '저장 완료', position: 'bottom-right'})
+
+      // state.originalPoints = clone(resultList)
     }
   } catch (e) {
     state.loading = false
     state.pointInit = true
     state.editable = false
-    console.error(e)
+    logger.error(errMsg(e))
     // @ts-ignore
     await MessageBox.alert('저장 실패', {type: 'error'})
   }
