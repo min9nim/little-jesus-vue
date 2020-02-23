@@ -278,9 +278,12 @@ export function useHandleRemove({root, state}) {
       await MessageBox.confirm('입력했던 내용을 전부 삭제합니다', {type: 'warning'})
       const publicState = usePublicState()
       state.loading = true
-      const results: Array<Promise<any>> = publicState.points.map(point =>
-        req(qRemovePoint, {_id: point._id}),
-      )
+      const results: Array<Promise<any>> = publicState.points.map(point => {
+        if (!point._id) {
+          return Promise.resolve()
+        }
+        return req(qRemovePoint, {_id: point._id})
+      })
       await Promise.all(results)
       state.loading = false
       // await Message({message: '삭제 완료', type: 'success'})
