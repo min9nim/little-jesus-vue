@@ -159,14 +159,14 @@ export async function initPoints({root, state, publicState}: any) {
 export function useHandleSave({root, state, publicState}: IAllState) {
   return async () => {
     if (state.pointInit) {
-      await updatePoint({root, state, publicState})
+      await updatePoint({state, publicState})
     } else {
       await createPoint({root, state, publicState})
     }
   }
 }
 
-export async function updatePoint({root, state, publicState}: any) {
+export async function updatePoint({state, publicState}: any) {
   const logger = createLogger().addTags('updatePoint')
   try {
     state.loading = true
@@ -205,9 +205,6 @@ export async function updatePoint({root, state, publicState}: any) {
       //   owner: root.$store.getters.studentMap[result.res.owner],
       // })
 
-      // originalPoints 도 갱신
-      state.originalPoints = clone(publicState.points)
-      logger.debug('originalPoints 갱신')
       return result.res
     })
     const resultList = await Promise.all(results)
@@ -217,8 +214,12 @@ export async function updatePoint({root, state, publicState}: any) {
     state.editable = false
     if (resultList.every(isNil)) {
       // @ts-ignore
-      Notification.warning({message: '변경사항이 없습니다', position: 'bottom-right'})
+      Notification.success({message: '저장 완료(변경사항 없음)', position: 'bottom-right'})
     } else {
+      // originalPoints 도 갱신
+      state.originalPoints = clone(publicState.points)
+      logger.debug('변경사항이 있었으니 originalPoints & publicState.points 동기화')
+
       // @ts-ignore
       Notification.success({message: '저장 완료', position: 'bottom-right'})
     }
