@@ -144,7 +144,7 @@ export async function initPoints({root, state, publicState}: any) {
     propEq('_id', publicState.teacherId),
   )
   if (!teacher) {
-    logger.warn('Teacher is not selected yet')
+    logger.warn('Teacher is not selected yet.')
     return
   }
 
