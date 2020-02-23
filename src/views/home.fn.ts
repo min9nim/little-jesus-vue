@@ -173,12 +173,13 @@ export async function updatePoint({state, publicState}: any) {
     const results = publicState.points.map(async (point: IPoint) => {
       if (!point._id) {
         // 최초 포인트입력 이후 신규로 추가된 학생이 있는 경우
-        return req(qCreatePoint, {
+        const result = await req(qCreatePoint, {
           owner: point.owner._id,
           date: state.date,
           items: point.items.map((item: any) => ({value: item.value, type: item.type})),
           etc: point.etc,
         })
+        return result.res
       }
 
       const asisPoint = findById(point._id)(state.originalPoints)
@@ -234,7 +235,7 @@ export async function updatePoint({state, publicState}: any) {
 }
 
 export async function createPoint({root, state, publicState}: any) {
-  // console.log(publicState.points)
+  const logger = createLogger().addTags('createPoint')
   state.loading = true
   try {
     const results = publicState.points.map((point: any) => {
@@ -259,7 +260,7 @@ export async function createPoint({root, state, publicState}: any) {
     Notification.success({message: '저장 완료', position: 'bottom-right'})
   } catch (e) {
     state.loading = false
-    console.error(e)
+    logger.error(errMsg(e))
     await MessageBox.alert('저장 실패', {type: 'error'})
   }
 }
