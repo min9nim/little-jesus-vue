@@ -195,11 +195,15 @@ export async function updatePoint({root, state, publicState}: any) {
       })
 
       // publicState 를 최신상태로 갱신
-      logger.debug('publicState 갱신', result.res)
-      publicState.points = updateById(result._id, {
-        ...result.res,
-        owner: root.$store.getters.studentMap[result.res.owner],
-      })(publicState.points)
+      // logger.debug('publicState 갱신', result.res)
+      // publicState.points = updateById(result._id, {
+      //   ...result.res,
+      //   owner: root.$store.getters.studentMap[result.res.owner],
+      // })(publicState.points)
+      // Object.assign(point, {
+      //   ...result.res,
+      //   owner: root.$store.getters.studentMap[result.res.owner],
+      // })
 
       // originalPoints 도 갱신
       state.originalPoints = clone(publicState.points)
