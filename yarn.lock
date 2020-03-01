@@ -781,10 +781,10 @@
     request-promise "^4.1.1"
     yargs "^8.0.2"
 
-"@mgsong/lj-common@0.0.8":
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/@mgsong/lj-common/-/lj-common-0.0.8.tgz#2a8d2afa65b1c9952d9b71972a856ad08b3f84f2"
-  integrity sha512-YJAYWuUa9vgjJHtjw953J+qDfik3cv5Qg43B8cPJHr0wR0lk0I1bikF3e5UN0xeyCxwFdN+Q2SMPi7AImxsmFg==
+"@mgsong/lj-common@0.0.9":
+  version "0.0.9"
+  resolved "https://registry.yarnpkg.com/@mgsong/lj-common/-/lj-common-0.0.9.tgz#12b522cd88536f457472d0afbc59eea21aec386d"
+  integrity sha512-mqiIHwxNhQr9zuDa6cRYyozNGwG6+XHhJKrUOERXyVTE8vCTXSbQjB+L8Wip51Qe62NwzVVXs4lVY1fhVii1Rg==
   dependencies:
     "@sentry/browser" "^5.12.4"
     "@sentry/integrations" "^5.12.4"
@@ -794,7 +794,7 @@
     element-ui "^2.12.0"
     graphql "^14.5.8"
     graphql-tag "^2.10.1"
-    if-logger "0.8.4"
+    if-logger "0.10.2"
     interval-call "^0.1.0"
     mingutils "0.0.10"
     mocha "^6.2.2"
@@ -5301,6 +5301,11 @@ ieee754@^1.1.4:
   version "1.1.13"
   resolved "https://registry.yarnpkg.com/ieee754/-/ieee754-1.1.13.tgz#ec168558e95aa181fd87d37f55c32bbcb6708b84"
   integrity sha512-4vf7I2LYV/HaWerSo3XmlMkp5eZ83i+/CDluXi/IGTs/O1sejBNhTtnxzmRZfvOUqj7lZjqHkeTvpgSFDlWZTg==
+
+if-logger@0.10.2:
+  version "0.10.2"
+  resolved "https://registry.yarnpkg.com/if-logger/-/if-logger-0.10.2.tgz#aeb69fd6645dbca44591fbe57dabc2a1336a829d"
+  integrity sha512-JWbts3um+XnmiLM2TRUI1ZCg7DBplOJ9JDPIrhmK2FqE7hrni5VXTpCKX6K2GrtSCTd1cNKfrswkD65E9DTSXg==
 
 if-logger@0.8.4:
   version "0.8.4"
