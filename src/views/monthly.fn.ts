@@ -3,9 +3,16 @@ import {req} from '@/utils'
 import {qPointsFromTo} from '@/biz/query'
 import {groupBy, filter, path, propEq, map, split, last} from 'ramda'
 import {go} from 'mingutils'
+import createLogger from 'if-logger'
+
+const logger = createLogger().addTags('monthly.fn.ts')
 
 export function useHandleMonthChange({state, root}) {
   return async (value: string) => {
+    if (!value) {
+      logger.warn('value(`yearMonth`) is undefined')
+      return
+    }
     if (root.$store.state.teachers.length === 0) {
       return
     }

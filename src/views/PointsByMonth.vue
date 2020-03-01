@@ -36,6 +36,10 @@ import {
 import {getSundaysOfMonth} from './points-by-month.fn'
 import PointsByClass from '../components/PointsByClass.vue'
 import moment from 'moment'
+import createLogger from 'if-logger'
+
+const logger = createLogger().addTags('PointsByMonth.vue')
+
 interface IState {
   yearMonth: string
   loading: boolean
@@ -56,6 +60,10 @@ export default {
     return {
       state,
       handleMonthChange: (value: string) => {
+        if (!value) {
+          logger.warn('value is undefined')
+          return
+        }
         state.sundays = getSundaysOfMonth(value, 'YYYYMMDD')
       },
     }
