@@ -29,7 +29,7 @@ export interface IAllState {
 export function useHandleDateChange({props, root, state}) {
   return async (value: string) => {
     const l = createLogger().addTags(PATH)
-    l.verbose('handleDateChange start')
+    // l.verbose('handleDateChange start')
     if (moment(value, 'YYYYMMDD').format('dddd') !== 'Sunday') {
       await MessageBox.alert('일요일만 선택가능합니다', {type: 'warning'})
       state.date = state.oldDate
@@ -42,7 +42,7 @@ export function useHandleDateChange({props, root, state}) {
 export function useBeforeMount({props, root, state}) {
   return async () => {
     const l = createLogger().addTags(PATH)
-    l.verbose('beforeMount start')
+    // l.verbose('beforeMount start')
     if (root.$store.state.teachers.length === 0) {
       return
     }
