@@ -7,6 +7,7 @@
       format="yyyy년 MM월"
       value-format="yyyyMM"
       placeholder="월 선택"
+      :clearable="false"
       @change="handleMonthChange"
     )
   .flex-container

@@ -7,6 +7,7 @@
       :format="dateFormat"
       value-format="yyyyMMdd"
       placeholder="날짜 선택"
+      :clearable="false"
       @change="handleDateChange"
       :readonly="Boolean(date)"
     )
