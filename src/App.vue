@@ -13,6 +13,7 @@
 import {reactive, onMounted, onBeforeMount} from '@vue/composition-api'
 import Vue from 'vue'
 import {initialize} from './app.fn'
+import {checkLocalServer} from '@mgsong/lj-common'
 
 export default {
   setup(props: any, {root}: any) {
@@ -20,8 +21,9 @@ export default {
       loading: false,
       activeName: location.pathname,
     })
-    onBeforeMount(() => {
-      initialize({root, state})
+    onBeforeMount(async () => {
+      await checkLocalServer()
+      await initialize({root, state})
     })
     // onMounted(() => {
     //   setTimeout(() => {
