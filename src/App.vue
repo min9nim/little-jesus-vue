@@ -22,7 +22,6 @@ export default {
       activeName: location.pathname,
     })
     onBeforeMount(async () => {
-      await checkLocalServer()
       await initialize({root, state})
     })
     // onMounted(() => {
