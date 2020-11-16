@@ -13,6 +13,7 @@ import loading from 'element-ui/lib/loading'
 import Card from 'element-ui/lib/card'
 import Select from 'element-ui/lib/select'
 import Option from 'element-ui/lib/option'
+import Radio from 'element-ui/lib/radio'
 import DatePicker from 'element-ui/lib/date-picker'
 import Table from 'element-ui/lib/table'
 import TableColumn from 'element-ui/lib/table-column'
@@ -40,6 +41,7 @@ Vue.use(Option)
 Vue.use(DatePicker)
 Vue.use(Table)
 Vue.use(TableColumn)
+Vue.use(Radio)
 
 new Vue({
   router,
