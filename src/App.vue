@@ -7,13 +7,11 @@
       el-tab-pane(label="월별포인트" name="/points-by-month")
       el-tab-pane(label="월별랭킹" name="/monthly")
       el-tab-pane(label="분기별랭킹" name="/quarterly")
-  router-view  
+  router-view
 </template>
 <script lang="ts">
-import {reactive, onMounted, onBeforeMount} from '@vue/composition-api'
-import Vue from 'vue'
+import {onBeforeMount, reactive} from '@vue/composition-api'
 import {initialize} from './app.fn'
-import {checkLocalServer} from '@mgsong/lj-common'
 
 export default {
   setup(props: any, {root}: any) {
