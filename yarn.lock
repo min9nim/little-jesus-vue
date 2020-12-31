@@ -781,10 +781,10 @@
     request-promise "^4.1.1"
     yargs "^8.0.2"
 
-"@mgsong/lj-common@0.1.9":
-  version "0.1.9"
-  resolved "https://registry.yarnpkg.com/@mgsong/lj-common/-/lj-common-0.1.9.tgz#a94f617f7e864767f5b31dafd910142036a0e6d8"
-  integrity sha512-IMZNvwEsp1oQVh4RAvxyUMCdZUy4Xbo/102Nu04gVK65jF3sMliEddYvn+HWiXcDi3vxuJ9swkuj7ZRb2aJ0Vw==
+"@mgsong/lj-common@0.2.0":
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/@mgsong/lj-common/-/lj-common-0.2.0.tgz#2d613be985d06dee04bc512338baebaf72b6f0db"
+  integrity sha512-4ykAnLr7oAC8/2mojWSDRMZJKlJxDFP7EOtWhPJvsAoDYEvNFPrwkYz9Kr7tHP1abrvERAH7HqvjVya56JLwPQ==
   dependencies:
     "@sentry/browser" "^5.12.4"
     "@sentry/integrations" "^5.12.4"
@@ -796,7 +796,7 @@
     graphql-tag "^2.10.1"
     if-logger "0.11.2"
     interval-call "^0.1.0"
-    mingutils "0.2.0"
+    mingutils "0.6.0"
     mocha "^6.2.2"
     ramda "^0.26.1"
     vue "^2.6.10"
@@ -6665,10 +6665,10 @@ mingutils@0.0.10:
   dependencies:
     ramda "^0.26.1"
 
-mingutils@0.2.0:
-  version "0.2.0"
-  resolved "https://registry.yarnpkg.com/mingutils/-/mingutils-0.2.0.tgz#ab4bdc262f1f2da7e5c68867e83754e240244edf"
-  integrity sha512-bY9CEOXcOLNyTm1HRJu0NDpOyJJyV77vOj06BoM7j3GIfuZhQ4LsKXOfaccq37Kefun8lq0bsBRNQn2Rx9ktbQ==
+mingutils@0.6.0:
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/mingutils/-/mingutils-0.6.0.tgz#5c0cfe0df0a52ebd0ea029a3274ad36eb7332ee1"
+  integrity sha512-JSAf1/2iGoJHFHlsVz9LVbs9a4haahvg0qYCnfXsDFWa/kZejB/5PN4kyv5Ig/Hk2PI2SO5RCnHxN1IOhcvrrA==
   dependencies:
     ramda "^0.26.1"
 
