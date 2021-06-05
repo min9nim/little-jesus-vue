@@ -781,10 +781,10 @@
     request-promise "^4.1.1"
     yargs "^8.0.2"
 
-"@mgsong/lj-common@0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@mgsong/lj-common/-/lj-common-0.2.3.tgz#ccf2dbff9d0acfb32cc13949dce701bf9947eaba"
-  integrity sha512-dfpf5gQRwqfZvaTszBMByyq53kjxO/y7j5lWR6jgd5hB69E6pnuWgIKd1thxGIf5os23ScaEwI88ufjU0JtB0Q==
+"@mgsong/lj-common@0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@mgsong/lj-common/-/lj-common-0.2.6.tgz#7e6ff087e37eb4d2c7cee6842c296182f0eaf7b4"
+  integrity sha512-F0ostx0C3F8q5h7qZzCke9rPnOw2g1yghXv5e3UZOskG88OBuIKKj3c5FiggBMXleD9AEd5O8o7Rr0cTpXl6bg==
   dependencies:
     "@sentry/browser" "^5.12.4"
     "@sentry/integrations" "^5.12.4"
@@ -10702,9 +10702,9 @@ write@1.0.3:
     mkdirp "^0.5.1"
 
 ws@^6.0.0, ws@^6.2.1:
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/ws/-/ws-6.2.1.tgz#442fdf0a47ed64f59b6a5d8ff130f4748ed524fb"
-  integrity sha512-GIyAXC2cB7LjvpgMt9EKS2ldqr0MTrORaleiOno6TweZ6r3TKtoFQWay/2PceJ3RuBasOHzXNn5Lrw1X0bEjqA==
+  version "6.2.2"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-6.2.2.tgz#dd5cdbd57a9979916097652d78f1cc5faea0c32e"
+  integrity sha512-zmhltoSR8u1cnDsD43TX59mzoMZsLKqUweyYBAIvTngR3shc0W6aOZylZmq/7hqyVxPdi+5Ud2QInblgyE72fw==
   dependencies:
     async-limiter "~1.0.0"
 
