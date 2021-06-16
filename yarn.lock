@@ -781,10 +781,10 @@
     request-promise "^4.1.1"
     yargs "^8.0.2"
 
-"@mgsong/lj-common@0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@mgsong/lj-common/-/lj-common-0.2.3.tgz#ccf2dbff9d0acfb32cc13949dce701bf9947eaba"
-  integrity sha512-dfpf5gQRwqfZvaTszBMByyq53kjxO/y7j5lWR6jgd5hB69E6pnuWgIKd1thxGIf5os23ScaEwI88ufjU0JtB0Q==
+"@mgsong/lj-common@0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@mgsong/lj-common/-/lj-common-0.2.6.tgz#7e6ff087e37eb4d2c7cee6842c296182f0eaf7b4"
+  integrity sha512-F0ostx0C3F8q5h7qZzCke9rPnOw2g1yghXv5e3UZOskG88OBuIKKj3c5FiggBMXleD9AEd5O8o7Rr0cTpXl6bg==
   dependencies:
     "@sentry/browser" "^5.12.4"
     "@sentry/integrations" "^5.12.4"
@@ -8132,9 +8132,9 @@ postcss-value-parser@^4.0.0, postcss-value-parser@^4.0.2:
   integrity sha512-LmeoohTpp/K4UiyQCwuGWlONxXamGzCMtFxLq4W1nZVGIQLYvMCJx3yAF9qyyuFpflABI9yVdtJAqbihOsCsJQ==
 
 postcss@^7.0.0, postcss@^7.0.1, postcss@^7.0.14, postcss@^7.0.16, postcss@^7.0.17, postcss@^7.0.18, postcss@^7.0.5, postcss@^7.0.6:
-  version "7.0.18"
-  resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.18.tgz#4b9cda95ae6c069c67a4d933029eddd4838ac233"
-  integrity sha512-/7g1QXXgegpF+9GJj4iN7ChGF40sYuGYJ8WZu8DZWnmhQ/G36hfdk3q9LBJmoK+lZ+yzZ5KYpOoxq7LF1BxE8g==
+  version "7.0.36"
+  resolved "https://registry.yarnpkg.com/postcss/-/postcss-7.0.36.tgz#056f8cffa939662a8f5905950c07d5285644dfcb"
+  integrity sha512-BebJSIUMwJHRH0HAQoxN4u1CN86glsrwsW0q7T+/m44eXOUAxSNdHRkNZPYz5vVUbg17hFgOQDE7fZk7li3pZw==
   dependencies:
     chalk "^2.4.2"
     source-map "^0.6.1"
