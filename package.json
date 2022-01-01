@@ -11,7 +11,7 @@
   "dependencies": {
     "@mgsong/lj-common": "0.2.8",
     "@vue/composition-api": "latest",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "core-js": "^3.3.2",
     "element-ui": "^2.12.0",
     "graphql": "^14.5.8",
